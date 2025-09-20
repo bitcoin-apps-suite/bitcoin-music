@@ -10,6 +10,7 @@ import MusicExchangeView from '@/components/MusicExchangeView'
 import AuthModal from '@/components/AuthModal'
 import AppHeader from '@/components/AppHeader'
 import '../styles/AppHeader.css'
+import '../styles/MobileLayout.css'
 
 type ViewMode = 'studio' | 'marketplace' | 'library' | 'exchange'
 
@@ -19,6 +20,7 @@ export default function HomePage() {
   const [sidebarWidth, setSidebarWidth] = useState(280)
   const [isResizing, setIsResizing] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const resizeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -78,22 +80,26 @@ export default function HomePage() {
       <AppHeader onTitleClick={() => setCurrentView('studio')} />
       
       {/* Main Content Area */}
-      <div style={{ 
-        display: 'flex', 
-        flex: 1,
-        overflow: 'hidden'
-      }}>
-        {/* Sidebar */}
       <div 
+        className="app-main-container"
         style={{ 
-          width: `${sidebarWidth}px`,
-          background: 'linear-gradient(180deg, #1a1a1a 0%, #141414 100%)',
-          borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative'
+          display: 'flex', 
+          flex: 1,
+          overflow: 'hidden'
         }}
       >
+        {/* Sidebar */}
+        <div 
+          className="music-sidebar-container"
+          style={{ 
+            width: `${sidebarWidth}px`,
+            background: 'linear-gradient(180deg, #1a1a1a 0%, #141414 100%)',
+            borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative'
+          }}
+        >
         <MusicSidebar 
           currentView={currentView} 
           onViewChange={setCurrentView}
@@ -128,16 +134,124 @@ export default function HomePage() {
       </div>
 
         {/* Main Content Area */}
-        <div style={{ 
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          background: '#0a0a0a'
-        }}>
+        <div 
+          className="main-content-area"
+          style={{ 
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            background: '#0a0a0a'
+          }}
+        >
           {renderMainContent()}
         </div>
       </div>
+
+      {/* Mobile Menu Toggle Button */}
+      <button
+        className="mobile-menu-toggle"
+        onClick={() => setShowMobileMenu(!showMobileMenu)}
+        aria-label="Toggle menu"
+      >
+        ☰
+      </button>
+
+      {/* Mobile Menu */}
+      {showMobileMenu && (
+        <>
+          <div 
+            className="mobile-menu-overlay" 
+            onClick={() => setShowMobileMenu(false)}
+          />
+          <div className="mobile-menu-panel">
+            <div className="mobile-menu-header">
+              <div className="mobile-menu-title">
+                <span>🎵</span>
+                <span>Bitcoin Music</span>
+              </div>
+              <button 
+                className="mobile-menu-close"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="mobile-menu-content">
+              <div className="mobile-menu-section">
+                <h4>Navigation</h4>
+                <button 
+                  className={`mobile-menu-item ${currentView === 'studio' ? 'active' : ''}`}
+                  onClick={() => {
+                    setCurrentView('studio')
+                    setShowMobileMenu(false)
+                  }}
+                >
+                  <span>🎹</span>
+                  <span>Studio</span>
+                </button>
+                <button 
+                  className={`mobile-menu-item ${currentView === 'marketplace' ? 'active' : ''}`}
+                  onClick={() => {
+                    setCurrentView('marketplace')
+                    setShowMobileMenu(false)
+                  }}
+                >
+                  <span>🛍️</span>
+                  <span>Marketplace</span>
+                </button>
+                <button 
+                  className={`mobile-menu-item ${currentView === 'library' ? 'active' : ''}`}
+                  onClick={() => {
+                    setCurrentView('library')
+                    setShowMobileMenu(false)
+                  }}
+                >
+                  <span>📚</span>
+                  <span>Library</span>
+                </button>
+                <button 
+                  className={`mobile-menu-item ${currentView === 'exchange' ? 'active' : ''}`}
+                  onClick={() => {
+                    setCurrentView('exchange')
+                    setShowMobileMenu(false)
+                  }}
+                >
+                  <span>📈</span>
+                  <span>Exchange</span>
+                </button>
+              </div>
+              
+              <div className="mobile-menu-section">
+                <h4>Account</h4>
+                {session ? (
+                  <button 
+                    className="mobile-menu-item"
+                    onClick={() => {
+                      // Handle logout
+                      setShowMobileMenu(false)
+                    }}
+                  >
+                    <span>🚪</span>
+                    <span>Sign Out</span>
+                  </button>
+                ) : (
+                  <button 
+                    className="mobile-menu-item"
+                    onClick={() => {
+                      setShowAuthModal(true)
+                      setShowMobileMenu(false)
+                    }}
+                  >
+                    <span>🔑</span>
+                    <span>Sign In</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Auth Modal */}
       {showAuthModal && (
