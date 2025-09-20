@@ -26,8 +26,9 @@ import MultiTrackEditor from '@/components/studio/MultiTrackEditor'
 import MixerPanel from '@/components/studio/MixerPanel'
 import PianoRoll from '@/components/studio/PianoRoll'
 import { FileManager } from '@/components/studio/FileManager'
+import MixingDesk from '@/components/MixingDesk'
 
-type StudioView = 'arrange' | 'mixer' | 'piano'
+type StudioView = 'arrange' | 'mixer' | 'piano' | 'mixing'
 
 export default function StudioInterface() {
   const {
@@ -112,6 +113,8 @@ export default function StudioInterface() {
 
   const renderContent = () => {
     switch (currentView) {
+      case 'mixing':
+        return <MixingDesk />
       case 'mixer':
         return <MixerPanel tracks={tracks} />
       case 'piano':
@@ -194,7 +197,8 @@ export default function StudioInterface() {
         }}>
           {[
             { id: 'arrange', icon: <Layers size={16} />, label: 'Arrange' },
-            { id: 'mixer', icon: <Sliders size={16} />, label: 'Mixer' },
+            { id: 'mixing', icon: <Sliders size={16} />, label: 'Mixing Desk' },
+            { id: 'mixer', icon: <Volume2 size={16} />, label: 'Mixer' },
             { id: 'piano', icon: <Radio size={16} />, label: 'Piano Roll' }
           ].map((view) => (
             <button
