@@ -24,7 +24,7 @@ interface ChannelStripProps {
   onVolumeChange: (trackId: string, volume: number) => void
   onMuteToggle: (trackId: string, muted: boolean) => void
   onSoloToggle: (trackId: string, solo: boolean) => void
-  onAddEffect: (trackId: string, effectType: string) => void
+  onAddEffect: (trackId: string, effectType: 'reverb' | 'delay' | 'distortion' | 'filter') => void | Promise<void>
 }
 
 function ChannelStrip({ 
@@ -95,7 +95,7 @@ function ChannelStrip({
           EFFECTS
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          {['reverb', 'delay', 'distortion', 'filter'].map((effect) => (
+          {(['reverb', 'delay', 'distortion', 'filter'] as const).map((effect) => (
             <button
               key={effect}
               onClick={() => onAddEffect(track.id, effect)}

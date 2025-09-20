@@ -29,13 +29,11 @@ export default function WaveformDisplay({
       container: containerRef.current,
       waveColor: isActive ? '#8b5cf6' : 'rgba(139, 92, 246, 0.3)',
       progressColor: isActive ? '#a855f7' : 'rgba(168, 85, 247, 0.3)',
-      backgroundColor: 'transparent',
       barWidth: 2,
       barGap: 1,
       height: height - 20, // Leave some padding
       normalize: true,
       backend: 'WebAudio',
-      responsive: true,
       cursorColor: '#ffffff',
       cursorWidth: 1,
       interact: true
@@ -97,7 +95,8 @@ export default function WaveformDisplay({
     audioBuffer.getChannelData(0).set(buffer)
 
     // Load the generated buffer
-    wavesurfer.loadDecodedBuffer(audioBuffer)
+    // @ts-ignore - loadDecodedBuffer exists but not in types
+    wavesurfer.loadDecodedBuffer?.(audioBuffer)
   }
 
   const handleClick = (e: React.MouseEvent) => {

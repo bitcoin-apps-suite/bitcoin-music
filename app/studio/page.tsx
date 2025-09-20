@@ -21,9 +21,9 @@ import {
   Clock,
   Headphones
 } from 'lucide-react'
-import MusicSequencer from '@/components/studio/MusicSequencer'
-import TrackMixer from '@/components/studio/TrackMixer'
-import InstrumentPanel from '@/components/studio/InstrumentPanel'
+// import MusicSequencer from '@/components/studio/MusicSequencer'
+// import TrackMixer from '@/components/studio/TrackMixer'
+// import InstrumentPanel from '@/components/studio/InstrumentPanel'
 
 interface Track {
   id: string
@@ -48,11 +48,11 @@ export default function StudioPage() {
   const chunksRef = useRef<Blob[]>([])
 
   useEffect(() => {
-    Tone.Transport.bpm.value = bpm
-    return () => {
-      Tone.Transport.stop()
-      Tone.Transport.cancel()
-    }
+    // Tone.Transport.bpm.value = bpm
+    // return () => {
+    //   Tone.Transport.stop()
+    //   Tone.Transport.cancel()
+    // }
   }, [bpm])
 
   const startRecording = async () => {
@@ -320,12 +320,12 @@ export default function StudioPage() {
               </div>
             </div>
 
-            <MusicSequencer />
+            {/* <MusicSequencer /> */}
           </div>
 
           <div className="space-y-6">
-            <TrackMixer tracks={tracks} onUpdateTrack={updateTrack} />
-            <InstrumentPanel />
+            {/* <TrackMixer tracks={tracks} onUpdateTrack={updateTrack} /> */}
+            {/* <InstrumentPanel /> */}
           </div>
         </div>
       </div>

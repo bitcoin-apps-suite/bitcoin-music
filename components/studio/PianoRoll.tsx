@@ -34,8 +34,8 @@ export default function PianoRoll() {
     }
   }
 
-  const createMidiTrack = () => {
-    const trackId = createTrack('MIDI Synth', 'midi')
+  const createMidiTrack = async () => {
+    const trackId = await createTrack('MIDI Synth', 'midi')
     setSelectedTrack(trackId)
   }
 

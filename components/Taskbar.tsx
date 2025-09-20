@@ -543,7 +543,7 @@ export default function Taskbar() {
         {showMobileMenu ? <X size={18} /> : <Menu size={18} />}
       </button>
 
-      {/* Right side - Status items */}
+      {/* Right side - Links and Status items */}
       <div className="hidden sm:flex" style={{
         marginLeft: 'auto',
         alignItems: 'center',
@@ -552,6 +552,57 @@ export default function Taskbar() {
         fontSize: '12px',
         color: 'rgba(255, 255, 255, 0.8)'
       }}>
+        {/* GitHub Link */}
+        <a
+          href="https://github.com/bitcoin-apps-suite/bitcoin-music"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: 'rgba(255, 255, 255, 0.8)',
+            textDecoration: 'none',
+            transition: 'color 0.15s ease',
+            fontWeight: '400'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
+        >
+          GitHub
+        </a>
+        
+        {/* Docs Link */}
+        <a
+          href="/tasks"
+          style={{
+            color: 'rgba(255, 255, 255, 0.8)',
+            textDecoration: 'none',
+            transition: 'color 0.15s ease',
+            fontWeight: '400'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
+        >
+          Developers
+        </a>
+        
+        {/* Token Link */}
+        <a
+          href="/token"
+          style={{
+            color: 'rgba(255, 255, 255, 0.8)',
+            textDecoration: 'none',
+            transition: 'color 0.15s ease',
+            fontWeight: '400'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
+        >
+          $BMusic
+        </a>
+        
+        {/* Divider */}
+        <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>|</span>
+        
+        {/* Connection Status */}
         {session ? (
           <>
             <span>{session.user?.email || 'Connected'}</span>
