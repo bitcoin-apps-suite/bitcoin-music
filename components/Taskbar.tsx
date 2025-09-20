@@ -18,6 +18,14 @@ interface DropdownMenu {
   items: DropdownItem[]
 }
 
+interface BitcoinApp {
+  name: string
+  color: string
+  url: string
+  current?: boolean
+  action?: () => void
+}
+
 export default function Taskbar() {
   const { data: session } = useSession()
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
@@ -26,7 +34,7 @@ export default function Taskbar() {
   const menuRef = useRef<HTMLDivElement>(null)
 
   const handleOpenExchange = () => {
-    window.location.href = '/exchange'
+    window.dispatchEvent(new CustomEvent('openExchange'))
   }
 
   const handleOpenMarketplace = () => {
@@ -219,14 +227,14 @@ export default function Taskbar() {
     }
   ]
 
-  const bitcoinApps = [
+  const bitcoinApps: BitcoinApp[] = [
     { name: 'Bitcoin Auth', color: '#ef4444', url: '#' },
     { name: 'Bitcoin Chat', color: '#ff6500', url: '#' },
     { name: 'Bitcoin Domains', color: '#eab308', url: '#' },
     { name: 'Bitcoin Draw', color: '#10b981', url: '#' },
     { name: 'Bitcoin Drive', color: '#22c55e', url: 'https://bitcoin-drive.vercel.app' },
     { name: 'Bitcoin Email', color: '#06b6d4', url: '#' },
-    { name: 'Bitcoin Exchange', color: '#3b82f6', url: '/exchange' },
+    { name: 'Bitcoin Exchange', color: '#3b82f6', url: '#', action: handleOpenExchange },
     { name: 'Bitcoin Music', color: '#8b5cf6', url: '#', current: true },
     { name: 'Bitcoin Paint', color: '#a855f7', url: '#' },
     { name: 'Bitcoin Pics', color: '#ec4899', url: '#' },
@@ -339,28 +347,70 @@ export default function Taskbar() {
               Bitcoin Apps
             </div>
             
-            {bitcoinApps.map((app) => (
-              <a
-                key={app.name}
-                href={app.url}
-                target={app.url.startsWith('http') ? '_blank' : undefined}
-                rel={app.url.startsWith('http') ? 'noopener noreferrer' : undefined}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '6px 16px',
-                  color: app.current ? '#ffffff' : '#ffffff',
-                  background: 'transparent',
-                  textDecoration: 'none',
-                  fontSize: '13px',
-                  transition: 'background 0.15s ease',
-                  cursor: 'pointer',
-                  fontWeight: app.current ? '500' : '400'
-                }}
-                onClick={() => setShowBitcoinSuite(false)}
-                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-              >
+            {bitcoinApps.map((app) => {
+              const isAction = 'action' in app && app.action
+              return isAction ? (
+                <button
+                  key={app.name}
+                  onClick={() => {
+                    app.action?.()
+                    setShowBitcoinSuite(false)
+                  }}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '6px 16px',
+                    color: app.current ? '#ffffff' : '#ffffff',
+                    background: 'transparent',
+                    border: 'none',
+                    textDecoration: 'none',
+                    fontSize: '13px',
+                    transition: 'background 0.15s ease',
+                    cursor: 'pointer',
+                    fontWeight: app.current ? '500' : '400',
+                    textAlign: 'left'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                >
+                  <span 
+                    style={{ 
+                      color: app.color,
+                      marginRight: '12px',
+                      fontSize: '16px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    ₿
+                  </span>
+                  <span>
+                    {app.name}
+                    {app.current && <span style={{ marginLeft: '8px', fontSize: '11px', opacity: 0.6 }}>(current)</span>}
+                  </span>
+                </button>
+              ) : (
+                <a
+                  key={app.name}
+                  href={app.url}
+                  target={app.url.startsWith('http') ? '_blank' : undefined}
+                  rel={app.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '6px 16px',
+                    color: app.current ? '#ffffff' : '#ffffff',
+                    background: 'transparent',
+                    textDecoration: 'none',
+                    fontSize: '13px',
+                    transition: 'background 0.15s ease',
+                    cursor: 'pointer',
+                    fontWeight: app.current ? '500' : '400'
+                  }}
+                  onClick={() => setShowBitcoinSuite(false)}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                >
                 <span 
                   style={{ 
                     color: app.color,
@@ -535,7 +585,6 @@ export default function Taskbar() {
           background: 'transparent',
           border: 'none',
           color: '#ffffff',
-          display: 'flex',
           alignItems: 'center',
           cursor: 'pointer'
         }}

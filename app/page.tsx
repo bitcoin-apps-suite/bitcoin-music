@@ -41,6 +41,15 @@ export default function HomePage() {
     }
   }, [isResizing])
 
+  useEffect(() => {
+    const handleOpenExchange = () => {
+      setCurrentView('exchange')
+    }
+
+    window.addEventListener('openExchange', handleOpenExchange)
+    return () => window.removeEventListener('openExchange', handleOpenExchange)
+  }, [])
+
   const renderMainContent = () => {
     switch (currentView) {
       case 'studio':
