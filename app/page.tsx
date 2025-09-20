@@ -9,6 +9,7 @@ import LibraryView from '@/components/LibraryView'
 import MusicExchangeView from '@/components/MusicExchangeView'
 import AuthModal from '@/components/AuthModal'
 import AppHeader from '@/components/AppHeader'
+import InstallPrompt from '@/components/InstallPrompt'
 import '../styles/AppHeader.css'
 import '../styles/MobileLayout.css'
 
@@ -257,6 +258,9 @@ export default function HomePage() {
       {showAuthModal && (
         <AuthModal onClose={() => setShowAuthModal(false)} />
       )}
+
+      {/* Install Prompt */}
+      <InstallPrompt />
     </div>
   )
 }

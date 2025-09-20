@@ -3,22 +3,130 @@
   "short_name": "Bitcoin Music",
   "description": "Create, mint, and trade music NFTs on Bitcoin BSV",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#8b5cf6",
-  "orientation": "landscape",
+  "orientation": "any",
   "icons": [
+    {
+      "src": "/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["music", "entertainment", "finance"],
-  "lang": "en-US"
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "Studio",
+      "short_name": "Studio",
+      "description": "Open music studio",
+      "url": "/studio",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Exchange",
+      "short_name": "Exchange",
+      "description": "Music exchange",
+      "url": "/exchange",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Bitcoin Music Studio Desktop"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Bitcoin Music Studio Mobile"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [{
+        "name": "audio",
+        "accept": ["audio/*"]
+      }]
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "audio/mpeg": [".mp3"],
+        "audio/wav": [".wav"],
+        "audio/flac": [".flac"],
+        "audio/ogg": [".ogg"],
+        "audio/aac": [".aac", ".m4a"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+bitcoinmusic",
+      "url": "/?track=%s"
+    }
+  ],
+  "iarc_rating_id": "",
+  "publicPath": "/"
 }
