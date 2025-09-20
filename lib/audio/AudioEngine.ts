@@ -1,8 +1,6 @@
 'use client'
 
-// Simplified audio engine without Tone.js for now
-// This will allow the app to run without audio import errors
-// Real audio functionality will be added later once Tone.js import issues are resolved
+import { getTone, initializeTone } from './ToneWrapper'
 
 export interface Track {
   id: string
@@ -30,13 +28,13 @@ class AudioEngine {
   private mainOut: any = null
   private recorder: any = null
   private metronome: any = null
-  private isCurrentlyPlaying = false
-  private isCurrentlyRecording = false
-  private currentBPM = 120
-  private currentPosition = '0:0:0'
+  private masterCompressor: any = null
+  private masterLimiter: any = null
+  private mediaRecorder: MediaRecorder | null = null
+  private recordedChunks: Blob[] = []
   
   constructor() {
-    // Simplified constructor without Tone.js
+    // Constructor will initialize Tone.js dynamically
   }
 
   static getInstance(): AudioEngine {
@@ -50,63 +48,169 @@ class AudioEngine {
     if (this.initialized) return
 
     try {
-      console.log('Simplified audio engine initialized')
+      // Initialize Tone.js
+      const initialized = await initializeTone()
+      if (!initialized) {
+        console.warn('Running without Tone.js audio engine')
+        this.initialized = true
+        return
+      }
+
+      const Tone = await getTone()
+      if (!Tone) {
+        this.initialized = true
+        return
+      }
+
+      // Set up master chain
+      this.masterCompressor = new Tone.Compressor(-20, 10)
+      this.masterLimiter = new Tone.Limiter(-3)
+      this.mainOut = Tone.Destination
+      
+      // Connect master chain
+      this.masterCompressor.connect(this.masterLimiter)
+      this.masterLimiter.connect(this.mainOut)
+
+      // Initialize transport
+      Tone.Transport.bpm.value = 120
+      
+      // Set up metronome
+      this.metronome = new Tone.Oscillator(800, 'sine').toDestination()
+      this.metronome.volume.value = -10
+      this.metronome.stop() // Start stopped
+
       this.initialized = true
+      console.log('Tone.js audio engine initialized')
     } catch (error) {
       console.error('Failed to initialize audio:', error)
+      this.initialized = true
     }
   }
 
   // Transport Controls
   async play() {
     await this.initialize()
-    this.isCurrentlyPlaying = true
-    console.log('Audio engine: play started')
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      await Tone.Transport.start()
+      console.log('Transport started')
+    }
     return true
   }
 
-  pause() {
-    this.isCurrentlyPlaying = false
-    console.log('Audio engine: paused')
+  async pause() {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      Tone.Transport.pause()
+      console.log('Transport paused')
+    }
   }
 
-  stop() {
-    this.isCurrentlyPlaying = false
-    this.currentPosition = '0:0:0'
-    console.log('Audio engine: stopped')
+  async stop() {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      Tone.Transport.stop()
+      Tone.Transport.position = 0
+      console.log('Transport stopped')
+    }
   }
 
   async startRecording() {
     await this.initialize()
-    this.isCurrentlyRecording = true
-    console.log('Audio engine: recording started')
+    
+    try {
+      const Tone = await getTone()
+      // Use Web Audio API MediaRecorder
+      if (Tone && Tone.context) {
+        const dest = Tone.context.createMediaStreamDestination()
+        this.mainOut.connect(dest)
+        
+        this.recordedChunks = []
+        this.mediaRecorder = new MediaRecorder(dest.stream)
+        
+        this.mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            this.recordedChunks.push(event.data)
+          }
+        }
+        
+        this.mediaRecorder.start()
+        console.log('Recording started')
+      }
+    } catch (error) {
+      console.error('Failed to start recording:', error)
+    }
+    
     this.play()
   }
 
   async stopRecording(): Promise<Blob | null> {
-    this.isCurrentlyRecording = false
-    console.log('Audio engine: recording stopped')
     this.stop()
-    return null
+    
+    return new Promise((resolve) => {
+      if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+        this.mediaRecorder.onstop = () => {
+          const blob = new Blob(this.recordedChunks, { type: 'audio/wav' })
+          this.recordedChunks = []
+          console.log('Recording stopped')
+          resolve(blob)
+        }
+        this.mediaRecorder.stop()
+      } else {
+        resolve(null)
+      }
+    })
   }
 
   // Track Management
-  createTrack(name: string, type: 'audio' | 'midi' | 'drum' = 'audio'): string {
+  async createTrack(name: string, type: 'audio' | 'midi' | 'drum' = 'audio'): Promise<string> {
     const id = `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+    let channel = null
+    let instrument = null
+    
+    const Tone = await getTone()
+    if (Tone) {
+      // Create channel strip
+      channel = new Tone.Channel({
+        volume: 0,
+        pan: 0
+      })
+      
+      // Create instrument based on type
+      if (type === 'midi') {
+        instrument = new Tone.PolySynth(Tone.Synth, {
+          oscillator: { type: 'sine' },
+          envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 1 }
+        })
+        instrument.connect(channel)
+      } else if (type === 'drum') {
+        instrument = new Tone.Sampler({
+          C4: 'https://tonejs.github.io/audio/drum-samples/kick.mp3',
+          D4: 'https://tonejs.github.io/audio/drum-samples/snare.mp3',
+          E4: 'https://tonejs.github.io/audio/drum-samples/hihat-closed.mp3'
+        })
+        instrument.connect(channel)
+      }
+      
+      if (this.masterCompressor) {
+        channel.connect(this.masterCompressor)
+      }
+    }
 
     const track: Track = {
       id,
       name,
-      volume: 0, // 0 dB
+      volume: 0,
       muted: false,
       solo: false,
-      instrument: null,
+      instrument,
       effects: [],
-      channel: null
+      channel
     }
 
     this.tracks.set(id, track)
-    console.log(`Audio engine: created ${type} track "${name}" with id ${id}`)
+    console.log(`Created ${type} track "${name}" with id ${id}`)
     return id
   }
 
@@ -131,7 +235,10 @@ class AudioEngine {
     const track = this.tracks.get(trackId)
     if (track) {
       track.volume = volume
-      console.log(`Audio engine: set track ${trackId} volume to ${volume}dB`)
+      if (track.channel) {
+        track.channel.volume.value = volume
+      }
+      console.log(`Set track ${trackId} volume to ${volume}dB`)
     }
   }
 
@@ -139,7 +246,10 @@ class AudioEngine {
     const track = this.tracks.get(trackId)
     if (track) {
       track.muted = muted
-      console.log(`Audio engine: ${muted ? 'muted' : 'unmuted'} track ${trackId}`)
+      if (track.channel) {
+        track.channel.mute = muted
+      }
+      console.log(`${muted ? 'Muted' : 'Unmuted'} track ${trackId}`)
     }
   }
 
@@ -147,83 +257,207 @@ class AudioEngine {
     const track = this.tracks.get(trackId)
     if (track) {
       track.solo = solo
-      console.log(`Audio engine: ${solo ? 'soloed' : 'unsoloed'} track ${trackId}`)
+      
+      // Handle solo logic
+      const hasSoloedTracks = Array.from(this.tracks.values()).some(t => t.solo)
+      
+      this.tracks.forEach((t) => {
+        if (t.channel) {
+          if (hasSoloedTracks) {
+            t.channel.mute = !t.solo
+          } else {
+            t.channel.mute = t.muted
+          }
+        }
+      })
+      
+      console.log(`${solo ? 'Soloed' : 'Unsoloed'} track ${trackId}`)
     }
   }
 
   // Audio Loading
   async loadAudioToTrack(trackId: string, audioUrl: string) {
     const track = this.tracks.get(trackId)
-    if (track) {
-      console.log(`Audio engine: loaded audio to track ${trackId}`)
+    const Tone = await getTone()
+    if (track && Tone) {
+      try {
+        const player = new Tone.Player(audioUrl)
+        await player.load()
+        if (track.channel) {
+          player.connect(track.channel)
+        }
+        track.instrument = player
+        console.log(`Loaded audio to track ${trackId}`)
+      } catch (error) {
+        console.error(`Failed to load audio to track ${trackId}:`, error)
+      }
     }
   }
 
   // MIDI Playback
-  playNote(trackId: string, note: string, duration: string = '8n', time?: number) {
+  async playNote(trackId: string, note: string, duration: string = '8n', time?: number) {
     const track = this.tracks.get(trackId)
-    if (track) {
-      console.log(`Audio engine: playing note ${note} on track ${trackId}`)
+    const Tone = await getTone()
+    if (track && track.instrument && Tone) {
+      const playTime = time !== undefined ? time : Tone.now()
+      
+      if (track.instrument.triggerAttackRelease) {
+        track.instrument.triggerAttackRelease(note, duration, playTime)
+      } else if (track.instrument.start) {
+        track.instrument.start(playTime)
+      }
+      
+      console.log(`Playing note ${note} on track ${trackId}`)
     }
   }
 
   // Effects
-  addEffect(trackId: string, effectType: 'reverb' | 'delay' | 'distortion' | 'filter') {
+  async addEffect(trackId: string, effectType: 'reverb' | 'delay' | 'distortion' | 'filter') {
     const track = this.tracks.get(trackId)
-    if (!track) return
+    const Tone = await getTone()
+    if (!track || !Tone) return
 
-    track.effects.push({ name: effectType, type: effectType })
-    console.log(`Audio engine: added ${effectType} effect to track ${trackId}`)
+    let effect = null
+    
+    switch (effectType) {
+      case 'reverb':
+        effect = new Tone.Reverb(2)
+        break
+      case 'delay':
+        effect = new Tone.Delay(0.25)
+        break
+      case 'distortion':
+        effect = new Tone.Distortion(0.4)
+        break
+      case 'filter':
+        effect = new Tone.Filter(350, 'lowpass')
+        break
+    }
+    
+    if (effect && track.channel && this.masterCompressor) {
+      // Insert effect in channel chain
+      track.channel.chain(effect, this.masterCompressor)
+      track.effects.push(effect)
+      console.log(`Added ${effectType} effect to track ${trackId}`)
+    }
   }
 
   // Transport Control
-  setBPM(bpm: number) {
-    this.currentBPM = bpm
-    console.log(`Audio engine: set BPM to ${bpm}`)
+  async setBPM(bpm: number) {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      Tone.Transport.bpm.value = bpm
+    }
+    console.log(`Set BPM to ${bpm}`)
   }
 
-  getBPM(): number {
-    return this.currentBPM
+  async getBPM(): Promise<number> {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      return Tone.Transport.bpm.value
+    }
+    return 120
   }
 
-  getPosition(): string {
-    return this.currentPosition
+  async getPosition(): Promise<string> {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      return Tone.Transport.position.toString()
+    }
+    return '0:0:0'
   }
 
-  setPosition(position: string) {
-    this.currentPosition = position
-    console.log(`Audio engine: set position to ${position}`)
+  async setPosition(position: string) {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      Tone.Transport.position = position
+    }
+    console.log(`Set position to ${position}`)
   }
 
   // Loop Control
-  setLoop(start: string, end: string) {
-    console.log(`Audio engine: set loop from ${start} to ${end}`)
+  async setLoop(start: string, end: string) {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      Tone.Transport.loop = true
+      Tone.Transport.loopStart = start
+      Tone.Transport.loopEnd = end
+    }
+    console.log(`Set loop from ${start} to ${end}`)
   }
 
-  disableLoop() {
-    console.log('Audio engine: disabled loop')
+  async disableLoop() {
+    const Tone = await getTone()
+    if (Tone && Tone.Transport) {
+      Tone.Transport.loop = false
+    }
+    console.log('Disabled loop')
   }
 
   // Metronome
-  toggleMetronome(enabled: boolean) {
-    console.log(`Audio engine: metronome ${enabled ? 'enabled' : 'disabled'}`)
+  async toggleMetronome(enabled: boolean) {
+    const Tone = await getTone()
+    if (!Tone || !this.metronome) return
+    
+    if (enabled) {
+      // Create a loop for metronome clicks
+      const loop = new Tone.Loop((time: number) => {
+        this.metronome.start(time).stop(time + 0.1)
+      }, '4n')
+      loop.start(0)
+    } else {
+      // Stop metronome
+      if (this.metronome) {
+        this.metronome.stop()
+      }
+    }
+    
+    console.log(`Metronome ${enabled ? 'enabled' : 'disabled'}`)
   }
 
   // State
-  getState(): AudioEngineState {
+  async getState(): Promise<AudioEngineState> {
+    const Tone = await getTone()
+    const isPlaying = Tone && Tone.Transport ? Tone.Transport.state === 'started' : false
+    const isRecording = this.mediaRecorder ? this.mediaRecorder.state === 'recording' : false
+    
     return {
-      isPlaying: this.isCurrentlyPlaying,
-      isRecording: this.isCurrentlyRecording,
-      bpm: this.currentBPM,
-      position: this.currentPosition,
+      isPlaying,
+      isRecording,
+      bpm: await this.getBPM(),
+      position: await this.getPosition(),
       tracks: this.getAllTracks()
     }
   }
 
   // Cleanup
-  dispose() {
+  async dispose() {
+    const Tone = await getTone()
+    if (Tone) {
+      // Stop transport
+      if (Tone.Transport) {
+        Tone.Transport.stop()
+        Tone.Transport.cancel()
+      }
+      
+      // Dispose all tracks
+      this.tracks.forEach(track => {
+        if (track.instrument && track.instrument.dispose) track.instrument.dispose()
+        if (track.channel && track.channel.dispose) track.channel.dispose()
+        track.effects.forEach(effect => {
+          if (effect && effect.dispose) effect.dispose()
+        })
+      })
+      
+      // Dispose master chain
+      if (this.masterCompressor && this.masterCompressor.dispose) this.masterCompressor.dispose()
+      if (this.masterLimiter && this.masterLimiter.dispose) this.masterLimiter.dispose()
+      if (this.metronome && this.metronome.dispose) this.metronome.dispose()
+    }
+    
     this.tracks.clear()
-    console.log('Audio engine: disposed')
+    this.initialized = false
+    console.log('Audio engine disposed')
   }
 }
 

@@ -18,8 +18,9 @@ export function useAudioEngine() {
     let interval: NodeJS.Timeout | null = null
 
     if (state.isPlaying) {
-      interval = setInterval(() => {
-        setState(audioEngine.getState())
+      interval = setInterval(async () => {
+        const newState = await audioEngine.getState()
+        setState(newState)
       }, 100)
     }
 
@@ -30,73 +31,85 @@ export function useAudioEngine() {
 
   // Initial state update
   useEffect(() => {
-    setState(audioEngine.getState())
+    audioEngine.getState().then(setState)
   }, [audioEngine])
 
   const play = useCallback(async () => {
     await audioEngine.play()
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const pause = useCallback(() => {
-    audioEngine.pause()
-    setState(audioEngine.getState())
+  const pause = useCallback(async () => {
+    await audioEngine.pause()
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const stop = useCallback(() => {
-    audioEngine.stop()
-    setState(audioEngine.getState())
+  const stop = useCallback(async () => {
+    await audioEngine.stop()
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
   const startRecording = useCallback(async () => {
     await audioEngine.startRecording()
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
   const stopRecording = useCallback(async () => {
     const blob = await audioEngine.stopRecording()
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
     return blob
   }, [audioEngine])
 
-  const setBPM = useCallback((bpm: number) => {
-    audioEngine.setBPM(bpm)
-    setState(audioEngine.getState())
+  const setBPM = useCallback(async (bpm: number) => {
+    await audioEngine.setBPM(bpm)
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const createTrack = useCallback((name: string, type: 'audio' | 'midi' | 'drum' = 'audio') => {
-    const trackId = audioEngine.createTrack(name, type)
-    setState(audioEngine.getState())
+  const createTrack = useCallback(async (name: string, type: 'audio' | 'midi' | 'drum' = 'audio') => {
+    const trackId = await audioEngine.createTrack(name, type)
+    const newState = await audioEngine.getState()
+    setState(newState)
     return trackId
   }, [audioEngine])
 
-  const setTrackVolume = useCallback((trackId: string, volume: number) => {
+  const setTrackVolume = useCallback(async (trackId: string, volume: number) => {
     audioEngine.setTrackVolume(trackId, volume)
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const setTrackMute = useCallback((trackId: string, muted: boolean) => {
+  const setTrackMute = useCallback(async (trackId: string, muted: boolean) => {
     audioEngine.setTrackMute(trackId, muted)
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const setTrackSolo = useCallback((trackId: string, solo: boolean) => {
+  const setTrackSolo = useCallback(async (trackId: string, solo: boolean) => {
     audioEngine.setTrackSolo(trackId, solo)
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const playNote = useCallback((trackId: string, note: string, duration: string = '8n') => {
-    audioEngine.playNote(trackId, note, duration)
+  const playNote = useCallback(async (trackId: string, note: string, duration: string = '8n') => {
+    await audioEngine.playNote(trackId, note, duration)
   }, [audioEngine])
 
   const loadAudioToTrack = useCallback(async (trackId: string, audioUrl: string) => {
     await audioEngine.loadAudioToTrack(trackId, audioUrl)
-    setState(audioEngine.getState())
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
-  const addEffect = useCallback((trackId: string, effectType: 'reverb' | 'delay' | 'distortion' | 'filter') => {
-    audioEngine.addEffect(trackId, effectType)
-    setState(audioEngine.getState())
+  const addEffect = useCallback(async (trackId: string, effectType: 'reverb' | 'delay' | 'distortion' | 'filter') => {
+    await audioEngine.addEffect(trackId, effectType)
+    const newState = await audioEngine.getState()
+    setState(newState)
   }, [audioEngine])
 
   return {
