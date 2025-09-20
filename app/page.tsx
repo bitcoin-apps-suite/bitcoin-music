@@ -6,8 +6,10 @@ import MusicSidebar from '@/components/MusicSidebar'
 import StudioInterface from '@/components/StudioInterface'
 import MarketplaceView from '@/components/MarketplaceView'
 import LibraryView from '@/components/LibraryView'
-import ExchangeView from '@/components/ExchangeView'
+import MusicExchangeView from '@/components/MusicExchangeView'
 import AuthModal from '@/components/AuthModal'
+import AppHeader from '@/components/AppHeader'
+import '../styles/AppHeader.css'
 
 type ViewMode = 'studio' | 'marketplace' | 'library' | 'exchange'
 
@@ -59,7 +61,7 @@ export default function HomePage() {
       case 'library':
         return <LibraryView />
       case 'exchange':
-        return <ExchangeView />
+        return <MusicExchangeView />
       default:
         return <StudioInterface />
     }
@@ -67,12 +69,21 @@ export default function HomePage() {
 
   return (
     <div style={{ 
-      display: 'flex', 
+      display: 'flex',
+      flexDirection: 'column',
       height: 'calc(100vh - 28px)',
-      background: '#0a0a0a',
-      overflow: 'hidden'
+      background: '#0a0a0a'
     }}>
-      {/* Sidebar */}
+      {/* Header */}
+      <AppHeader onTitleClick={() => setCurrentView('studio')} />
+      
+      {/* Main Content Area */}
+      <div style={{ 
+        display: 'flex', 
+        flex: 1,
+        overflow: 'hidden'
+      }}>
+        {/* Sidebar */}
       <div 
         style={{ 
           width: `${sidebarWidth}px`,
@@ -116,15 +127,16 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Main Content Area */}
-      <div style={{ 
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        background: '#0a0a0a'
-      }}>
-        {renderMainContent()}
+        {/* Main Content Area */}
+        <div style={{ 
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          background: '#0a0a0a'
+        }}>
+          {renderMainContent()}
+        </div>
       </div>
 
       {/* Auth Modal */}

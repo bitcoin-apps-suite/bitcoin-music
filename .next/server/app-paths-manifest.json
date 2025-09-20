@@ -2,11 +2,15 @@
   "/_not-found": "app/_not-found.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/community/page": "app/community/page.js",
-  "/marketplace/page": "app/marketplace/page.js",
-  "/studio/page": "app/studio/page.js",
   "/page": "app/page.js",
   "/token/page": "app/token/page.js",
+  "/marketplace/page": "app/marketplace/page.js",
   "/library/page": "app/library/page.js",
+  "/studio/page": "app/studio/page.js",
+  "/wallet/page": "app/wallet/page.js",
   "/tasks/page": "app/tasks/page.js",
-  "/wallet/page": "app/wallet/page.js"
+  "/opengraph-image/route": "app/opengraph-image/route.js",
+  "/twitter-image/route": "app/twitter-image/route.js",
+  "/icon/route": "app/icon/route.js",
+  "/apple-icon/route": "app/apple-icon/route.js"
 }

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { Menu, X } from 'lucide-react'
+import BitcoinMusicLogo from './BitcoinMusicLogo'
 
 interface DropdownItem {
   label?: string
@@ -455,7 +456,12 @@ export default function Taskbar() {
                 transition: 'background 0.15s ease'
               }}
             >
-              {menu.label}
+              {menu.label === 'Bitcoin Music' ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <BitcoinMusicLogo size={16} />
+                  <span>{menu.label}</span>
+                </div>
+              ) : menu.label}
             </button>
 
             {/* Dropdown Menu */}
@@ -558,7 +564,7 @@ export default function Taskbar() {
 
       {/* Mobile: Center title */}
       <button 
-        className="sm:hidden flex-1 text-center" 
+        className="sm:hidden flex-1" 
         onClick={() => {
           window.location.href = '/'
         }}
@@ -569,11 +575,16 @@ export default function Taskbar() {
           background: 'transparent',
           border: 'none',
           cursor: 'pointer',
-          height: '28px'
+          height: '28px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '6px'
         }}
         title="Return to home"
       >
-        Bitcoin Music
+        <BitcoinMusicLogo size={18} />
+        <span>Bitcoin Music</span>
       </button>
 
       {/* Mobile Menu Button - Only visible on mobile */}
