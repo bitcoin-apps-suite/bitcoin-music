@@ -20,6 +20,7 @@ interface DropdownMenu {
 
 export default function Taskbar() {
   const { data: session } = useSession()
+  const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [showBitcoinSuite, setShowBitcoinSuite] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -240,6 +241,7 @@ export default function Taskbar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setActiveMenu(null)
         setShowBitcoinSuite(false)
         setShowMobileMenu(false)
       }
@@ -288,6 +290,7 @@ export default function Taskbar() {
           <button
             onClick={() => {
               setShowBitcoinSuite(!showBitcoinSuite)
+              setActiveMenu(null)
             }}
             onDoubleClick={() => {
               window.location.href = '/'
@@ -378,64 +381,127 @@ export default function Taskbar() {
         )}
         </div>
 
-        {/* Simple Navigation Links - Desktop */}
-        <div className="hidden sm:flex" style={{ alignItems: 'center', height: '100%', gap: '24px', marginLeft: '24px' }}>
-          <a
-            href="/studio"
-            style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: '400',
-              transition: 'color 0.15s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
-          >
-            Studio
-          </a>
-          <a
-            href="/marketplace"
-            style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: '400',
-              transition: 'color 0.15s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
-          >
-            Marketplace
-          </a>
-          <a
-            href="/exchange"
-            style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: '400',
-              transition: 'color 0.15s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
-          >
-            Exchange
-          </a>
-          <a
-            href="/library"
-            style={{
-              color: 'rgba(255, 255, 255, 0.8)',
-              textDecoration: 'none',
-              fontSize: '13px',
-              fontWeight: '400',
-              transition: 'color 0.15s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
-          >
-            Library
-          </a>
+        {/* Menu Items - Hidden on mobile */}
+        <div className="hidden sm:flex" style={{ alignItems: 'center', height: '100%' }}>
+        {menus.map((menu) => (
+          <div key={menu.label} style={{ position: 'relative' }}>
+            <button
+              onClick={() => {
+                setActiveMenu(activeMenu === menu.label ? null : menu.label)
+                setShowBitcoinSuite(false)
+              }}
+              onMouseEnter={() => activeMenu && setActiveMenu(menu.label)}
+              style={{
+                padding: '0 12px',
+                height: '24px',
+                background: activeMenu === menu.label ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                border: 'none',
+                color: '#ffffff',
+                fontSize: '13px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontWeight: '400',
+                transition: 'background 0.15s ease'
+              }}
+            >
+              {menu.label}
+            </button>
+
+            {/* Dropdown Menu */}
+            {activeMenu === menu.label && (
+              <div style={{
+                position: 'absolute',
+                top: '28px',
+                left: 0,
+                minWidth: '200px',
+                background: '#1a1a1a',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '8px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+                padding: '4px 0',
+                zIndex: 9999,
+                overflow: 'hidden'
+              }}>
+                {menu.items.map((item, index) => (
+                  item.divider ? (
+                    <div 
+                      key={index}
+                      style={{
+                        height: '1px',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        margin: '4px 0'
+                      }}
+                    />
+                  ) : item.href ? (
+                    <a
+                      key={index}
+                      href={item.href}
+                      target={item.target || '_blank'}
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '4px 12px',
+                        color: '#ffffff',
+                        textDecoration: 'none',
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        transition: 'background 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(139, 92, 246, 0.2)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent'
+                      }}
+                    >
+                      <span>{item.label}</span>
+                      {item.shortcut && (
+                        <span style={{ opacity: 0.6, fontSize: '12px' }}>{item.shortcut}</span>
+                      )}
+                    </a>
+                  ) : (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        item.action?.()
+                        setActiveMenu(null)
+                      }}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                        padding: '4px 12px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#ffffff',
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        fontFamily: 'inherit',
+                        textAlign: 'left',
+                        transition: 'background 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(139, 92, 246, 0.2)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent'
+                      }}
+                    >
+                      <span>{item.label}</span>
+                      {item.shortcut && (
+                        <span style={{ opacity: 0.6, fontSize: '12px' }}>{item.shortcut}</span>
+                      )}
+                    </button>
+                  )
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
         </div>
       </div>
 
