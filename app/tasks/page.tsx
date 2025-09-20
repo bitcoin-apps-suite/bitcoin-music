@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import './TasksPage.css'
 import { 
   Music, 
   Code, 
@@ -108,19 +108,6 @@ const categoryIcons = {
   ui: Palette
 }
 
-const categoryColors = {
-  daw: 'from-purple-500 to-pink-500',
-  blockchain: 'from-yellow-500 to-orange-500',
-  marketplace: 'from-green-500 to-teal-500',
-  ui: 'from-blue-500 to-indigo-500'
-}
-
-const priorityColors = {
-  HIGH: 'text-red-400',
-  MEDIUM: 'text-yellow-400',
-  LOW: 'text-green-400'
-}
-
 export default function TasksPage() {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'daw' | 'blockchain' | 'marketplace' | 'ui'>('all')
   const [selectedPriority, setSelectedPriority] = useState<'all' | 'HIGH' | 'MEDIUM' | 'LOW'>('all')
@@ -141,353 +128,291 @@ export default function TasksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900/20 to-gray-900 text-white">
-      {/* Header */}
-      <div className="relative overflow-hidden bg-black/50 border-b border-purple-500/30">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10" />
-        <div className="container mx-auto px-6 py-12 relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-              Bitcoin Music Development Tasks
-            </h1>
-            <p className="text-xl text-gray-300 mb-8">
-              Earn 1% equity (10,000,000 $BMusic tokens) for each completed task
-            </p>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-              <div className="bg-black/50 backdrop-blur-sm border border-purple-500/30 rounded-xl p-6">
-                <div className="text-3xl font-bold text-purple-400">{stats.total}</div>
-                <div className="text-gray-400 mt-2">Total Tasks</div>
+    <div className="tasks-page">
+      <div className="tasks-container">
+        {/* Hero Section */}
+        <section className="tasks-hero">
+          <h1><span style={{color: '#ffffff'}}>Bitcoin Music</span> Development <span style={{color: '#ffffff'}}>Tasks</span></h1>
+          <p className="tasks-tagline">
+            Earn ownership in the future of decentralized music production
+          </p>
+          <div className="tasks-badge">49 TASKS AVAILABLE</div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="tasks-section">
+          <div className="stats-grid">
+            <div className="stat-card">
+              <h3>Total Tasks</h3>
+              <p className="stat-value">{stats.total}</p>
+              <p className="stat-label">Development opportunities</p>
+            </div>
+            <div className="stat-card">
+              <h3>Available</h3>
+              <p className="stat-value">{stats.open}</p>
+              <p className="stat-label">Open for claiming</p>
+            </div>
+            <div className="stat-card">
+              <h3>In Progress</h3>
+              <p className="stat-value">{stats.claimed}</p>
+              <p className="stat-label">Currently claimed</p>
+            </div>
+            <div className="stat-card">
+              <h3>Completed</h3>
+              <p className="stat-value">{stats.completed}</p>
+              <p className="stat-label">Successfully merged</p>
+            </div>
+          </div>
+
+          {/* Token Info */}
+          <div className="token-info-card">
+            <div className="token-info-content">
+              <div className="token-info-item">
+                <Coins className="token-info-icon" />
+                <div className="token-info-value">{stats.tokensAvailable.toLocaleString()}</div>
+                <div className="token-info-label">$BMusic Tokens Available</div>
               </div>
-              <div className="bg-black/50 backdrop-blur-sm border border-green-500/30 rounded-xl p-6">
-                <div className="text-3xl font-bold text-green-400">{stats.open}</div>
-                <div className="text-gray-400 mt-2">Available</div>
-              </div>
-              <div className="bg-black/50 backdrop-blur-sm border border-yellow-500/30 rounded-xl p-6">
-                <div className="text-3xl font-bold text-yellow-400">{stats.claimed}</div>
-                <div className="text-gray-400 mt-2">In Progress</div>
-              </div>
-              <div className="bg-black/50 backdrop-blur-sm border border-blue-500/30 rounded-xl p-6">
-                <div className="text-3xl font-bold text-blue-400">{stats.completed}</div>
-                <div className="text-gray-400 mt-2">Completed</div>
+              <div className="token-info-item">
+                <Trophy className="token-info-icon" />
+                <div className="token-info-value">{stats.percentageAvailable.toFixed(1)}%</div>
+                <div className="token-info-label">Total Equity Available</div>
               </div>
             </div>
-            
-            {/* Token Info */}
-            <div className="mt-8 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8">
-              <div className="flex items-center justify-center gap-8 flex-wrap">
-                <div>
-                  <Coins className="w-8 h-8 text-yellow-400 mb-2 mx-auto" />
-                  <div className="text-2xl font-bold text-yellow-400">{stats.tokensAvailable.toLocaleString()}</div>
-                  <div className="text-gray-300">$BMusic Tokens Available</div>
-                </div>
-                <div>
-                  <Trophy className="w-8 h-8 text-purple-400 mb-2 mx-auto" />
-                  <div className="text-2xl font-bold text-purple-400">{stats.percentageAvailable.toFixed(1)}%</div>
-                  <div className="text-gray-300">Total Equity Available</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="container mx-auto px-6 py-8">
-        <div className="flex flex-wrap gap-4 justify-center">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-4 py-2 rounded-lg transition ${
-                selectedCategory === 'all'
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-purple-500/20'
-              }`}
-            >
-              All Categories
-            </button>
-            <button
-              onClick={() => setSelectedCategory('daw')}
-              className={`px-4 py-2 rounded-lg transition flex items-center gap-2 ${
-                selectedCategory === 'daw'
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-purple-500/20'
-              }`}
-            >
-              <Music className="w-4 h-4" />
-              DAW
-            </button>
-            <button
-              onClick={() => setSelectedCategory('blockchain')}
-              className={`px-4 py-2 rounded-lg transition flex items-center gap-2 ${
-                selectedCategory === 'blockchain'
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-purple-500/20'
-              }`}
-            >
-              <Database className="w-4 h-4" />
-              Blockchain
-            </button>
-            <button
-              onClick={() => setSelectedCategory('marketplace')}
-              className={`px-4 py-2 rounded-lg transition flex items-center gap-2 ${
-                selectedCategory === 'marketplace'
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-purple-500/20'
-              }`}
-            >
-              <ShoppingCart className="w-4 h-4" />
-              Marketplace
-            </button>
-            <button
-              onClick={() => setSelectedCategory('ui')}
-              className={`px-4 py-2 rounded-lg transition flex items-center gap-2 ${
-                selectedCategory === 'ui'
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-purple-500/20'
-              }`}
-            >
-              <Palette className="w-4 h-4" />
-              UI/UX
-            </button>
           </div>
-          
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedPriority('all')}
-              className={`px-4 py-2 rounded-lg transition ${
-                selectedPriority === 'all'
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-purple-500/20'
-              }`}
-            >
-              All Priorities
-            </button>
-            <button
-              onClick={() => setSelectedPriority('HIGH')}
-              className={`px-4 py-2 rounded-lg transition ${
-                selectedPriority === 'HIGH'
-                  ? 'bg-red-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-red-500/20'
-              }`}
-            >
-              High
-            </button>
-            <button
-              onClick={() => setSelectedPriority('MEDIUM')}
-              className={`px-4 py-2 rounded-lg transition ${
-                selectedPriority === 'MEDIUM'
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-yellow-500/20'
-              }`}
-            >
-              Medium
-            </button>
-            <button
-              onClick={() => setSelectedPriority('LOW')}
-              className={`px-4 py-2 rounded-lg transition ${
-                selectedPriority === 'LOW'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-black/50 text-gray-400 hover:bg-green-500/20'
-              }`}
-            >
-              Low
-            </button>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Task Grid */}
-      <div className="container mx-auto px-6 pb-12">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredTasks.map((task, index) => {
-            const Icon = categoryIcons[task.category]
-            const gradientColor = categoryColors[task.category]
-            const priorityColor = priorityColors[task.priority]
-            
-            return (
-              <motion.div
-                key={task.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.02 }}
-                className="relative group"
+        {/* Filters Section */}
+        <section className="filters-section">
+          <div className="filters-container">
+            <div className="filter-group">
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
               >
-                <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 blur-xl transition duration-500 -z-10"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
-                    '--tw-gradient-from': task.category === 'daw' ? '#a855f7' : 
-                                         task.category === 'blockchain' ? '#eab308' :
-                                         task.category === 'marketplace' ? '#10b981' : '#3b82f6',
-                    '--tw-gradient-to': task.category === 'daw' ? '#ec4899' : 
-                                        task.category === 'blockchain' ? '#f97316' :
-                                        task.category === 'marketplace' ? '#14b8a6' : '#6366f1',
-                  } as React.CSSProperties}
-                />
-                
-                <div className="bg-black/80 backdrop-blur-sm border border-gray-800 hover:border-purple-500/50 rounded-xl p-6 transition-all duration-300">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg bg-gradient-to-r ${gradientColor} bg-opacity-20`}>
+                All Categories
+              </button>
+              <button
+                onClick={() => setSelectedCategory('daw')}
+                className={`filter-btn ${selectedCategory === 'daw' ? 'active' : ''}`}
+              >
+                <Music className="w-4 h-4" />
+                DAW
+              </button>
+              <button
+                onClick={() => setSelectedCategory('blockchain')}
+                className={`filter-btn ${selectedCategory === 'blockchain' ? 'active' : ''}`}
+              >
+                <Database className="w-4 h-4" />
+                Blockchain
+              </button>
+              <button
+                onClick={() => setSelectedCategory('marketplace')}
+                className={`filter-btn ${selectedCategory === 'marketplace' ? 'active' : ''}`}
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Marketplace
+              </button>
+              <button
+                onClick={() => setSelectedCategory('ui')}
+                className={`filter-btn ${selectedCategory === 'ui' ? 'active' : ''}`}
+              >
+                <Palette className="w-4 h-4" />
+                UI/UX
+              </button>
+            </div>
+            
+            <div className="filter-group">
+              <button
+                onClick={() => setSelectedPriority('all')}
+                className={`filter-btn ${selectedPriority === 'all' ? 'active' : ''}`}
+              >
+                All Priorities
+              </button>
+              <button
+                onClick={() => setSelectedPriority('HIGH')}
+                className={`filter-btn priority-high ${selectedPriority === 'HIGH' ? 'active' : ''}`}
+              >
+                High
+              </button>
+              <button
+                onClick={() => setSelectedPriority('MEDIUM')}
+                className={`filter-btn priority-medium ${selectedPriority === 'MEDIUM' ? 'active' : ''}`}
+              >
+                Medium
+              </button>
+              <button
+                onClick={() => setSelectedPriority('LOW')}
+                className={`filter-btn priority-low ${selectedPriority === 'LOW' ? 'active' : ''}`}
+              >
+                Low
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Task Grid Section */}
+        <section className="tasks-section">
+          <h2>Available Development Tasks</h2>
+          <div className="task-grid">
+            {filteredTasks.map((task) => {
+              const Icon = categoryIcons[task.category]
+              
+              return (
+                <div key={task.id} className="task-card">
+                  <div className="task-card-header">
+                    <div className="task-category">
+                      <div className="task-category-icon">
                         <Icon className="w-5 h-5" />
                       </div>
-                      <div>
-                        <div className="text-sm text-gray-500">{task.id}</div>
-                        <div className={`text-xs font-semibold ${priorityColor}`}>
+                      <div className="task-meta">
+                        <div className="task-id">{task.id}</div>
+                        <div className={`task-priority priority-${task.priority.toLowerCase()}`}>
                           {task.priority} PRIORITY
                         </div>
                       </div>
                     </div>
                     {task.status === 'open' && (
-                      <Zap className="w-5 h-5 text-green-400" />
+                      <Zap className="task-status-icon status-open" />
                     )}
                     {task.status === 'claimed' && (
-                      <Clock className="w-5 h-5 text-yellow-400" />
+                      <Clock className="task-status-icon status-claimed" />
                     )}
                     {task.status === 'completed' && (
-                      <CheckCircle className="w-5 h-5 text-blue-400" />
+                      <CheckCircle className="task-status-icon status-completed" />
                     )}
                   </div>
                   
-                  <h3 className="text-lg font-semibold mb-2">{task.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{task.description}</p>
+                  <h3 className="task-title">{task.title}</h3>
+                  <p className="task-description">{task.description}</p>
                   
-                  {task.status === 'open' && (
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-yellow-400">
-                        <Coins className="w-4 h-4" />
-                        <span className="text-sm font-semibold">10M $BMusic</span>
-                      </div>
-                      <a
-                        href={`https://github.com/bitcoin-apps-suite/bitcoin-music/issues/new?title=${encodeURIComponent(task.id + ': ' + task.title)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg transition text-sm font-semibold"
-                      >
-                        Claim Task
-                        <ChevronRight className="w-4 h-4" />
-                      </a>
-                    </div>
-                  )}
-                  
-                  {task.status === 'claimed' && task.claimedBy && (
-                    <div className="text-sm text-yellow-400">
-                      In progress by {task.claimedBy}
-                    </div>
-                  )}
-                  
-                  {task.status === 'completed' && task.completedBy && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-green-400">
-                        Completed by {task.completedBy}
-                      </span>
-                      {task.prLink && (
+                  <div className="task-footer">
+                    {task.status === 'open' && (
+                      <>
+                        <div className="task-reward">
+                          <Coins className="task-reward-icon" />
+                          <span className="task-reward-text">10M $BMusic</span>
+                        </div>
                         <a
-                          href={task.prLink}
+                          href={`https://github.com/bitcoin-apps-suite/bitcoin-music/issues/new?title=${encodeURIComponent(task.id + ': ' + task.title)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                          className="task-action-btn"
                         >
-                          <GitPullRequest className="w-4 h-4" />
-                          View PR
+                          Claim Task
+                          <ChevronRight className="task-action-icon" />
                         </a>
-                      )}
-                    </div>
-                  )}
+                      </>
+                    )}
+                    
+                    {task.status === 'claimed' && task.claimedBy && (
+                      <div className="task-status-text status-claimed-text">
+                        In progress by {task.claimedBy}
+                      </div>
+                    )}
+                    
+                    {task.status === 'completed' && task.completedBy && (
+                      <div className="task-footer">
+                        <span className="task-status-text status-completed-text">
+                          Completed by {task.completedBy}
+                        </span>
+                        {task.prLink && (
+                          <a
+                            href={task.prLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="task-pr-link"
+                          >
+                            <GitPullRequest className="w-4 h-4" />
+                            View PR
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </motion.div>
-            )
-          })}
-        </div>
-      </div>
+              )
+            })}
+          </div>
+        </section>
 
-      {/* How to Contribute Section */}
-      <div className="bg-black/50 border-t border-purple-500/30">
-        <div className="container mx-auto px-6 py-16">
-          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            How to Earn $BMusic Tokens
-          </h2>
-          
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+        {/* How to Contribute Section */}
+        <section className="contribute-section">
+          <h2>How to Earn $BMusic Tokens</h2>
+          <div className="contribute-steps">
+            <div className="contribute-step">
+              <div className="step-icon">
                 <Code className="w-8 h-8" />
               </div>
-              <h3 className="font-semibold mb-2">1. Choose a Task</h3>
-              <p className="text-gray-400 text-sm">Select an open task that matches your skills</p>
+              <h3 className="step-title">1. Choose a Task</h3>
+              <p className="step-description">Select an open task that matches your skills</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center">
+            <div className="contribute-step">
+              <div className="step-icon">
                 <Github className="w-8 h-8" />
               </div>
-              <h3 className="font-semibold mb-2">2. Claim on GitHub</h3>
-              <p className="text-gray-400 text-sm">Comment on the issue to claim the task</p>
+              <h3 className="step-title">2. Claim on GitHub</h3>
+              <p className="step-description">Comment on the issue to claim the task</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center">
+            <div className="contribute-step">
+              <div className="step-icon">
                 <GitPullRequest className="w-8 h-8" />
               </div>
-              <h3 className="font-semibold mb-2">3. Submit PR</h3>
-              <p className="text-gray-400 text-sm">Complete the task and submit a pull request</p>
+              <h3 className="step-title">3. Submit PR</h3>
+              <p className="step-description">Complete the task and submit a pull request</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center">
+            <div className="contribute-step">
+              <div className="step-icon">
                 <Coins className="w-8 h-8" />
               </div>
-              <h3 className="font-semibold mb-2">4. Earn Tokens</h3>
-              <p className="text-gray-400 text-sm">Receive 10M $BMusic tokens when merged</p>
+              <h3 className="step-title">4. Earn Tokens</h3>
+              <p className="step-description">Receive 10M $BMusic tokens when merged</p>
             </div>
           </div>
 
           {/* Contact Section */}
-          <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8">
-            <h3 className="text-xl font-semibold mb-6 text-center">Get Involved</h3>
-            <div className="flex justify-center gap-6 flex-wrap">
+          <div className="contact-section">
+            <h3 className="contact-title">Get Involved</h3>
+            <div className="contact-links">
               <a
                 href="https://github.com/bitcoin-apps-suite/bitcoin-music"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-black/50 hover:bg-purple-500/20 border border-gray-800 hover:border-purple-500/50 rounded-lg transition"
+                className="contact-link"
               >
-                <Github className="w-5 h-5" />
+                <Github className="contact-icon" />
                 GitHub Repo
               </a>
               <a
                 href="https://discord.gg/bitcoinmusic"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-black/50 hover:bg-purple-500/20 border border-gray-800 hover:border-purple-500/50 rounded-lg transition"
+                className="contact-link"
               >
-                <MessageCircle className="w-5 h-5" />
+                <MessageCircle className="contact-icon" />
                 Join Discord
               </a>
               <a
                 href="https://twitter.com/bitcoinmusic"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-black/50 hover:bg-purple-500/20 border border-gray-800 hover:border-purple-500/50 rounded-lg transition"
+                className="contact-link"
               >
-                <Twitter className="w-5 h-5" />
+                <Twitter className="contact-icon" />
                 Follow Updates
               </a>
               <a
                 href="mailto:dev@bitcoin-music.app"
-                className="flex items-center gap-2 px-6 py-3 bg-black/50 hover:bg-purple-500/20 border border-gray-800 hover:border-purple-500/50 rounded-lg transition"
+                className="contact-link"
               >
-                <Mail className="w-5 h-5" />
+                <Mail className="contact-icon" />
                 Contact Team
               </a>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   )
