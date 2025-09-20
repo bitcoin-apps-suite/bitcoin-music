@@ -426,7 +426,8 @@ export default function Taskbar() {
                   {app.current && <span style={{ marginLeft: '8px', fontSize: '11px', opacity: 0.6 }}>(current)</span>}
                 </span>
               </a>
-            ))}
+            )
+            })}
           </div>
         )}
         </div>

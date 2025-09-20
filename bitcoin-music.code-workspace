@@ -132,6 +132,91 @@
     "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
     "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
     
+    // Theme & Colors - Purple/Magenta Dark Mode
+    "workbench.colorTheme": "Shades of Purple",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#2d1b69",
+      "titleBar.activeForeground": "#ffffff",
+      "titleBar.inactiveBackground": "#1e1e3f",
+      "titleBar.inactiveForeground": "#cccccc",
+      "statusBar.background": "#8b5cf6",
+      "statusBar.foreground": "#ffffff",
+      "statusBar.noFolderBackground": "#a855f7",
+      "statusBar.debuggingBackground": "#ec4899",
+      "activityBar.background": "#2d1b69",
+      "activityBar.foreground": "#ffffff",
+      "activityBar.inactiveForeground": "#cccccc99",
+      "sideBar.background": "#1a1a2e",
+      "sideBar.foreground": "#ffffff",
+      "sideBar.border": "#8b5cf6",
+      "panel.background": "#16213e",
+      "panel.border": "#8b5cf6",
+      "terminal.background": "#0f0f23",
+      "terminal.foreground": "#ffffff",
+      "editorGroupHeader.tabsBackground": "#2d1b69",
+      "tab.activeBackground": "#8b5cf6",
+      "tab.activeForeground": "#ffffff",
+      "tab.inactiveBackground": "#1e1e3f",
+      "tab.inactiveForeground": "#cccccc",
+      "tab.border": "#8b5cf6",
+      "editor.background": "#0f0f23",
+      "editor.foreground": "#ffffff",
+      "editorLineNumber.foreground": "#8b5cf6",
+      "editorLineNumber.activeForeground": "#a855f7",
+      "editorCursor.foreground": "#ec4899",
+      "editor.selectionBackground": "#8b5cf633",
+      "editor.lineHighlightBackground": "#8b5cf611",
+      "scrollbarSlider.background": "#8b5cf633",
+      "scrollbarSlider.hoverBackground": "#8b5cf666",
+      "scrollbarSlider.activeBackground": "#8b5cf6",
+      "minimap.background": "#0f0f23",
+      "breadcrumb.background": "#2d1b69",
+      "breadcrumb.foreground": "#ffffff"
+    },
+    "editor.tokenColorCustomizations": {
+      "textMateRules": [
+        {
+          "scope": "keyword",
+          "settings": {
+            "foreground": "#ec4899",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "scope": "string",
+          "settings": {
+            "foreground": "#a855f7"
+          }
+        },
+        {
+          "scope": "variable",
+          "settings": {
+            "foreground": "#8b5cf6"
+          }
+        },
+        {
+          "scope": "comment",
+          "settings": {
+            "foreground": "#6b7280",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "scope": "entity.name.function",
+          "settings": {
+            "foreground": "#c084fc"
+          }
+        },
+        {
+          "scope": "support.type",
+          "settings": {
+            "foreground": "#d946ef"
+          }
+        }
+      ]
+    },
+    
     // JSON
     "json.schemas": [
       {
@@ -193,7 +278,9 @@
       "davidanson.vscode-markdownlint",
       
       // Theme
-      "github.github-vscode-theme",
+      "ahmadawais.shades-of-purple",
+      "teabyii.ayu",
+      "zhuangtongfa.material-theme",
       "pkief.material-icon-theme",
       
       // Performance
