@@ -525,9 +525,9 @@ export default function Taskbar() {
         Bitcoin Music
       </button>
 
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Only visible on mobile */}
       <button
-        className="sm:hidden"
+        className="flex sm:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
         style={{
           padding: '0 12px',
@@ -616,20 +616,21 @@ export default function Taskbar() {
         )}
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Optimized for touch */}
       {showMobileMenu && (
         <div 
-          className="sm:hidden"
+          className="block sm:hidden"
           style={{
             position: 'fixed',
             top: '28px',
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'rgba(0, 0, 0, 0.95)',
-            backdropFilter: 'blur(16px)',
+            background: 'rgba(26, 26, 26, 0.98)',
+            backdropFilter: 'blur(20px)',
             zIndex: 9999,
-            overflowY: 'auto'
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch'
           }}
         >
           <div style={{ padding: '16px' }}>

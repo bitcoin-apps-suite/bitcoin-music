@@ -1,20 +1,91 @@
 {
   "pages": {
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+    "/_not-found": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/app/_not-found-359c962f1fc1dd1e.js"
     ],
     "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/259-830586ad1999d77c.js",
+      "static/chunks/104-d59ed993be5ecf16.js",
+      "static/css/29d5d05e469fe060.css",
+      "static/chunks/app/layout-27d664979c506b4e.js"
+    ],
+    "/marketplace/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/259-830586ad1999d77c.js",
+      "static/chunks/app/marketplace/page-76d82bf9a91bc32e.js"
+    ],
+    "/library/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/app/library/page-9ea2ec29c0dab91c.js"
+    ],
+    "/studio/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/app/studio/page-785b87bf4c934301.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/259-830586ad1999d77c.js",
+      "static/chunks/367-d73d027b7a2cad9d.js",
+      "static/chunks/app/page-c6f4a6b2bcfeac70.js"
+    ],
+    "/wallet/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/259-830586ad1999d77c.js",
+      "static/chunks/580-b2064fcdfda43cff.js",
+      "static/chunks/app/wallet/page-87a72e1c8d305015.js"
+    ],
+    "/token/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/app/token/page-210f4bf30c7e59aa.js"
+    ],
+    "/community/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/app/community/page-cce272d490ab8106.js"
     ],
     "/exchange/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/exchange/page.js"
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/259-830586ad1999d77c.js",
+      "static/chunks/app/exchange/page-bb11dec8d471c43c.js"
+    ],
+    "/tasks/page": [
+      "static/chunks/webpack-e39a16310da5a7e7.js",
+      "static/chunks/fd9d1056-7ff2fe48fdac41a1.js",
+      "static/chunks/472-01f12fa5052541e0.js",
+      "static/chunks/main-app-ea85ecd536a0e2a4.js",
+      "static/chunks/780-fc9c4d4709665563.js",
+      "static/chunks/app/tasks/page-bacca31de6468490.js"
     ]
   }
 }
