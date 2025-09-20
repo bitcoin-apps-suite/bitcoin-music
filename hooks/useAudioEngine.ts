@@ -112,6 +112,12 @@ export function useAudioEngine() {
     setState(newState)
   }, [audioEngine])
 
+  const deleteTrack = useCallback(async (trackId: string) => {
+    audioEngine.deleteTrack(trackId)
+    const newState = await audioEngine.getState()
+    setState(newState)
+  }, [audioEngine])
+
   return {
     // State
     ...state,
@@ -126,6 +132,7 @@ export function useAudioEngine() {
     
     // Track management
     createTrack,
+    deleteTrack,
     setTrackVolume,
     setTrackMute,
     setTrackSolo,

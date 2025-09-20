@@ -225,8 +225,19 @@ class AudioEngine {
   deleteTrack(id: string) {
     const track = this.tracks.get(id)
     if (track) {
+      // Dispose of track resources
+      if (track.instrument && track.instrument.dispose) {
+        track.instrument.dispose()
+      }
+      if (track.channel && track.channel.dispose) {
+        track.channel.dispose()
+      }
+      track.effects.forEach(effect => {
+        if (effect && effect.dispose) effect.dispose()
+      })
+      
       this.tracks.delete(id)
-      console.log(`Audio engine: deleted track ${id}`)
+      console.log(`Deleted track ${id}`)
     }
   }
 

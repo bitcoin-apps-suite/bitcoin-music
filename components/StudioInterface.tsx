@@ -18,12 +18,14 @@ import {
   Music,
   Sliders,
   Radio,
-  Plus
+  Plus,
+  FolderOpen
 } from 'lucide-react'
 import { useAudioEngine } from '@/hooks/useAudioEngine'
 import MultiTrackEditor from '@/components/studio/MultiTrackEditor'
 import MixerPanel from '@/components/studio/MixerPanel'
 import PianoRoll from '@/components/studio/PianoRoll'
+import { FileManager } from '@/components/studio/FileManager'
 
 type StudioView = 'arrange' | 'mixer' | 'piano'
 
@@ -48,6 +50,7 @@ export default function StudioInterface() {
   const [loop, setLoop] = useState(false)
   const [projectName, setProjectName] = useState('Untitled Project')
   const [isEditingName, setIsEditingName] = useState(false)
+  const [showFileManager, setShowFileManager] = useState(false)
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null)
 
   // Format position time for display
@@ -258,13 +261,13 @@ export default function StudioInterface() {
             <span>Track</span>
           </button>
           <button
-            onClick={() => console.log('Save')}
+            onClick={() => setShowFileManager(!showFileManager)}
             style={{
               padding: '6px 10px',
-              background: 'transparent',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              background: showFileManager ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
+              border: '1px solid ' + (showFileManager ? 'rgba(139, 92, 246, 0.3)' : 'rgba(255, 255, 255, 0.2)'),
               borderRadius: '4px',
-              color: '#ffffff',
+              color: showFileManager ? '#8b5cf6' : '#ffffff',
               fontSize: '12px',
               cursor: 'pointer',
               display: 'flex',
@@ -273,16 +276,16 @@ export default function StudioInterface() {
               transition: 'all 0.2s'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+              e.currentTarget.style.background = showFileManager ? 'rgba(139, 92, 246, 0.3)' : 'rgba(255, 255, 255, 0.05)'
+              e.currentTarget.style.borderColor = showFileManager ? 'rgba(139, 92, 246, 0.4)' : 'rgba(255, 255, 255, 0.3)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent'
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+              e.currentTarget.style.background = showFileManager ? 'rgba(139, 92, 246, 0.2)' : 'transparent'
+              e.currentTarget.style.borderColor = showFileManager ? 'rgba(139, 92, 246, 0.3)' : 'rgba(255, 255, 255, 0.2)'
             }}
           >
-            <Save size={14} />
-            <span>Save</span>
+            <FolderOpen size={14} />
+            <span>Files</span>
           </button>
           {recordingBlob && (
             <button
@@ -571,13 +574,33 @@ export default function StudioInterface() {
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content Area with File Manager Sidebar */}
       <div style={{
         flex: 1,
+        display: 'flex',
         overflow: 'hidden',
         position: 'relative'
       }}>
-        {renderContent()}
+        {/* Main Content */}
+        <div style={{
+          flex: 1,
+          overflow: 'hidden'
+        }}>
+          {renderContent()}
+        </div>
+        
+        {/* File Manager Sidebar */}
+        {showFileManager && (
+          <div style={{
+            width: '280px',
+            background: '#0f0f0f',
+            borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '16px',
+            overflowY: 'auto'
+          }}>
+            <FileManager />
+          </div>
+        )}
       </div>
 
       <style jsx>{`
