@@ -279,7 +279,7 @@ export default function Taskbar() {
         <div className="sm:hidden" style={{ 
           padding: '0 12px',
           fontSize: '18px',
-          fontWeight: 'bold',
+          fontWeight: '500',
           color: '#8b5cf6'
         }}>
           ₿
@@ -298,7 +298,7 @@ export default function Taskbar() {
             style={{
               padding: '0 12px',
               fontSize: '18px',
-              fontWeight: 'bold',
+              fontWeight: '500',
               color: '#8b5cf6',
               display: 'flex',
               alignItems: 'center',
@@ -332,7 +332,7 @@ export default function Taskbar() {
               padding: '8px 16px',
               fontSize: '12px',
               color: '#8b5cf6',
-              fontWeight: '600',
+              fontWeight: '400',
               borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
               marginBottom: '4px'
             }}>
@@ -355,7 +355,7 @@ export default function Taskbar() {
                   fontSize: '13px',
                   transition: 'background 0.15s ease',
                   cursor: 'pointer',
-                  fontWeight: app.current ? '600' : '400'
+                  fontWeight: app.current ? '500' : '400'
                 }}
                 onClick={() => setShowBitcoinSuite(false)}
                 onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
@@ -366,7 +366,7 @@ export default function Taskbar() {
                     color: app.color,
                     marginRight: '12px',
                     fontSize: '16px',
-                    fontWeight: 'bold'
+                    fontWeight: '500'
                   }}
                 >
                   ₿
@@ -400,6 +400,7 @@ export default function Taskbar() {
                 fontSize: '13px',
                 cursor: 'pointer',
                 fontFamily: 'inherit',
+                fontWeight: '400',
                 transition: 'background 0.15s ease'
               }}
             >
@@ -512,7 +513,7 @@ export default function Taskbar() {
         }}
         style={{ 
           fontSize: '14px',
-          fontWeight: '600',
+          fontWeight: '400',
           color: '#8b5cf6',
           background: 'transparent',
           border: 'none',
@@ -617,7 +618,7 @@ export default function Taskbar() {
                   padding: '12px',
                   background: 'rgba(255, 255, 255, 0.05)',
                   fontSize: '13px',
-                  fontWeight: '600',
+                  fontWeight: '400',
                   color: '#ffffff',
                   borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
                 }}>
