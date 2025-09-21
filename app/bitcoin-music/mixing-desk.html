@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Music - Professional Mixing Desk</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+        
+        .console-wrapper {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        
+        .console-header {
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 10px 10px 0 0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f7931a, #ffb84d);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(247, 147, 26, 0.3);
+        }
+        
+        .brand-text {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .console-displays {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .display {
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 6px;
+            padding: 8px 16px;
+            min-width: 100px;
+        }
+        
+        .display-label {
+            color: #666;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        
+        .display-value {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .mixing-desk {
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 50%, #1f1f1f 100%);
+            border-radius: 0 0 10px 10px;
+            padding: 30px;
+            display: flex;
+            gap: 40px;
+        }
+        
+        .channel-section {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .channel {
+            background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 20px 15px;
+            width: 90px;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.5),
+                0 1px 0 rgba(255,255,255,0.1);
+        }
+        
+        .channel-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .channel-number {
+            background: linear-gradient(135deg, #5a5a5a, #3a3a3a);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .channel-label {
+            color: #aaa;
+            font-size: 10px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+        
+        .eq-section {
+            margin-bottom: 20px;
+        }
+        
+        .eq-label {
+            color: #888;
+            font-size: 9px;
+            text-align: center;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .knob-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .knob {
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle at 30% 30%, #8a8a8a, #3a3a3a);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.5),
+                inset 0 -2px 4px rgba(0,0,0,0.3),
+                inset 0 2px 2px rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .knob:hover {
+            transform: scale(1.05);
+        }
+        
+        .knob::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 1px;
+            box-shadow: 0 0 4px #00ff00;
+        }
+        
+        .knob-label {
+            color: #777;
+            font-size: 9px;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+        
+        .fader-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .fader-track {
+            width: 4px;
+            height: 120px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            position: relative;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+        }
+        
+        .fader-handle {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(180deg, #9a9a9a 0%, #6a6a6a 50%, #4a4a4a 100%);
+            border: 1px solid #333;
+            border-radius: 4px;
+            left: 50%;
+            top: 60%;
+            transform: translateX(-50%);
+            cursor: grab;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        
+        .fader-handle:active {
+            cursor: grabbing;
+        }
+        
+        .fader-scale {
+            position: absolute;
+            right: -20px;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 8px;
+            color: #666;
+        }
+        
+        .button-section {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .channel-button {
+            width: 32px;
+            height: 24px;
+            background: linear-gradient(180deg, #5a5a5a, #3a3a3a);
+            border: 1px solid #222;
+            border-radius: 4px;
+            color: #aaa;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.1s;
+        }
+        
+        .channel-button:hover {
+            background: linear-gradient(180deg, #6a6a6a, #4a4a4a);
+        }
+        
+        .channel-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .channel-button.active {
+            background: linear-gradient(180deg, #f7931a, #e5851a);
+            color: #fff;
+            border-color: #d57a1a;
+            box-shadow: 
+                0 2px 8px rgba(247, 147, 26, 0.4),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        
+        .master-section {
+            background: linear-gradient(180deg, #5a5a5a 0%, #3a3a3a 100%);
+            border: 2px solid #666;
+            border-radius: 10px;
+            padding: 20px;
+            width: 120px;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.5),
+                0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .master-title {
+            color: #f7931a;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .master-fader {
+            height: 180px;
+            margin: 20px 0;
+        }
+        
+        .master-fader .fader-track {
+            width: 8px;
+            height: 180px;
+            background: linear-gradient(180deg, #ff0000 0%, #ffff00 50%, #00ff00 100%);
+            opacity: 0.3;
+        }
+        
+        .master-fader .fader-handle {
+            width: 40px;
+            height: 25px;
+            background: linear-gradient(180deg, #f7931a 0%, #e5851a 50%, #d57a1a 100%);
+            border: 2px solid #c56a0a;
+        }
+        
+        .effects-rack {
+            background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 20px;
+            width: 300px;
+        }
+        
+        .effects-title {
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .spectrum-analyzer {
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 6px;
+            height: 120px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spectrum-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            padding: 10px;
+            gap: 2px;
+        }
+        
+        .spectrum-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #ff0000 0%, #ffff00 50%, #00ff00 100%);
+            border-radius: 2px 2px 0 0;
+            animation: pulse 0.5s infinite alternate;
+        }
+        
+        .spectrum-bar:nth-child(1) { height: 80%; animation-delay: 0s; }
+        .spectrum-bar:nth-child(2) { height: 95%; animation-delay: 0.1s; }
+        .spectrum-bar:nth-child(3) { height: 70%; animation-delay: 0.2s; }
+        .spectrum-bar:nth-child(4) { height: 85%; animation-delay: 0.3s; }
+        .spectrum-bar:nth-child(5) { height: 60%; animation-delay: 0.4s; }
+        .spectrum-bar:nth-child(6) { height: 75%; animation-delay: 0.5s; }
+        .spectrum-bar:nth-child(7) { height: 50%; animation-delay: 0.6s; }
+        .spectrum-bar:nth-child(8) { height: 65%; animation-delay: 0.7s; }
+        .spectrum-bar:nth-child(9) { height: 40%; animation-delay: 0.8s; }
+        .spectrum-bar:nth-child(10) { height: 55%; animation-delay: 0.9s; }
+        .spectrum-bar:nth-child(11) { height: 35%; animation-delay: 1s; }
+        .spectrum-bar:nth-child(12) { height: 45%; animation-delay: 1.1s; }
+        
+        @keyframes pulse {
+            to {
+                transform: scaleY(0.8);
+                opacity: 0.8;
+            }
+        }
+        
+        .vu-meters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .vu-meter {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        
+        .vu-label {
+            color: #666;
+            font-size: 9px;
+            text-align: center;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .vu-display {
+            height: 8px;
+            background: #0a0a0a;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .vu-level {
+            height: 100%;
+            width: 75%;
+            background: linear-gradient(90deg, #00ff00 0%, #ffff00 70%, #ff0000 100%);
+            border-radius: 4px;
+            animation: vuPulse 2s infinite ease-in-out;
+        }
+        
+        @keyframes vuPulse {
+            0%, 100% { width: 65%; }
+            50% { width: 85%; }
+        }
+        
+        .effects-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .effect-module {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .effect-name {
+            color: #888;
+            font-size: 9px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .effect-knob {
+            width: 28px;
+            height: 28px;
+            margin: 0 auto;
+            background: radial-gradient(circle at 30% 30%, #7a7a7a, #2a2a2a);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 
+                0 3px 6px rgba(0,0,0,0.5),
+                inset 0 -1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .effect-knob::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 8px;
+            background: #f7931a;
+            border-radius: 1px;
+        }
+        
+        .transport-controls {
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .transport-btn {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 30% 30%, #6a6a6a, #3a3a3a);
+            border: 2px solid #222;
+            border-radius: 50%;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.1s;
+        }
+        
+        .transport-btn:hover {
+            background: radial-gradient(circle at 30% 30%, #7a7a7a, #4a4a4a);
+            transform: scale(1.05);
+        }
+        
+        .transport-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        
+        .transport-btn.play {
+            background: radial-gradient(circle at 30% 30%, #00ff00, #00aa00);
+            color: #fff;
+        }
+        
+        .transport-btn.record {
+            background: radial-gradient(circle at 30% 30%, #ff0000, #aa0000);
+            color: #fff;
+            animation: recordPulse 1s infinite;
+        }
+        
+        @keyframes recordPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(255,0,0,0.4); }
+        }
+        
+        .led-indicator {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff00;
+            animation: ledBlink 2s infinite;
+        }
+        
+        @keyframes ledBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="console-wrapper">
+        <div class="console-header">
+            <div class="brand">
+                <div class="brand-logo">♪</div>
+                <div class="brand-text">BITCOIN MUSIC PRO</div>
+            </div>
+            <div class="console-displays">
+                <div class="display">
+                    <div class="display-label">BPM</div>
+                    <div class="display-value">128</div>
+                </div>
+                <div class="display">
+                    <div class="display-label">Time</div>
+                    <div class="display-value">03:42:15</div>
+                </div>
+                <div class="display">
+                    <div class="display-label">CPU</div>
+                    <div class="display-value">42%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mixing-desk">
+            <div class="channel-section">
+                <!-- Channel 1 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">01</div>
+                        <div class="channel-label">Kick</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button active">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 2 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">02</div>
+                        <div class="channel-label">Snare</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 3 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">03</div>
+                        <div class="channel-label">Hi-Hat</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 4 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">04</div>
+                        <div class="channel-label">Bass</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button active">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 5 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">05</div>
+                        <div class="channel-label">Lead</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 6 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">06</div>
+                        <div class="channel-label">Pad</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 7 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">07</div>
+                        <div class="channel-label">Vocal</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button active">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+                
+                <!-- Channel 8 -->
+                <div class="channel">
+                    <div class="channel-header">
+                        <div class="channel-number">08</div>
+                        <div class="channel-label">FX</div>
+                    </div>
+                    <div class="eq-section">
+                        <div class="eq-label">HIGH</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">MID</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                        <div class="eq-label">LOW</div>
+                        <div class="knob-container">
+                            <div class="knob"></div>
+                        </div>
+                    </div>
+                    <div class="fader-section">
+                        <div class="fader-track">
+                            <div class="fader-handle"></div>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <button class="channel-button">S</button>
+                        <button class="channel-button">M</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Master Section -->
+            <div class="master-section">
+                <div class="master-title">MASTER</div>
+                <div class="knob-container">
+                    <div class="knob"></div>
+                    <div class="knob-label">COMP</div>
+                </div>
+                <div class="knob-container">
+                    <div class="knob"></div>
+                    <div class="knob-label">LIMIT</div>
+                </div>
+                <div class="master-fader fader-section">
+                    <div class="fader-track">
+                        <div class="fader-handle"></div>
+                    </div>
+                </div>
+                <div class="knob-container">
+                    <div class="knob"></div>
+                    <div class="knob-label">OUTPUT</div>
+                </div>
+            </div>
+            
+            <!-- Effects Rack -->
+            <div class="effects-rack">
+                <div class="effects-title">EFFECTS & ANALYSIS</div>
+                
+                <div class="spectrum-analyzer">
+                    <div class="spectrum-bars">
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                        <div class="spectrum-bar"></div>
+                    </div>
+                </div>
+                
+                <div class="vu-meters">
+                    <div class="vu-meter">
+                        <div class="vu-label">LEFT</div>
+                        <div class="vu-display">
+                            <div class="vu-level"></div>
+                        </div>
+                    </div>
+                    <div class="vu-meter">
+                        <div class="vu-label">RIGHT</div>
+                        <div class="vu-display">
+                            <div class="vu-level" style="animation-delay: 0.5s;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="effects-controls">
+                    <div class="effect-module">
+                        <div class="effect-name">Reverb</div>
+                        <div class="effect-knob"></div>
+                    </div>
+                    <div class="effect-module">
+                        <div class="effect-name">Delay</div>
+                        <div class="effect-knob"></div>
+                    </div>
+                    <div class="effect-module">
+                        <div class="effect-name">Chorus</div>
+                        <div class="effect-knob"></div>
+                    </div>
+                    <div class="effect-module">
+                        <div class="effect-name">Flanger</div>
+                        <div class="effect-knob"></div>
+                    </div>
+                    <div class="effect-module">
+                        <div class="effect-name">Phaser</div>
+                        <div class="effect-knob"></div>
+                    </div>
+                    <div class="effect-module">
+                        <div class="effect-name">Filter</div>
+                        <div class="effect-knob"></div>
+                    </div>
+                </div>
+                
+                <div class="transport-controls">
+                    <button class="transport-btn">⏮</button>
+                    <button class="transport-btn play">▶</button>
+                    <button class="transport-btn">⏸</button>
+                    <button class="transport-btn">⏹</button>
+                    <button class="transport-btn record">●</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

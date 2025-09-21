@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import './marketing.css';
+import '../marketing.css';
+import './dark.css';
 
-const MarketingPage: React.FC = () => {
+const DarkMarketingPage: React.FC = () => {
   return (
-    <div className="marketing-page">
+    <div className="marketing-page dark-theme">
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-background">
@@ -54,8 +55,8 @@ const MarketingPage: React.FC = () => {
               <div className="stat-label">Per Stream</div>
             </div>
             <div className="stat">
-              <div className="stat-number">32-Channel</div>
-              <div className="stat-label">Pro Mixing Desk</div>
+              <div className="stat-number">8-Channel</div>
+              <div className="stat-label">Mixing Desk</div>
             </div>
           </div>
         </div>
@@ -134,19 +135,6 @@ const MarketingPage: React.FC = () => {
             </div>
             
             <div className="feature-card">
-              <div className="feature-icon studio">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                </svg>
-              </div>
-              <h3 className="feature-title">32-Channel Digital Console</h3>
-              <p className="feature-description">
-                Industry-standard mixing with motorized faders, 4-band parametric EQ per channel, 
-                8 aux sends, 16 buses, and full automation support. SSL-quality preamps and converters.
-              </p>
-            </div>
-            
-            <div className="feature-card">
               <div className="feature-icon security">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
@@ -191,11 +179,10 @@ const MarketingPage: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="feature-title">AI-Powered Studio Mixing</h3>
+              <h3 className="feature-title">AI-Powered Mixing</h3>
               <p className="feature-description">
-                Professional 32-channel digital mixing console with AI mastering. 
-                Features motorized faders, parametric EQ, compressors, reverb, delay, 
-                sidechain compression, and studio-grade VST plugin support.
+                Professional 8-channel mixing desk with AI assistance. 
+                Master your tracks with cutting-edge audio processing.
               </p>
             </div>
             
@@ -209,32 +196,6 @@ const MarketingPage: React.FC = () => {
               <p className="feature-description">
                 Issue fungible tokens for royalty shares. 
                 Fans can invest directly in their favorite artists' success.
-              </p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon effects">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
-              </div>
-              <h3 className="feature-title">Studio Effects Rack</h3>
-              <p className="feature-description">
-                Built-in Neve-inspired compressors, Lexicon-quality reverbs, tape delay emulation, 
-                vintage analog warmth, multi-band dynamics, and over 200 premium VST3 plugins included.
-              </p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon mastering">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="feature-title">AI Mastering Suite</h3>
-              <p className="feature-description">
-                LUFS-targeted loudness optimization, intelligent spectral balancing, 
-                stereo field enhancement, and reference track matching. Export in 24-bit/96kHz or DSD.
               </p>
             </div>
           </div>
@@ -277,8 +238,8 @@ const MarketingPage: React.FC = () => {
             
             <div className="testimonial">
               <div className="testimonial-content">
-                "The 32-channel mixing console is absolutely incredible! Motorized faders, 
-                built-in effects, and AI mastering - it's better than my $50K studio setup."
+                "The 8-channel mixing desk rivals professional studios. 
+                I can create broadcast-quality tracks right from my browser."
               </div>
               <div className="testimonial-author">
                 <div className="author-avatar"></div>
@@ -412,4 +373,4 @@ const MarketingPage: React.FC = () => {
   );
 };
 
-export default MarketingPage;
+export default DarkMarketingPage;
