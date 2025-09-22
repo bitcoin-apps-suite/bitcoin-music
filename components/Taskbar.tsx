@@ -276,7 +276,7 @@ export default function Taskbar() {
         color: '#ffffff',
         userSelect: 'none',
         position: 'fixed',
-        top: 0,
+        top: '32px', // Below POC banner
         left: 0,
         right: 0,
         zIndex: 10000
@@ -683,7 +683,7 @@ export default function Taskbar() {
           className="block sm:hidden"
           style={{
             position: 'fixed',
-            top: '28px',
+            top: '60px', // Below POC banner (32px) and taskbar (28px)
             left: 0,
             right: 0,
             bottom: 0,

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
-import Taskbar from '@/components/Taskbar'
+import AppWrapper from '@/components/AppWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,13 +52,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          <Taskbar />
-          <div className="pt-7" style={{ 
-            minHeight: '100vh',
-            background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)'
-          }}>
+          <AppWrapper>
             {children}
-          </div>
+          </AppWrapper>
         </Providers>
       </body>
     </html>
