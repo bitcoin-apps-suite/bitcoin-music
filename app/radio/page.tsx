@@ -160,7 +160,7 @@ export default function RadioPage() {
   const [playlists] = useState<Playlist[]>([
     {
       id: '1',
-      title: 'Top Bitcoin Hits 2024',
+      title: 'Top Bitcoin Hits 2025',
       description: 'The most popular tracks on Bitcoin Music this year',
       tracks: 50,
       duration: '3h 25m',

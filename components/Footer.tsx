@@ -27,7 +27,7 @@ export default function Footer() {
           fontWeight: '600',
           letterSpacing: '0.5px'
         }}>
-          © 2024 The Bitcoin Corporation LTD.
+          © 2025 The Bitcoin Corporation LTD.
         </div>
         <div style={{
           fontSize: '12px',

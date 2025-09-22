@@ -387,7 +387,7 @@ const MarketingPage: React.FC = () => {
         
         <div className="footer-bottom">
           <div className="footer-copyright">
-            © 2024 Bitcoin Music. Built on Bitcoin blockchain technology.
+            © 2025 Bitcoin Music - The Bitcoin Corporation LTD. Built on Bitcoin blockchain technology.
           </div>
           <div className="footer-social">
             <a href="#" className="social-link">

@@ -106,7 +106,7 @@ export default function CommunityPage() {
       id: '1',
       title: 'Blockchain Music Festival',
       artist: 'Various Artists',
-      date: new Date('2024-03-15'),
+      date: new Date('2025-03-15'),
       location: 'Virtual Metaverse',
       price: 0.01,
       attendees: 500
@@ -115,7 +115,7 @@ export default function CommunityPage() {
       id: '2',
       title: 'NFT Launch Party',
       artist: 'Satoshi Sounds',
-      date: new Date('2024-03-20'),
+      date: new Date('2025-03-20'),
       location: 'Discord Stage',
       price: 0,
       attendees: 1200

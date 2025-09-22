@@ -106,7 +106,7 @@ export default function ArtistsPage() {
         twitter: '@cryptosynth',
         instagram: '@cryptosynth_music'
       },
-      achievements: ['Verified Artist', 'Top Electronic Artist 2024', '1M+ Streams']
+      achievements: ['Verified Artist', 'Top Electronic Artist 2025', '1M+ Streams']
     },
     {
       id: '2',
@@ -137,7 +137,7 @@ export default function ArtistsPage() {
         twitter: '@hashrate_music',
         youtube: 'HashRateOfficial'
       },
-      achievements: ['Verified Artist', 'Top Hip Hop Artist 2024', '2M+ Streams', 'Grammy Nominated']
+      achievements: ['Verified Artist', 'Top Hip Hop Artist 2025', '2M+ Streams', 'Grammy Nominated']
     },
     {
       id: '3',
