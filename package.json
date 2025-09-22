@@ -2,6 +2,9 @@
   "name": "bitcoin-music",
   "version": "1.0.0",
   "description": "Bitcoin Music - A decentralized music studio and NFT marketplace on Bitcoin BSV",
+  "author": "The Bitcoin Corporation LTD.",
+  "license": "Proprietary",
+  "company": "The Bitcoin Corporation LTD. - UK Company No. 16735102",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3007",

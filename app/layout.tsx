@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
 import AppWrapper from '@/components/AppWrapper'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -10,15 +11,15 @@ export const metadata: Metadata = {
   title: 'Bitcoin Music Studio',
   description: 'Create, mint, and trade music NFTs on Bitcoin BSV',
   keywords: ['Bitcoin', 'BSV', 'Music', 'NFT', 'Studio', 'Blockchain', 'Royalties'],
-  authors: [{ name: 'Bitcoin Music' }],
-  creator: 'Bitcoin Music',
-  publisher: 'Bitcoin Music',
+  authors: [{ name: 'The Bitcoin Corporation LTD.' }],
+  creator: 'The Bitcoin Corporation LTD.',
+  publisher: 'The Bitcoin Corporation LTD.',
   openGraph: {
     title: 'Bitcoin Music Studio',
     description: 'Create, mint, and trade music NFTs on Bitcoin BSV',
     type: 'website',
     locale: 'en_US',
-    siteName: 'Bitcoin Music',
+    siteName: 'Bitcoin Music - The Bitcoin Corporation LTD.',
     images: [
       {
         url: '/og-image.png',
@@ -55,6 +56,7 @@ export default function RootLayout({
           <AppWrapper>
             {children}
           </AppWrapper>
+          <Footer />
         </Providers>
       </body>
     </html>

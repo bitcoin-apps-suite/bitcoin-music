@@ -2,6 +2,9 @@
 
 A revolutionary decentralized Digital Audio Workstation (DAW) and NFT marketplace built on Bitcoin SV blockchain. Create, produce, tokenize, and trade music as blockchain assets with professional-grade audio tools and Web3 monetization.
 
+**Developed by The Bitcoin Corporation LTD.**  
+*UK Registered Company No. 16735102*
+
 ![Bitcoin Music Logo](public/bitcoin-music-logo.jpg)
 
 ## 🌟 Overview

@@ -133,6 +133,15 @@ export default function ContributorsPage() {
           <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '1.1rem' }}>
             Building Bitcoin Music together with BMUSIC token incentives
           </p>
+          <p style={{ 
+            color: '#8b5cf6', 
+            fontSize: '0.9rem', 
+            marginTop: '10px',
+            fontWeight: '600',
+            letterSpacing: '0.5px'
+          }}>
+            The Bitcoin Corporation LTD. • UK Company No. 16735102
+          </p>
         </div>
 
         {/* Tabs */}
