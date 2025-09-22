@@ -65,12 +65,7 @@ const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
     divider?: boolean;
     external?: boolean;
   }> = [
-    { path: '/studio', icon: Music, label: 'Music Studio' },
-    { path: '/tracks', icon: Disc, label: 'Tracks', badge: 'NEW' },
-    { path: '/artists', icon: Headphones, label: 'Artists' },
-    { path: '/radio', icon: Radio, label: 'Radio' },
-    { divider: true },
-    { path: '/contracts', icon: FileText, label: 'Contracts' },
+    { path: '/contracts', icon: FileText, label: 'Contracts', badge: issueCount > 0 ? String(issueCount) : '0' },
     { path: '/tasks', icon: Terminal, label: 'Tasks', badge: issueCount > 0 ? String(issueCount) : '0' },
     { path: '/contributors', icon: Users, label: 'Contributors', badge: '2' },
     { path: '/docs', icon: BookOpen, label: 'Documentation' },

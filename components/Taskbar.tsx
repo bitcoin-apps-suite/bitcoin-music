@@ -46,6 +46,8 @@ export default function Taskbar() {
     {
       label: 'Bitcoin Music',
       items: [
+        { label: 'Home', shortcut: '⌘H', action: () => window.location.href = '/' },
+        { divider: true },
         { label: 'About Bitcoin Music', action: () => alert('Bitcoin Music Studio v1.0\n\nProfessional music production on BSV blockchain\n\nBuilt with Next.js, Tone.js, and BSV SDK') },
         { divider: true },
         { label: 'Preferences...', shortcut: '⌘,', action: () => console.log('Preferences') },
@@ -124,6 +126,21 @@ export default function Taskbar() {
         { label: 'Reverse', action: () => console.log('Reverse') },
         { label: 'Fade In', action: () => console.log('Fade in') },
         { label: 'Fade Out', action: () => console.log('Fade out') }
+      ]
+    },
+    {
+      label: 'Music',
+      items: [
+        { label: 'Music Studio', shortcut: '⌘M', action: () => window.location.href = '/studio' },
+        { label: 'My Tracks', action: () => window.location.href = '/tracks' },
+        { label: 'Artists', action: () => window.location.href = '/artists' },
+        { label: 'Radio Station', action: () => window.location.href = '/radio' },
+        { divider: true },
+        { label: 'Upload Track', shortcut: '⌘U', action: () => console.log('Upload track') },
+        { label: 'Create Playlist', action: () => console.log('Create playlist') },
+        { divider: true },
+        { label: 'Browse Genres', action: () => console.log('Browse genres') },
+        { label: 'Discover', action: () => console.log('Discover music') }
       ]
     },
     {

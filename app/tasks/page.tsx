@@ -1,418 +1,471 @@
 'use client'
 
-import { useState } from 'react'
-import './TasksPage.css'
-import { 
-  Music, 
-  Code, 
-  Coins, 
-  GitPullRequest, 
-  CheckCircle,
-  Clock,
-  Trophy,
-  Users,
-  Zap,
-  Database,
-  ShoppingCart,
-  Palette,
-  Github,
-  MessageCircle,
-  Twitter,
-  Mail,
-  ChevronRight
-} from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Terminal, Clock, Tag, GitBranch, ExternalLink, Star, ChevronDown } from 'lucide-react'
 
 interface Task {
   id: string
   title: string
   description: string
-  category: 'daw' | 'blockchain' | 'marketplace' | 'ui'
-  priority: 'HIGH' | 'MEDIUM' | 'LOW'
-  status: 'open' | 'claimed' | 'completed'
-  claimedBy?: string
-  completedBy?: string
-  prLink?: string
-}
-
-const tasks: Task[] = [
-  // Core DAW Development
-  { id: 'TASK-001', title: 'Core Tone.js audio engine', description: 'Implement core Tone.js audio engine with transport controls', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-002', title: 'Multi-track timeline', description: 'Create multi-track timeline with zoom and scroll functionality', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-003', title: 'Track mixer controls', description: 'Build track mixer with volume, pan, mute, and solo controls', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-004', title: 'Audio recording', description: 'Implement audio recording via MediaRecorder API', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-005', title: 'MIDI recording', description: 'Add MIDI recording and piano roll editor', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-006', title: 'Waveform visualization', description: 'Create waveform visualization component using WaveSurfer.js', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-007', title: 'Audio file import', description: 'Implement audio file import (WAV, MP3, FLAC, OGG)', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-008', title: 'Audio export system', description: 'Build audio export system with multiple format support', category: 'daw', priority: 'HIGH', status: 'open' },
-  
-  // Virtual Instruments
-  { id: 'TASK-009', title: 'Subtractive synthesizer', description: 'Create polyphonic subtractive synthesizer with ADSR', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-010', title: 'FM synthesis', description: 'Build FM synthesis instrument with operators', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-011', title: 'Wavetable synthesizer', description: 'Implement wavetable synthesizer with custom waveforms', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-012', title: 'Sample player', description: 'Create multi-sample instrument player', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-013', title: 'Drum machine', description: 'Build drum machine with 16-step sequencer', category: 'daw', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-014', title: 'Piano instrument', description: 'Add piano/keyboard instrument with velocity sensitivity', category: 'daw', priority: 'HIGH', status: 'open' },
-  
-  // Audio Effects
-  { id: 'TASK-015', title: 'Dynamics suite', description: 'Implement dynamics suite (compressor, limiter, gate)', category: 'daw', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-016', title: 'EQ system', description: 'Create EQ system (parametric, graphic, filters)', category: 'daw', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-017', title: 'Reverb and delay', description: 'Build reverb and delay effects with presets', category: 'daw', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-018', title: 'Modulation effects', description: 'Add modulation effects (chorus, flanger, phaser)', category: 'daw', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-019', title: 'Distortion effects', description: 'Implement distortion and saturation effects', category: 'daw', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-020', title: 'Automation system', description: 'Create automation system for all parameters', category: 'daw', priority: 'MEDIUM', status: 'open' },
-  
-  // Blockchain Integration
-  { id: 'TASK-021', title: 'NFT container format', description: 'Design and implement .nft container format for music', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-022', title: 'NFT minting interface', description: 'Create NFT minting interface with metadata input', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-023', title: 'Preview generation', description: 'Build preview generation system with watermarking', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-024', title: 'IPFS/Arweave upload', description: 'Implement IPFS/Arweave upload for audio storage', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-025', title: 'Batch minting', description: 'Add batch minting for multiple tracks', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-026', title: 'NFT gallery', description: 'Create NFT gallery view for user\'s collection', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  
-  // Token System
-  { id: 'TASK-027', title: 'Fungible token creation', description: 'Implement fungible token (.ft) creation for revenue shares', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-028', title: 'Token distribution UI', description: 'Build token distribution calculator and UI', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-029', title: 'Royalty distribution', description: 'Create automatic royalty distribution system', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-030', title: 'Staking mechanism', description: 'Add staking mechanism for $BMusic tokens', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-031', title: 'Governance voting', description: 'Implement governance voting for token holders', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  
-  // HandCash Integration
-  { id: 'TASK-032', title: 'HandCash OAuth', description: 'Complete HandCash OAuth authentication flow', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-033', title: 'HandCash payments', description: 'Implement HandCash payment processing', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-034', title: 'HandCash profiles', description: 'Add HandCash profile integration', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-035', title: 'Transaction history', description: 'Create transaction history viewer', category: 'blockchain', priority: 'HIGH', status: 'open' },
-  
-  // Marketplace Features
-  { id: 'TASK-036', title: 'Exchange API', description: 'Connect to Bitcoin-Exchange API', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-037', title: 'Order book trading', description: 'Implement order book display and trading', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-038', title: 'Price charts', description: 'Create price charts and market data views', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-039', title: 'Portfolio tracking', description: 'Build portfolio tracking dashboard', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-040', title: 'Music discovery', description: 'Create music discovery page with filters', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-041', title: 'Preview streaming', description: 'Implement preview streaming system', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-042', title: 'Auction system', description: 'Build auction system for exclusive releases', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  { id: 'TASK-043', title: 'Offer system', description: 'Add direct offer and negotiation system', category: 'marketplace', priority: 'MEDIUM', status: 'open' },
-  
-  // UI/UX Development
-  { id: 'TASK-044', title: 'DAW layout', description: 'Design and implement responsive DAW layout', category: 'ui', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-045', title: 'Theme system', description: 'Create dark/light theme toggle system', category: 'ui', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-046', title: 'Keyboard shortcuts', description: 'Build keyboard shortcut system', category: 'ui', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-047', title: 'Drag and drop', description: 'Implement drag-and-drop for tracks and effects', category: 'ui', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-048', title: 'Mobile interface', description: 'Create touch-optimized mobile interface', category: 'ui', priority: 'HIGH', status: 'open' },
-  { id: 'TASK-049', title: 'Help system', description: 'Build comprehensive help system and tutorials', category: 'ui', priority: 'LOW', status: 'open' },
-]
-
-const categoryIcons = {
-  daw: Music,
-  blockchain: Database,
-  marketplace: ShoppingCart,
-  ui: Palette
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced'
+  category: string
+  estimatedHours: number
+  reward: string
+  skills: string[]
+  githubIssueNumber: number
+  githubIssueUrl: string
+  status: 'open' | 'assigned' | 'completed'
 }
 
 export default function TasksPage() {
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'daw' | 'blockchain' | 'marketplace' | 'ui'>('all')
-  const [selectedPriority, setSelectedPriority] = useState<'all' | 'HIGH' | 'MEDIUM' | 'LOW'>('all')
-  
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
+  const [expandedTask, setExpandedTask] = useState<string | null>(null)
+
+  // Sample tasks - in production, these would come from GitHub issues
+  const sampleTasks: Task[] = [
+    {
+      id: '1',
+      title: 'Implement Audio Waveform Visualization',
+      description: 'Create a React component that visualizes audio waveforms in real-time using Web Audio API',
+      difficulty: 'Intermediate',
+      category: 'Frontend',
+      estimatedHours: 12,
+      reward: '3,000 BMUSIC',
+      skills: ['React', 'TypeScript', 'Web Audio API', 'Canvas'],
+      githubIssueNumber: 1,
+      githubIssueUrl: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues/1',
+      status: 'open'
+    },
+    {
+      id: '2',
+      title: 'Add MIDI Import/Export Functionality',
+      description: 'Implement the ability to import and export MIDI files in the music studio',
+      difficulty: 'Advanced',
+      category: 'Audio',
+      estimatedHours: 20,
+      reward: '5,000 BMUSIC',
+      skills: ['MIDI', 'File Processing', 'TypeScript', 'Audio Programming'],
+      githubIssueNumber: 2,
+      githubIssueUrl: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues/2',
+      status: 'open'
+    },
+    {
+      id: '3',
+      title: 'Create Documentation Pages',
+      description: 'Write comprehensive documentation for the Bitcoin Music API and SDK',
+      difficulty: 'Beginner',
+      category: 'Documentation',
+      estimatedHours: 8,
+      reward: '1,500 BMUSIC',
+      skills: ['Technical Writing', 'Markdown', 'API Documentation'],
+      githubIssueNumber: 3,
+      githubIssueUrl: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues/3',
+      status: 'open'
+    },
+    {
+      id: '4',
+      title: 'Implement BSV Payment Integration',
+      description: 'Integrate BSV blockchain for music NFT purchases and royalty payments',
+      difficulty: 'Advanced',
+      category: 'Blockchain',
+      estimatedHours: 30,
+      reward: '10,000 BMUSIC',
+      skills: ['BSV', 'Blockchain', 'Smart Contracts', 'TypeScript'],
+      githubIssueNumber: 4,
+      githubIssueUrl: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues/4',
+      status: 'assigned'
+    },
+    {
+      id: '5',
+      title: 'Design Music Player UI Components',
+      description: 'Create reusable UI components for the music player interface',
+      difficulty: 'Beginner',
+      category: 'Design',
+      estimatedHours: 6,
+      reward: '1,000 BMUSIC',
+      skills: ['React', 'CSS', 'UI/UX Design'],
+      githubIssueNumber: 5,
+      githubIssueUrl: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues/5',
+      status: 'open'
+    },
+    {
+      id: '6',
+      title: 'Optimize Audio Processing Performance',
+      description: 'Improve the performance of real-time audio processing in the DAW',
+      difficulty: 'Advanced',
+      category: 'Performance',
+      estimatedHours: 25,
+      reward: '7,500 BMUSIC',
+      skills: ['Web Audio API', 'Performance Optimization', 'Profiling', 'TypeScript'],
+      githubIssueNumber: 6,
+      githubIssueUrl: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues/6',
+      status: 'open'
+    }
+  ]
+
+  useEffect(() => {
+    // Simulate loading tasks
+    setTimeout(() => {
+      setTasks(sampleTasks)
+      setLoading(false)
+    }, 1000)
+  }, [])
+
+  const categories = ['all', 'Frontend', 'Backend', 'Audio', 'Blockchain', 'Documentation', 'Design', 'Performance']
+  const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced']
+
   const filteredTasks = tasks.filter(task => {
     const categoryMatch = selectedCategory === 'all' || task.category === selectedCategory
-    const priorityMatch = selectedPriority === 'all' || task.priority === selectedPriority
-    return categoryMatch && priorityMatch
+    const difficultyMatch = selectedDifficulty === 'all' || task.difficulty === selectedDifficulty
+    return categoryMatch && difficultyMatch
   })
-  
-  const stats = {
-    total: tasks.length,
-    open: tasks.filter(t => t.status === 'open').length,
-    claimed: tasks.filter(t => t.status === 'claimed').length,
-    completed: tasks.filter(t => t.status === 'completed').length,
-    tokensAvailable: tasks.filter(t => t.status === 'open').length * 10000000,
-    percentageAvailable: (tasks.filter(t => t.status === 'open').length / tasks.length) * 49
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'Beginner': return '#00C851'
+      case 'Intermediate': return '#ffbb33'
+      case 'Advanced': return '#ff4444'
+      default: return '#666'
+    }
+  }
+
+  const getDifficultyStars = (difficulty: string) => {
+    switch (difficulty) {
+      case 'Beginner': return 1
+      case 'Intermediate': return 2
+      case 'Advanced': return 3
+      default: return 1
+    }
   }
 
   return (
-    <div className="tasks-page">
-      <div className="tasks-container">
-        {/* Hero Section */}
-        <section className="tasks-hero">
-          <h1><span style={{color: '#ffffff'}}>Bitcoin Music</span> Development <span style={{color: '#ffffff'}}>Tasks</span></h1>
-          <p className="tasks-tagline">
-            Earn ownership in the future of decentralized music production
+    <div style={{ 
+      minHeight: '100vh',
+      background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)',
+      paddingTop: '60px'
+    }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
+        {/* Header */}
+        <div style={{ marginBottom: '40px' }}>
+          <h1 style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: '300', 
+            color: '#ffffff',
+            marginBottom: '10px'
+          }}>
+            Developer Tasks
+          </h1>
+          <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '1.1rem' }}>
+            Pick a task that matches your skills and start contributing
           </p>
-          <div className="tasks-badge">49 TASKS AVAILABLE</div>
-        </section>
+        </div>
 
-        {/* Stats Section */}
-        <section className="tasks-section">
-          <div className="stats-grid">
-            <div className="stat-card">
-              <h3>Total Tasks</h3>
-              <p className="stat-value">{stats.total}</p>
-              <p className="stat-label">Development opportunities</p>
-            </div>
-            <div className="stat-card">
-              <h3>Available</h3>
-              <p className="stat-value">{stats.open}</p>
-              <p className="stat-label">Open for claiming</p>
-            </div>
-            <div className="stat-card">
-              <h3>In Progress</h3>
-              <p className="stat-value">{stats.claimed}</p>
-              <p className="stat-label">Currently claimed</p>
-            </div>
-            <div className="stat-card">
-              <h3>Completed</h3>
-              <p className="stat-value">{stats.completed}</p>
-              <p className="stat-label">Successfully merged</p>
-            </div>
+        {/* Filters */}
+        <div style={{ 
+          display: 'flex',
+          gap: '20px',
+          marginBottom: '40px',
+          flexWrap: 'wrap'
+        }}>
+          <div>
+            <label style={{ 
+              display: 'block',
+              color: 'rgba(255, 255, 255, 0.6)',
+              fontSize: '14px',
+              marginBottom: '8px'
+            }}>
+              Category
+            </label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              style={{
+                padding: '10px 40px 10px 16px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '8px',
+                color: '#ffffff',
+                fontSize: '14px',
+                cursor: 'pointer',
+                appearance: 'none',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 8px center',
+                backgroundSize: '20px'
+              }}
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat} style={{ background: '#1a1a1a' }}>
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Token Info */}
-          <div className="token-info-card">
-            <div className="token-info-content">
-              <div className="token-info-item">
-                <Coins className="token-info-icon" />
-                <div className="token-info-value">{stats.tokensAvailable.toLocaleString()}</div>
-                <div className="token-info-label">$BMusic Tokens Available</div>
-              </div>
-              <div className="token-info-item">
-                <Trophy className="token-info-icon" />
-                <div className="token-info-value">{stats.percentageAvailable.toFixed(1)}%</div>
-                <div className="token-info-label">Total Equity Available</div>
-              </div>
-            </div>
+          <div>
+            <label style={{ 
+              display: 'block',
+              color: 'rgba(255, 255, 255, 0.6)',
+              fontSize: '14px',
+              marginBottom: '8px'
+            }}>
+              Difficulty
+            </label>
+            <select
+              value={selectedDifficulty}
+              onChange={(e) => setSelectedDifficulty(e.target.value)}
+              style={{
+                padding: '10px 40px 10px 16px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '8px',
+                color: '#ffffff',
+                fontSize: '14px',
+                cursor: 'pointer',
+                appearance: 'none',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 8px center',
+                backgroundSize: '20px'
+              }}
+            >
+              {difficulties.map(diff => (
+                <option key={diff} value={diff} style={{ background: '#1a1a1a' }}>
+                  {diff.charAt(0).toUpperCase() + diff.slice(1)}
+                </option>
+              ))}
+            </select>
           </div>
-        </section>
+        </div>
 
-        {/* Filters Section */}
-        <section className="filters-section">
-          <div className="filters-container">
-            <div className="filter-group">
-              <button
-                onClick={() => setSelectedCategory('all')}
-                className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-              >
-                All Categories
-              </button>
-              <button
-                onClick={() => setSelectedCategory('daw')}
-                className={`filter-btn ${selectedCategory === 'daw' ? 'active' : ''}`}
-              >
-                <Music className="w-4 h-4" />
-                DAW
-              </button>
-              <button
-                onClick={() => setSelectedCategory('blockchain')}
-                className={`filter-btn ${selectedCategory === 'blockchain' ? 'active' : ''}`}
-              >
-                <Database className="w-4 h-4" />
-                Blockchain
-              </button>
-              <button
-                onClick={() => setSelectedCategory('marketplace')}
-                className={`filter-btn ${selectedCategory === 'marketplace' ? 'active' : ''}`}
-              >
-                <ShoppingCart className="w-4 h-4" />
-                Marketplace
-              </button>
-              <button
-                onClick={() => setSelectedCategory('ui')}
-                className={`filter-btn ${selectedCategory === 'ui' ? 'active' : ''}`}
-              >
-                <Palette className="w-4 h-4" />
-                UI/UX
-              </button>
-            </div>
-            
-            <div className="filter-group">
-              <button
-                onClick={() => setSelectedPriority('all')}
-                className={`filter-btn ${selectedPriority === 'all' ? 'active' : ''}`}
-              >
-                All Priorities
-              </button>
-              <button
-                onClick={() => setSelectedPriority('HIGH')}
-                className={`filter-btn priority-high ${selectedPriority === 'HIGH' ? 'active' : ''}`}
-              >
-                High
-              </button>
-              <button
-                onClick={() => setSelectedPriority('MEDIUM')}
-                className={`filter-btn priority-medium ${selectedPriority === 'MEDIUM' ? 'active' : ''}`}
-              >
-                Medium
-              </button>
-              <button
-                onClick={() => setSelectedPriority('LOW')}
-                className={`filter-btn priority-low ${selectedPriority === 'LOW' ? 'active' : ''}`}
-              >
-                Low
-              </button>
-            </div>
+        {/* Tasks List */}
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px', color: 'rgba(255, 255, 255, 0.6)' }}>
+            Loading tasks...
           </div>
-        </section>
-
-        {/* Task Grid Section */}
-        <section className="tasks-section">
-          <h2>Available Development Tasks</h2>
-          <div className="task-grid">
-            {filteredTasks.map((task) => {
-              const Icon = categoryIcons[task.category]
-              
-              return (
-                <div key={task.id} className="task-card">
-                  <div className="task-card-header">
-                    <div className="task-category">
-                      <div className="task-category-icon">
-                        <Icon className="w-5 h-5" />
+        ) : filteredTasks.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px', color: 'rgba(255, 255, 255, 0.6)' }}>
+            No tasks found matching your criteria
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {filteredTasks.map(task => (
+              <div
+                key={task.id}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02))',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <div
+                  onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id)}
+                  style={{
+                    padding: '24px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <h3 style={{ 
+                          color: '#ffffff',
+                          fontSize: '1.2rem',
+                          margin: 0
+                        }}>
+                          {task.title}
+                        </h3>
+                        <div style={{
+                          display: 'inline-block',
+                          padding: '4px 8px',
+                          background: getDifficultyColor(task.difficulty),
+                          borderRadius: '4px',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          color: '#ffffff'
+                        }}>
+                          {task.difficulty}
+                        </div>
+                        {task.status === 'assigned' && (
+                          <div style={{
+                            display: 'inline-block',
+                            padding: '4px 8px',
+                            background: '#33b5e5',
+                            borderRadius: '4px',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            color: '#ffffff'
+                          }}>
+                            Assigned
+                          </div>
+                        )}
                       </div>
-                      <div className="task-meta">
-                        <div className="task-id">{task.id}</div>
-                        <div className={`task-priority priority-${task.priority.toLowerCase()}`}>
-                          {task.priority} PRIORITY
+                      
+                      <p style={{ 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        fontSize: '14px',
+                        marginBottom: '12px'
+                      }}>
+                        {task.description}
+                      </p>
+
+                      <div style={{ 
+                        display: 'flex',
+                        gap: '24px',
+                        fontSize: '13px'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Tag size={14} style={{ color: 'rgba(255, 255, 255, 0.5)' }} />
+                          <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{task.category}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Clock size={14} style={{ color: 'rgba(255, 255, 255, 0.5)' }} />
+                          <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{task.estimatedHours} hours</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ color: '#ffbb33', fontWeight: '600' }}>{task.reward}</span>
                         </div>
                       </div>
                     </div>
-                    {task.status === 'open' && (
-                      <Zap className="task-status-icon status-open" />
-                    )}
-                    {task.status === 'claimed' && (
-                      <Clock className="task-status-icon status-claimed" />
-                    )}
-                    {task.status === 'completed' && (
-                      <CheckCircle className="task-status-icon status-completed" />
-                    )}
-                  </div>
-                  
-                  <h3 className="task-title">{task.title}</h3>
-                  <p className="task-description">{task.description}</p>
-                  
-                  <div className="task-footer">
-                    {task.status === 'open' && (
-                      <>
-                        <div className="task-reward">
-                          <Coins className="task-reward-icon" />
-                          <span className="task-reward-text">10M $BMusic</span>
-                        </div>
-                        <a
-                          href={`https://github.com/bitcoin-apps-suite/bitcoin-music/issues/new?title=${encodeURIComponent(task.id + ': ' + task.title)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="task-action-btn"
-                        >
-                          Claim Task
-                          <ChevronRight className="task-action-icon" />
-                        </a>
-                      </>
-                    )}
-                    
-                    {task.status === 'claimed' && task.claimedBy && (
-                      <div className="task-status-text status-claimed-text">
-                        In progress by {task.claimedBy}
+
+                    <div style={{ 
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px'
+                    }}>
+                      <div style={{ display: 'flex', gap: '2px' }}>
+                        {[...Array(3)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={16}
+                            fill={i < getDifficultyStars(task.difficulty) ? '#ffbb33' : 'transparent'}
+                            style={{ 
+                              color: i < getDifficultyStars(task.difficulty) ? '#ffbb33' : 'rgba(255, 255, 255, 0.2)'
+                            }}
+                          />
+                        ))}
                       </div>
-                    )}
-                    
-                    {task.status === 'completed' && task.completedBy && (
-                      <div className="task-footer">
-                        <span className="task-status-text status-completed-text">
-                          Completed by {task.completedBy}
-                        </span>
-                        {task.prLink && (
-                          <a
-                            href={task.prLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="task-pr-link"
-                          >
-                            <GitPullRequest className="w-4 h-4" />
-                            View PR
-                          </a>
-                        )}
-                      </div>
-                    )}
+                      <ChevronDown 
+                        size={20} 
+                        style={{ 
+                          color: 'rgba(255, 255, 255, 0.5)',
+                          transform: expandedTask === task.id ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.3s'
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
-              )
-            })}
-          </div>
-        </section>
 
-        {/* How to Contribute Section */}
-        <section className="contribute-section">
-          <h2>How to Earn $BMusic Tokens</h2>
-          <div className="contribute-steps">
-            <div className="contribute-step">
-              <div className="step-icon">
-                <Code className="w-8 h-8" />
-              </div>
-              <h3 className="step-title">1. Choose a Task</h3>
-              <p className="step-description">Select an open task that matches your skills</p>
-            </div>
-            
-            <div className="contribute-step">
-              <div className="step-icon">
-                <Github className="w-8 h-8" />
-              </div>
-              <h3 className="step-title">2. Claim on GitHub</h3>
-              <p className="step-description">Comment on the issue to claim the task</p>
-            </div>
-            
-            <div className="contribute-step">
-              <div className="step-icon">
-                <GitPullRequest className="w-8 h-8" />
-              </div>
-              <h3 className="step-title">3. Submit PR</h3>
-              <p className="step-description">Complete the task and submit a pull request</p>
-            </div>
-            
-            <div className="contribute-step">
-              <div className="step-icon">
-                <Coins className="w-8 h-8" />
-              </div>
-              <h3 className="step-title">4. Earn Tokens</h3>
-              <p className="step-description">Receive 10M $BMusic tokens when merged</p>
-            </div>
-          </div>
+                {expandedTask === task.id && (
+                  <div style={{
+                    padding: '0 24px 24px 24px',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+                  }}>
+                    <div style={{ marginTop: '20px' }}>
+                      <h4 style={{ 
+                        color: '#8b5cf6',
+                        fontSize: '14px',
+                        marginBottom: '12px'
+                      }}>
+                        Required Skills
+                      </h4>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {task.skills.map((skill, idx) => (
+                          <span
+                            key={idx}
+                            style={{
+                              padding: '6px 12px',
+                              background: 'rgba(139, 92, 246, 0.1)',
+                              border: '1px solid rgba(139, 92, 246, 0.3)',
+                              borderRadius: '16px',
+                              fontSize: '13px',
+                              color: 'rgba(255, 255, 255, 0.8)'
+                            }}
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-          {/* Contact Section */}
-          <div className="contact-section">
-            <h3 className="contact-title">Get Involved</h3>
-            <div className="contact-links">
-              <a
-                href="https://github.com/bitcoin-apps-suite/bitcoin-music"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-link"
-              >
-                <Github className="contact-icon" />
-                GitHub Repo
-              </a>
-              <a
-                href="https://discord.gg/bitcoinmusic"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-link"
-              >
-                <MessageCircle className="contact-icon" />
-                Join Discord
-              </a>
-              <a
-                href="https://twitter.com/bitcoinmusic"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-link"
-              >
-                <Twitter className="contact-icon" />
-                Follow Updates
-              </a>
-              <a
-                href="mailto:dev@bitcoin-music.app"
-                className="contact-link"
-              >
-                <Mail className="contact-icon" />
-                Contact Team
-              </a>
-            </div>
+                    <div style={{ 
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginTop: '24px'
+                    }}>
+                      <a
+                        href={task.githubIssueUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '10px 20px',
+                          background: task.status === 'assigned' 
+                            ? 'rgba(255, 255, 255, 0.1)'
+                            : 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                          borderRadius: '8px',
+                          color: '#ffffff',
+                          textDecoration: 'none',
+                          fontWeight: '600',
+                          opacity: task.status === 'assigned' ? 0.5 : 1,
+                          cursor: task.status === 'assigned' ? 'not-allowed' : 'pointer'
+                        }}
+                        onClick={(e) => {
+                          if (task.status === 'assigned') {
+                            e.preventDefault()
+                          }
+                        }}
+                      >
+                        <GitBranch size={18} />
+                        {task.status === 'assigned' ? 'Already Assigned' : 'Start Task'}
+                        <ExternalLink size={14} />
+                      </a>
+
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        color: 'rgba(255, 255, 255, 0.5)',
+                        fontSize: '13px'
+                      }}>
+                        <Terminal size={16} />
+                        Issue #{task.githubIssueNumber}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        </section>
+        )}
+
+        {/* Info Section */}
+        <div style={{
+          marginTop: '60px',
+          padding: '30px',
+          background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05))',
+          border: '1px solid rgba(139, 92, 246, 0.3)',
+          borderRadius: '12px'
+        }}>
+          <h3 style={{ color: '#ffffff', marginBottom: '16px' }}>How to Get Started</h3>
+          <ol style={{ color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.8', marginLeft: '20px' }}>
+            <li>Browse through the available tasks and find one that matches your skillset</li>
+            <li>Click on "Start Task" to view the issue on GitHub</li>
+            <li>Comment on the GitHub issue to claim the task</li>
+            <li>Fork the repository and create a new branch for your work</li>
+            <li>Submit a pull request when you're done</li>
+            <li>Receive BMUSIC tokens upon successful merge</li>
+          </ol>
+        </div>
       </div>
     </div>
   )
