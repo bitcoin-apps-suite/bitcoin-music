@@ -61,16 +61,7 @@ export default function PocBar({ isVisible: controlledVisible, onVisibilityChang
         letterSpacing: '0.5px',
         boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
         borderBottom: '1px solid rgba(0,0,0,0.2)',
-        padding: '0 12px',
-        '@media (max-width: 768px)': {
-          height: '72px',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '8px 12px'
-        },
-        '@media (max-width: 480px)': {
-          height: '68px'
-        }
+        padding: '0 12px'
       }}
     >
       <div style={{ 
@@ -93,11 +84,7 @@ export default function PocBar({ isVisible: controlledVisible, onVisibilityChang
           display: 'flex', 
           gap: '12px', 
           marginLeft: '16px', 
-          fontSize: '12px',
-          '@media (max-width: 768px)': {
-            marginLeft: '8px',
-            gap: '8px'
-          }
+          fontSize: '12px'
         }}>
           <Link 
             href="/studio" 
