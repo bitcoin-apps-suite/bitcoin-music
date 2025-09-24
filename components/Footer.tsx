@@ -4,14 +4,15 @@ export default function Footer() {
   return (
     <footer style={{
       position: 'fixed',
-      bottom: 0,
+      bottom: '-100px',
       left: 0,
       right: 0,
-      background: 'linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.8))',
-      borderTop: '1px solid rgba(139, 92, 246, 0.2)',
+      background: 'linear-gradient(to top, #8b5cf6, #7c3aed)',
+      borderTop: '1px solid rgba(0, 0, 0, 0.2)',
       padding: '20px',
       zIndex: 1000,
-      backdropFilter: 'blur(10px)'
+      backdropFilter: 'blur(10px)',
+      transition: 'bottom 0.3s ease'
     }}>
       <div style={{
         maxWidth: '1200px',
