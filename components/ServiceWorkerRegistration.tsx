@@ -35,7 +35,7 @@ export default function ServiceWorkerRegistration() {
 
     // Handle protocol launches
     if ('launchQueue' in window) {
-      window.launchQueue.setConsumer((launchParams) => {
+      (window as any).launchQueue.setConsumer((launchParams: any) => {
         if (launchParams.targetURL) {
           console.log('Bitcoin Music launched with URL:', launchParams.targetURL);
           
