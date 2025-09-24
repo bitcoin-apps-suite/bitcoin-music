@@ -38,8 +38,8 @@ export default function AppWrapper({ children }: AppWrapperProps) {
         {!isInOS && <Taskbar />}
         <div style={{ 
           paddingTop: isInOS ? '0' : '60px', // 32px for POC banner + 28px for taskbar
-          minHeight: '100vh',
-          background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)'
+          flex: 1,
+          background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)'
         }}>
           {children}
         </div>
@@ -55,8 +55,8 @@ export default function AppWrapper({ children }: AppWrapperProps) {
         className={`app-container ${isInOS ? '' : (isCollapsed ? 'with-dev-bar-collapsed' : 'with-dev-bar')}`}
         style={{ 
           paddingTop: isInOS ? '0' : '60px', // 32px for POC banner + 28px for taskbar
-          minHeight: '100vh',
-          background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)'
+          flex: 1,
+          background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)'
         }}
       >
         {children}

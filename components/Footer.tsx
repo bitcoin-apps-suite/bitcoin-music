@@ -3,16 +3,10 @@
 export default function Footer() {
   return (
     <footer style={{
-      position: 'fixed',
-      bottom: '-100px',
-      left: 0,
-      right: 0,
-      background: 'linear-gradient(to top, #8b5cf6, #7c3aed)',
-      borderTop: '1px solid rgba(0, 0, 0, 0.2)',
-      padding: '20px',
-      zIndex: 1000,
-      backdropFilter: 'blur(10px)',
-      transition: 'bottom 0.3s ease'
+      background: '#1a1a1a',
+      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+      padding: '20px 0',
+      marginTop: 'auto'
     }}>
       <div style={{
         maxWidth: '1200px',
@@ -39,7 +33,7 @@ export default function Footer() {
         </div>
         <div style={{
           fontSize: '11px',
-          color: 'rgba(139, 92, 246, 0.8)',
+          color: 'rgba(255, 255, 255, 0.6)',
           marginTop: '5px'
         }}>
           Building the future of music on Bitcoin BSV
