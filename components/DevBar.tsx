@@ -29,7 +29,7 @@ interface DevBarProps {
 }
 
 const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); // Changed to true by default
   const [mounted, setMounted] = useState(false);
   const [issueCount, setIssueCount] = useState<number>(0);
   const pathname = usePathname();
@@ -38,7 +38,8 @@ const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
     setMounted(true);
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('devBarCollapsed');
-      setIsCollapsed(saved === 'true');
+      // If no saved preference, default to collapsed (true)
+      setIsCollapsed(saved !== null ? saved === 'true' : true);
     }
   }, []);
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import DevBar from './DevBar';
 import Taskbar from './Taskbar';
+import { useBitcoinOS } from '@/lib/utils/useBitcoinOS';
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ interface AppWrapperProps {
 export default function AppWrapper({ children }: AppWrapperProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { isInOS, setTitle } = useBitcoinOS();
 
   useEffect(() => {
     setMounted(true);
@@ -18,7 +20,12 @@ export default function AppWrapper({ children }: AppWrapperProps) {
       const saved = localStorage.getItem('devBarCollapsed');
       setIsCollapsed(saved === 'true');
     }
-  }, []);
+    
+    // Set app title when running in Bitcoin OS
+    if (isInOS) {
+      setTitle('Bitcoin Music Studio');
+    }
+  }, [isInOS, setTitle]);
 
   const handleCollapsedChange = (collapsed: boolean) => {
     setIsCollapsed(collapsed);
@@ -27,12 +34,12 @@ export default function AppWrapper({ children }: AppWrapperProps) {
   if (!mounted) {
     return (
       <>
-        <DevBar />
-        <Taskbar />
+        {!isInOS && <DevBar />}
+        {!isInOS && <Taskbar />}
         <div style={{ 
-          paddingTop: '60px', // 32px for POC banner + 28px for taskbar
+          paddingTop: isInOS ? '0' : '60px', // 32px for POC banner + 28px for taskbar
           minHeight: '100vh',
-          background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)'
+          background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)'
         }}>
           {children}
         </div>
@@ -42,14 +49,14 @@ export default function AppWrapper({ children }: AppWrapperProps) {
 
   return (
     <>
-      <DevBar onCollapsedChange={handleCollapsedChange} />
-      <Taskbar />
+      {!isInOS && <DevBar onCollapsedChange={handleCollapsedChange} />}
+      {!isInOS && <Taskbar />}
       <div 
-        className={`app-container ${isCollapsed ? 'with-dev-bar-collapsed' : 'with-dev-bar'}`}
+        className={`app-container ${isInOS ? '' : (isCollapsed ? 'with-dev-bar-collapsed' : 'with-dev-bar')}`}
         style={{ 
-          paddingTop: '60px', // 32px for POC banner + 28px for taskbar
+          paddingTop: isInOS ? '0' : '60px', // 32px for POC banner + 28px for taskbar
           minHeight: '100vh',
-          background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)'
+          background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)'
         }}
       >
         {children}

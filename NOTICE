@@ -1,0 +1,50 @@
+Bitcoin Music Platform
+Copyright (c) 2025 The Bitcoin Corporation LTD.
+
+LEGAL NOTICE
+============
+
+This software is the proprietary property of:
+
+The Bitcoin Corporation LTD.
+Registered in England and Wales
+Company Registration Number: 16735102
+Registered Office: United Kingdom
+
+All rights reserved.
+
+INTELLECTUAL PROPERTY
+=====================
+Bitcoin Music™ and all associated logos, designs, and branding elements are 
+trademarks and/or registered trademarks of The Bitcoin Corporation LTD.
+
+The software code, architecture, and all creative works contained within this 
+repository are protected by copyright law and international treaties.
+
+LICENSING
+=========
+This is proprietary software. No license is granted to use, copy, modify, or 
+distribute this software without explicit written permission from The Bitcoin 
+Corporation LTD.
+
+For licensing inquiries or permission requests, please contact:
+legal@thebitcoincorporation.com
+
+THIRD-PARTY COMPONENTS
+======================
+This software may include third-party open source components, each of which 
+has its own license. See package.json for a list of dependencies.
+
+DISCLAIMER
+==========
+This software is provided "as is" without warranty of any kind. The Bitcoin 
+Corporation LTD. shall not be liable for any damages arising from the use or 
+inability to use this software.
+
+REGULATORY COMPLIANCE
+=====================
+The Bitcoin Corporation LTD. operates in compliance with all applicable laws 
+and regulations of the United Kingdom and international jurisdictions where 
+our services are available.
+
+Last Updated: January 2025

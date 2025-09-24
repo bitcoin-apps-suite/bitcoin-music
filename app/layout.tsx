@@ -4,6 +4,7 @@ import './globals.css'
 import Providers from '@/components/Providers'
 import AppWrapper from '@/components/AppWrapper'
 import Footer from '@/components/Footer'
+import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,6 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <ServiceWorkerRegistration />
         <Providers>
           <AppWrapper>
             {children}
