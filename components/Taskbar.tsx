@@ -285,15 +285,15 @@ export default function Taskbar() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '28px',
-        background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)',
+        height: '32px',
+        background: 'linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%)',
         borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
         fontSize: '13px',
         fontWeight: '500',
         color: '#ffffff',
         userSelect: 'none',
         position: 'fixed',
-        top: '32px', // Below POC banner
+        top: '40px', // Below POC banner (40px)
         left: 0,
         right: 0,
         zIndex: 10000
@@ -346,7 +346,7 @@ export default function Taskbar() {
               top: '28px',
               left: 0,
               minWidth: '220px',
-              background: 'rgba(139, 92, 246, 0.95)',
+              background: 'rgba(58, 58, 58, 0.95)',
               backdropFilter: 'blur(16px)',
               border: '1px solid rgba(255, 255, 255, 0.15)',
               borderRadius: '8px',
@@ -488,7 +488,7 @@ export default function Taskbar() {
                 top: '28px',
                 left: 0,
                 minWidth: '200px',
-                background: 'rgba(139, 92, 246, 0.95)',
+                background: 'rgba(58, 58, 58, 0.95)',
                 backdropFilter: 'blur(16px)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 borderRadius: '8px',
@@ -700,7 +700,7 @@ export default function Taskbar() {
           className="block sm:hidden"
           style={{
             position: 'fixed',
-            top: '60px', // Below POC banner (32px) and taskbar (28px)
+            top: '72px', // Below POC banner (40px) and taskbar (32px)
             left: 0,
             right: 0,
             bottom: 0,

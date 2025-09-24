@@ -74,10 +74,10 @@ export default function HomePage() {
     <div style={{ 
       display: 'flex',
       flexDirection: 'column',
-      height: 'calc(100vh - 28px)',
+      height: '100vh',
       background: '#0a0a0a'
     }}>
-      {/* Header */}
+      {/* Header - Only show when NOT in Bitcoin OS */}
       <AppHeader onTitleClick={() => setCurrentView('studio')} />
       
       {/* Main Content Area */}

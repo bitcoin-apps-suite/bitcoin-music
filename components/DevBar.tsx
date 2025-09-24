@@ -92,26 +92,6 @@ const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
   if (!mounted) {
     return (
       <>
-        {/* Top POC Banner */}
-        <div className="dev-poc-banner">
-          <div className="dev-poc-content">
-            <span className="dev-poc-icon">⚠️</span>
-            <span className="dev-poc-title">PROOF OF CONCEPT:</span>
-            <span className="dev-poc-text">This is a demonstration version of Bitcoin Music.</span>
-            <div className="dev-poc-links">
-              <Link href="/studio">Studio</Link>
-              <Link href="/community">Community</Link>
-              <Link href="/token">Token</Link>
-              <a 
-                href="https://github.com/bitcoin-apps-suite/bitcoin-music"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
         {/* Side Developer Bar - static initial state */}
         <div className="dev-bar">
           <div className="dev-bar-header">
@@ -130,27 +110,6 @@ const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
 
   return (
     <>
-      {/* Top POC Banner */}
-      <div className="dev-poc-banner">
-        <div className="dev-poc-content">
-          <span className="dev-poc-icon">⚠️</span>
-          <span className="dev-poc-title">PROOF OF CONCEPT:</span>
-          <span className="dev-poc-text">This is a demonstration version of Bitcoin Music.</span>
-          <div className="dev-poc-links">
-            <Link href="/studio">Studio</Link>
-            <Link href="/community">Community</Link>
-            <Link href="/token">Token</Link>
-            <a 
-              href="https://github.com/bitcoin-apps-suite/bitcoin-music"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Side Developer Bar */}
       <div className={`dev-bar ${isCollapsed ? 'collapsed' : ''}`}>
         <div className="dev-bar-header">
