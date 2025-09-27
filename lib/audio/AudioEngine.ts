@@ -171,26 +171,58 @@ class AudioEngine {
     
     const Tone = await getTone()
     if (Tone) {
-      // Create channel strip
-      channel = new Tone.Channel({
-        volume: 0,
-        pan: 0
-      })
+      // Create channel strip (using Gain and Panner nodes)
+      const gainNode = new Tone.Gain(1)
+      const panNode = new Tone.Panner(0)
+      gainNode.connect(panNode)
+      channel = {
+        gain: gainNode,
+        panner: panNode,
+        connect: (destination: any) => panNode.connect(destination),
+        disconnect: () => {
+          gainNode.disconnect()
+          panNode.disconnect()
+        },
+        dispose: () => {
+          gainNode.dispose()
+          panNode.dispose()
+        },
+        set volume(value: number) {
+          gainNode.gain.value = Tone.dbToGain(value)
+        },
+        get volume() {
+          return Tone.gainToDb(gainNode.gain.value)
+        },
+        set pan(value: number) {
+          panNode.pan.value = value
+        },
+        get pan() {
+          return panNode.pan.value
+        },
+        set mute(value: boolean) {
+          gainNode.mute = value
+        },
+        get mute() {
+          return gainNode.mute
+        }
+      }
       
       // Create instrument based on type
       if (type === 'midi') {
-        instrument = new Tone.PolySynth(Tone.Synth, {
+        instrument = new Tone.PolySynth({
           oscillator: { type: 'sine' },
           envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 1 }
         })
-        instrument.connect(channel)
+        instrument.connect(channel.gain)
       } else if (type === 'drum') {
         instrument = new Tone.Sampler({
-          C4: 'https://tonejs.github.io/audio/drum-samples/kick.mp3',
-          D4: 'https://tonejs.github.io/audio/drum-samples/snare.mp3',
-          E4: 'https://tonejs.github.io/audio/drum-samples/hihat-closed.mp3'
+          urls: {
+            C4: 'https://tonejs.github.io/audio/drum-samples/kick.mp3',
+            D4: 'https://tonejs.github.io/audio/drum-samples/snare.mp3',
+            E4: 'https://tonejs.github.io/audio/drum-samples/hihat-closed.mp3'
+          }
         })
-        instrument.connect(channel)
+        instrument.connect(channel.gain)
       }
       
       if (this.masterCompressor) {
@@ -247,7 +279,7 @@ class AudioEngine {
     if (track) {
       track.volume = volume
       if (track.channel) {
-        track.channel.volume.value = volume
+        track.channel.volume = volume
       }
       console.log(`Set track ${trackId} volume to ${volume}dB`)
     }
@@ -295,7 +327,7 @@ class AudioEngine {
         const player = new Tone.Player(audioUrl)
         await player.load()
         if (track.channel) {
-          player.connect(track.channel)
+          player.connect(track.channel.gain)
         }
         track.instrument = player
         console.log(`Loaded audio to track ${trackId}`)
@@ -347,7 +379,9 @@ class AudioEngine {
     
     if (effect && track.channel && this.masterCompressor) {
       // Insert effect in channel chain
-      track.channel.chain(effect, this.masterCompressor)
+      track.channel.panner.disconnect()
+      track.channel.panner.connect(effect)
+      effect.connect(this.masterCompressor)
       track.effects.push(effect)
       console.log(`Added ${effectType} effect to track ${trackId}`)
     }

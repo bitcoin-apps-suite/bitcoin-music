@@ -1,0 +1,763 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+import { 
+  Volume2, 
+  Settings, 
+  Waves, 
+  RotateCcw, 
+  Save,
+  Upload,
+  Music,
+  Sliders
+} from 'lucide-react'
+import { Scale, Note } from 'tonal'
+import { getTone } from '@/lib/audio/ToneWrapper'
+
+interface SynthVoice {
+  id: string
+  note: string
+  velocity: number
+  startTime: number
+  oscillators: any[]
+  envelope: any
+  filter: any
+}
+
+interface SynthPreset {
+  id: string
+  name: string
+  oscillators: {
+    type: string
+    detune: number
+    volume: number
+    enabled: boolean
+  }[]
+  filter: {
+    type: string
+    frequency: number
+    resonance: number
+    envelope: number
+  }
+  envelope: {
+    attack: number
+    decay: number
+    sustain: number
+    release: number
+  }
+  effects: {
+    reverb: number
+    delay: number
+    chorus: number
+    distortion: number
+  }
+}
+
+const DEFAULT_PRESET: SynthPreset = {
+  id: 'default',
+  name: 'Default',
+  oscillators: [
+    { type: 'sine', detune: 0, volume: 0.7, enabled: true },
+    { type: 'square', detune: -12, volume: 0.3, enabled: false },
+    { type: 'sawtooth', detune: 12, volume: 0.2, enabled: false }
+  ],
+  filter: {
+    type: 'lowpass',
+    frequency: 1000,
+    resonance: 1,
+    envelope: 0.5
+  },
+  envelope: {
+    attack: 0.1,
+    decay: 0.2,
+    sustain: 0.6,
+    release: 0.8
+  },
+  effects: {
+    reverb: 0.2,
+    delay: 0.1,
+    chorus: 0.0,
+    distortion: 0.0
+  }
+}
+
+const PRESETS: SynthPreset[] = [
+  DEFAULT_PRESET,
+  {
+    id: 'pad',
+    name: 'Warm Pad',
+    oscillators: [
+      { type: 'sine', detune: 0, volume: 0.6, enabled: true },
+      { type: 'sine', detune: -12, volume: 0.4, enabled: true },
+      { type: 'triangle', detune: 12, volume: 0.3, enabled: true }
+    ],
+    filter: {
+      type: 'lowpass',
+      frequency: 800,
+      resonance: 2,
+      envelope: 0.7
+    },
+    envelope: {
+      attack: 1.2,
+      decay: 0.8,
+      sustain: 0.7,
+      release: 2.0
+    },
+    effects: {
+      reverb: 0.6,
+      delay: 0.2,
+      chorus: 0.3,
+      distortion: 0.0
+    }
+  },
+  {
+    id: 'lead',
+    name: 'Analog Lead',
+    oscillators: [
+      { type: 'sawtooth', detune: 0, volume: 0.8, enabled: true },
+      { type: 'square', detune: -7, volume: 0.4, enabled: true },
+      { type: 'triangle', detune: 12, volume: 0.2, enabled: false }
+    ],
+    filter: {
+      type: 'lowpass',
+      frequency: 1500,
+      resonance: 5,
+      envelope: 0.8
+    },
+    envelope: {
+      attack: 0.02,
+      decay: 0.3,
+      sustain: 0.4,
+      release: 0.5
+    },
+    effects: {
+      reverb: 0.1,
+      delay: 0.3,
+      chorus: 0.1,
+      distortion: 0.2
+    }
+  },
+  {
+    id: 'bass',
+    name: 'Sub Bass',
+    oscillators: [
+      { type: 'sine', detune: 0, volume: 0.9, enabled: true },
+      { type: 'square', detune: -12, volume: 0.3, enabled: true },
+      { type: 'triangle', detune: 0, volume: 0.2, enabled: false }
+    ],
+    filter: {
+      type: 'lowpass',
+      frequency: 200,
+      resonance: 3,
+      envelope: 0.3
+    },
+    envelope: {
+      attack: 0.01,
+      decay: 0.1,
+      sustain: 0.8,
+      release: 0.2
+    },
+    effects: {
+      reverb: 0.0,
+      delay: 0.0,
+      chorus: 0.0,
+      distortion: 0.1
+    }
+  }
+]
+
+export default function AdvancedSynth() {
+  const [currentPreset, setCurrentPreset] = useState<SynthPreset>(DEFAULT_PRESET)
+  const [activeVoices, setActiveVoices] = useState<SynthVoice[]>([])
+  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set())
+  const [octave, setOctave] = useState(4)
+  const [masterVolume, setMasterVolume] = useState(0.7)
+  const [polyphony, setPolyphony] = useState(8)
+  const synthRef = useRef<any>(null)
+  const effectsRef = useRef<any>({})
+
+  // Piano keyboard notes
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+  const keyboardKeys = ['a', 'w', 's', 'e', 'd', 'f', 't', 'g', 'y', 'h', 'u', 'j']
+
+  useEffect(() => {
+    initializeSynth()
+    return () => {
+      disposeSynth()
+    }
+  }, [])
+
+  useEffect(() => {
+    updateSynthParameters()
+  }, [currentPreset])
+
+  const initializeSynth = async () => {
+    const Tone = await getTone()
+    if (!Tone) return
+
+    try {
+      // Initialize effects chain
+      effectsRef.current.reverb = new Tone.Reverb(2).toDestination()
+      effectsRef.current.reverb.generate() // Generate reverb impulse response
+      
+      effectsRef.current.delay = new Tone.FeedbackDelay('8n', 0.3)
+      effectsRef.current.chorus = new Tone.Chorus(2, 2.5, 0.5).start()
+      effectsRef.current.distortion = new Tone.Distortion(0.2)
+      effectsRef.current.filter = new Tone.Filter(1000, 'lowpass')
+      effectsRef.current.gain = new Tone.Gain(masterVolume)
+      
+      // Connect the chain
+      effectsRef.current.gain.connect(effectsRef.current.filter)
+      effectsRef.current.filter.connect(effectsRef.current.distortion)
+      effectsRef.current.distortion.connect(effectsRef.current.chorus)
+      effectsRef.current.chorus.connect(effectsRef.current.delay)
+      effectsRef.current.delay.connect(effectsRef.current.reverb)
+      
+      updateSynthParameters()
+    } catch (error) {
+      console.error('Failed to initialize synth effects:', error)
+    }
+  }
+
+  const disposeSynth = async () => {
+    try {
+      // Stop all voices
+      activeVoices.forEach(voice => {
+        if (voice.oscillators) {
+          voice.oscillators.forEach((item: any) => {
+            if (item.osc && item.osc.dispose) {
+              item.osc.stop()
+              item.osc.dispose()
+            }
+            if (item.gain && item.gain.dispose) {
+              item.gain.dispose()
+            }
+          })
+        }
+        if (voice.envelope && voice.envelope.dispose) {
+          voice.envelope.dispose()
+        }
+      })
+
+      // Dispose effects
+      Object.values(effectsRef.current).forEach((effect: any) => {
+        if (effect && effect.dispose) {
+          effect.dispose()
+        }
+      })
+    } catch (error) {
+      console.error('Error disposing synth:', error)
+    }
+  }
+
+  const updateSynthParameters = () => {
+    const effects = effectsRef.current
+    if (!effects.reverb) return
+
+    // Update filter
+    if (effects.filter) {
+      effects.filter.frequency.value = currentPreset.filter.frequency
+      effects.filter.Q.value = currentPreset.filter.resonance
+      effects.filter.type = currentPreset.filter.type
+    }
+
+    // Update effects
+    if (effects.reverb) effects.reverb.wet.value = currentPreset.effects.reverb
+    if (effects.delay) effects.delay.wet.value = currentPreset.effects.delay
+    if (effects.chorus) effects.chorus.wet.value = currentPreset.effects.chorus
+    if (effects.distortion) effects.distortion.wet.value = currentPreset.effects.distortion
+  }
+
+  const playNote = async (note: string, velocity: number = 1) => {
+    const Tone = await getTone()
+    if (!Tone || activeVoices.length >= polyphony || !effectsRef.current.gain) return
+
+    try {
+      const frequency = Note.freq(note) || 440
+      const oscillators: any[] = []
+      
+      // Create oscillators for each enabled layer
+      currentPreset.oscillators.forEach((oscConfig, index) => {
+        if (!oscConfig.enabled) return
+
+        const detunedFreq = frequency * Math.pow(2, oscConfig.detune / 1200)
+        const osc = new Tone.Oscillator(detunedFreq, oscConfig.type as any)
+        const gain = new Tone.Gain(oscConfig.volume * velocity * masterVolume)
+        osc.connect(gain)
+        gain.connect(effectsRef.current.gain)
+        oscillators.push({ osc, gain })
+      })
+
+      if (oscillators.length === 0) return
+
+      // Create envelope for amplitude modulation
+      const envelope = new Tone.Envelope({
+        attack: currentPreset.envelope.attack,
+        decay: currentPreset.envelope.decay,
+        sustain: currentPreset.envelope.sustain,
+        release: currentPreset.envelope.release
+      })
+
+      // Connect envelope to control the gain of oscillators
+      oscillators.forEach(({ gain }) => {
+        envelope.connect(gain.gain)
+      })
+
+      // Start oscillators and trigger envelope
+      oscillators.forEach(({ osc }) => osc.start())
+      envelope.triggerAttack()
+
+      const voice: SynthVoice = {
+        id: `voice_${Date.now()}_${Math.random()}`,
+        note,
+        velocity,
+        startTime: Tone.now(),
+        oscillators,
+        envelope,
+        filter: null
+      }
+
+      setActiveVoices(prev => [...prev, voice])
+    } catch (error) {
+      console.error('Failed to play note:', error)
+    }
+  }
+
+  const stopNote = async (note: string) => {
+    const Tone = await getTone()
+    if (!Tone) return
+
+    setActiveVoices(prev => {
+      const updatedVoices = prev.map(voice => {
+        if (voice.note === note) {
+          try {
+            // Trigger release
+            if (voice.envelope) {
+              voice.envelope.triggerRelease()
+            }
+            
+            // Clean up after release time
+            setTimeout(() => {
+              voice.oscillators.forEach(({ osc, gain }: any) => {
+                if (osc && osc.dispose) {
+                  osc.stop()
+                  osc.dispose()
+                }
+                if (gain && gain.dispose) {
+                  gain.dispose()
+                }
+              })
+              if (voice.envelope && voice.envelope.dispose) {
+                voice.envelope.dispose()
+              }
+            }, currentPreset.envelope.release * 1000 + 100)
+          } catch (error) {
+            console.error('Error stopping note:', error)
+          }
+          
+          return null
+        }
+        return voice
+      }).filter(Boolean) as SynthVoice[]
+
+      return updatedVoices
+    })
+  }
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    const keyIndex = keyboardKeys.indexOf(event.key.toLowerCase())
+    if (keyIndex === -1 || pressedKeys.has(event.key)) return
+
+    const note = `${notes[keyIndex]}${octave}`
+    setPressedKeys(prev => new Set(Array.from(prev).concat(event.key)))
+    playNote(note)
+  }
+
+  const handleKeyUp = (event: KeyboardEvent) => {
+    const keyIndex = keyboardKeys.indexOf(event.key.toLowerCase())
+    if (keyIndex === -1) return
+
+    const note = `${notes[keyIndex]}${octave}`
+    setPressedKeys(prev => {
+      const newArray = Array.from(prev).filter(key => key !== event.key)
+      return new Set(newArray)
+    })
+    stopNote(note)
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [octave, pressedKeys])
+
+  const updatePresetParameter = (section: keyof SynthPreset, param: string, value: any) => {
+    setCurrentPreset(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev[section] as any),
+        [param]: value
+      }
+    }))
+  }
+
+  const updateOscillator = (index: number, param: string, value: any) => {
+    setCurrentPreset(prev => ({
+      ...prev,
+      oscillators: prev.oscillators.map((osc, i) => 
+        i === index ? { ...osc, [param]: value } : osc
+      )
+    }))
+  }
+
+  return (
+    <div style={{
+      width: '100%',
+      background: 'linear-gradient(180deg, #1a1a1a 0%, #141414 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '8px',
+      padding: '16px'
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '16px'
+      }}>
+        <h3 style={{
+          color: '#ffffff',
+          fontSize: '16px',
+          fontWeight: '600',
+          margin: 0,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <Waves size={20} />
+          Advanced Synthesizer
+        </h3>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Preset Selection */}
+          <select
+            value={currentPreset.id}
+            onChange={(e) => {
+              const preset = PRESETS.find(p => p.id === e.target.value)
+              if (preset) setCurrentPreset(preset)
+            }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '4px',
+              color: '#ffffff',
+              padding: '4px 8px',
+              fontSize: '12px'
+            }}
+          >
+            {PRESETS.map(preset => (
+              <option key={preset.id} value={preset.id} style={{ background: '#1a1a1a' }}>
+                {preset.name}
+              </option>
+            ))}
+          </select>
+
+          {/* Master Volume */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Volume2 size={14} style={{ color: 'rgba(255, 255, 255, 0.6)' }} />
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={masterVolume}
+              onChange={(e) => setMasterVolume(Number(e.target.value))}
+              style={{ width: '60px', accentColor: '#8b5cf6' }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Synth Controls */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr',
+        gap: '16px',
+        marginBottom: '16px'
+      }}>
+        {/* Oscillators */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '6px',
+          padding: '12px'
+        }}>
+          <h4 style={{ color: '#ffffff', fontSize: '12px', fontWeight: '600', margin: '0 0 8px' }}>
+            Oscillators
+          </h4>
+          {currentPreset.oscillators.map((osc, index) => (
+            <div key={index} style={{ marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <input
+                  type="checkbox"
+                  checked={osc.enabled}
+                  onChange={(e) => updateOscillator(index, 'enabled', e.target.checked)}
+                  style={{ accentColor: '#8b5cf6' }}
+                />
+                <select
+                  value={osc.type}
+                  onChange={(e) => updateOscillator(index, 'type', e.target.value)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '3px',
+                    color: '#ffffff',
+                    padding: '2px 4px',
+                    fontSize: '10px',
+                    flex: 1
+                  }}
+                >
+                  <option value="sine">Sine</option>
+                  <option value="square">Square</option>
+                  <option value="sawtooth">Saw</option>
+                  <option value="triangle">Triangle</option>
+                </select>
+              </div>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '9px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                    Detune: {osc.detune}¢
+                  </label>
+                  <input
+                    type="range"
+                    min="-50"
+                    max="50"
+                    value={osc.detune}
+                    onChange={(e) => updateOscillator(index, 'detune', Number(e.target.value))}
+                    style={{ width: '100%', height: '4px', accentColor: '#8b5cf6' }}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '9px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                    Vol: {(osc.volume * 100).toFixed(0)}%
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={osc.volume}
+                    onChange={(e) => updateOscillator(index, 'volume', Number(e.target.value))}
+                    style={{ width: '100%', height: '4px', accentColor: '#8b5cf6' }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Filter */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '6px',
+          padding: '12px'
+        }}>
+          <h4 style={{ color: '#ffffff', fontSize: '12px', fontWeight: '600', margin: '0 0 8px' }}>
+            Filter
+          </h4>
+          <div style={{ marginBottom: '8px' }}>
+            <label style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)' }}>Type</label>
+            <select
+              value={currentPreset.filter.type}
+              onChange={(e) => updatePresetParameter('filter', 'type', e.target.value)}
+              style={{
+                width: '100%',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '3px',
+                color: '#ffffff',
+                padding: '4px',
+                fontSize: '10px'
+              }}
+            >
+              <option value="lowpass">Lowpass</option>
+              <option value="highpass">Highpass</option>
+              <option value="bandpass">Bandpass</option>
+            </select>
+          </div>
+          <div style={{ marginBottom: '6px' }}>
+            <label style={{ fontSize: '9px', color: 'rgba(255, 255, 255, 0.6)' }}>
+              Cutoff: {currentPreset.filter.frequency}Hz
+            </label>
+            <input
+              type="range"
+              min="20"
+              max="8000"
+              value={currentPreset.filter.frequency}
+              onChange={(e) => updatePresetParameter('filter', 'frequency', Number(e.target.value))}
+              style={{ width: '100%', height: '4px', accentColor: '#8b5cf6' }}
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: '9px', color: 'rgba(255, 255, 255, 0.6)' }}>
+              Resonance: {currentPreset.filter.resonance.toFixed(1)}
+            </label>
+            <input
+              type="range"
+              min="0.1"
+              max="10"
+              step="0.1"
+              value={currentPreset.filter.resonance}
+              onChange={(e) => updatePresetParameter('filter', 'resonance', Number(e.target.value))}
+              style={{ width: '100%', height: '4px', accentColor: '#8b5cf6' }}
+            />
+          </div>
+        </div>
+
+        {/* Envelope */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '6px',
+          padding: '12px'
+        }}>
+          <h4 style={{ color: '#ffffff', fontSize: '12px', fontWeight: '600', margin: '0 0 8px' }}>
+            Envelope (ADSR)
+          </h4>
+          {Object.entries(currentPreset.envelope).map(([param, value]) => (
+            <div key={param} style={{ marginBottom: '6px' }}>
+              <label style={{ fontSize: '9px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                {param.charAt(0).toUpperCase() + param.slice(1)}: {value.toFixed(2)}s
+              </label>
+              <input
+                type="range"
+                min="0.01"
+                max={param === 'attack' || param === 'release' ? "3" : "1"}
+                step="0.01"
+                value={value}
+                onChange={(e) => updatePresetParameter('envelope', param, Number(e.target.value))}
+                style={{ width: '100%', height: '4px', accentColor: '#8b5cf6' }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Effects */}
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '6px',
+        padding: '12px',
+        marginBottom: '16px'
+      }}>
+        <h4 style={{ color: '#ffffff', fontSize: '12px', fontWeight: '600', margin: '0 0 8px' }}>
+          Effects
+        </h4>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+          {Object.entries(currentPreset.effects).map(([effect, value]) => (
+            <div key={effect}>
+              <label style={{ fontSize: '9px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                {effect.charAt(0).toUpperCase() + effect.slice(1)}: {(value * 100).toFixed(0)}%
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={value}
+                onChange={(e) => updatePresetParameter('effects', effect, Number(e.target.value))}
+                style={{ width: '100%', height: '4px', accentColor: '#8b5cf6' }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Virtual Keyboard */}
+      <div style={{
+        background: 'rgba(0, 0, 0, 0.3)',
+        borderRadius: '6px',
+        padding: '16px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <h4 style={{ color: '#ffffff', fontSize: '12px', fontWeight: '600', margin: 0 }}>
+            Virtual Keyboard
+          </h4>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <label style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)' }}>Octave:</label>
+            <select
+              value={octave}
+              onChange={(e) => setOctave(Number(e.target.value))}
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '3px',
+                color: '#ffffff',
+                padding: '2px 6px',
+                fontSize: '10px'
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6, 7].map(oct => (
+                <option key={oct} value={oct}>C{oct}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        
+        <div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
+          {notes.map((note, index) => {
+            const isSharp = note.includes('#')
+            const keyPressed = pressedKeys.has(keyboardKeys[index])
+            
+            return (
+              <button
+                key={note}
+                onMouseDown={() => playNote(`${note}${octave}`)}
+                onMouseUp={() => stopNote(`${note}${octave}`)}
+                onMouseLeave={() => stopNote(`${note}${octave}`)}
+                style={{
+                  width: isSharp ? '20px' : '30px',
+                  height: isSharp ? '60px' : '80px',
+                  background: isSharp 
+                    ? keyPressed ? '#8b5cf6' : 'linear-gradient(180deg, #333 0%, #111 100%)'
+                    : keyPressed ? '#a855f7' : 'linear-gradient(180deg, #f8f8f8 0%, #e0e0e0 100%)',
+                  border: isSharp ? '1px solid #555' : '1px solid #ccc',
+                  borderRadius: '0 0 4px 4px',
+                  cursor: 'pointer',
+                  color: isSharp ? '#ffffff' : '#000000',
+                  fontSize: '9px',
+                  fontWeight: '500',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
+                  paddingBottom: '4px',
+                  marginLeft: isSharp ? '-10px' : '0',
+                  marginRight: isSharp ? '-10px' : '0',
+                  zIndex: isSharp ? 2 : 1,
+                  position: 'relative',
+                  userSelect: 'none'
+                }}
+              >
+                {note}
+                <br />
+                <span style={{ fontSize: '8px', opacity: 0.6 }}>
+                  {keyboardKeys[index]}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+        
+        <div style={{ 
+          marginTop: '8px', 
+          textAlign: 'center', 
+          fontSize: '10px', 
+          color: 'rgba(255, 255, 255, 0.5)' 
+        }}>
+          Use keyboard keys or click to play • Active voices: {activeVoices.length}/{polyphony}
+        </div>
+      </div>
+    </div>
+  )
+}

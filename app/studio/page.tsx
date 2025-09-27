@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import * as Tone from 'tone'
-import WaveSurfer from 'wavesurfer.js'
 import { 
   Play, 
   Pause, 
@@ -19,11 +17,18 @@ import {
   Share2,
   Music,
   Clock,
-  Headphones
+  Headphones,
+  Waves,
+  Cable,
+  TrendingUp,
+  Keyboard
 } from 'lucide-react'
-// import MusicSequencer from '@/components/studio/MusicSequencer'
-// import TrackMixer from '@/components/studio/TrackMixer'
-// import InstrumentPanel from '@/components/studio/InstrumentPanel'
+import { useAudioEngine } from '@/hooks/useAudioEngine'
+import MultiTrackEditor from '@/components/studio/MultiTrackEditor'
+import PatternSequencer from '@/components/studio/PatternSequencer'
+import ModularRack from '@/components/studio/ModularRack'
+import AutomationEditor from '@/components/studio/AutomationEditor'
+import AdvancedSynth from '@/components/studio/AdvancedSynth'
 
 interface Track {
   id: string
@@ -43,78 +48,56 @@ export default function StudioPage() {
   const [selectedTrack, setSelectedTrack] = useState<string | null>(null)
   const [bpm, setBpm] = useState(120)
   const [currentTime, setCurrentTime] = useState('00:00:00')
+  const [activeView, setActiveView] = useState<'tracks' | 'patterns' | 'synth' | 'rack' | 'automation'>('tracks')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
+  
+  const { 
+    tracks: engineTracks, 
+    createTrack, 
+    deleteTrack: removeTrack,
+    play,
+    stop,
+    pause,
+    startRecording: startEngineRecording,
+    stopRecording: stopEngineRecording,
+    setBPM
+  } = useAudioEngine()
 
   useEffect(() => {
-    // Tone.Transport.bpm.value = bpm
-    // return () => {
-    //   Tone.Transport.stop()
-    //   Tone.Transport.cancel()
-    // }
-  }, [bpm])
+    setBPM(bpm)
+  }, [bpm, setBPM])
 
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
-      chunksRef.current = []
-
-      mediaRecorder.ondataavailable = (e) => {
-        chunksRef.current.push(e.data)
-      }
-
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/wav' })
-        addTrack('Recorded Audio', blob)
-      }
-
-      mediaRecorder.start()
-      setIsRecording(true)
-    } catch (error) {
-      console.error('Error accessing microphone:', error)
+  const handlePlay = async () => {
+    if (isPlaying) {
+      await pause()
+      setIsPlaying(false)
+    } else {
+      await play()
+      setIsPlaying(true)
     }
   }
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop()
+  const handleStop = async () => {
+    await stop()
+    setIsPlaying(false)
+    setCurrentTime('00:00:00')
+  }
+
+  const handleRecord = async () => {
+    if (isRecording) {
+      await stopEngineRecording()
       setIsRecording(false)
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop())
+    } else {
+      await startEngineRecording()
+      setIsRecording(true)
     }
   }
 
-  const addTrack = (name: string, audio?: Blob) => {
-    const newTrack: Track = {
-      id: Date.now().toString(),
-      name,
-      audio,
-      volume: 0,
-      pan: 0,
-      muted: false,
-      solo: false,
-      effects: []
-    }
-    setTracks([...tracks, newTrack])
-  }
-
-  const deleteTrack = (id: string) => {
-    setTracks(tracks.filter(track => track.id !== id))
-  }
-
-  const updateTrack = (id: string, updates: Partial<Track>) => {
-    setTracks(tracks.map(track => 
-      track.id === id ? { ...track, ...updates } : track
-    ))
-  }
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      addTrack(file.name, file as any)
-    }
+  const handleAddTrack = async (type: 'audio' | 'midi' | 'drum' = 'audio') => {
+    const trackId = await createTrack(`Track ${engineTracks.length + 1}`, type)
+    console.log('Created track:', trackId)
   }
 
   const exportProject = async () => {
@@ -123,6 +106,47 @@ export default function StudioPage() {
 
   const mintAsNFT = async () => {
     console.log('Minting as NFT...')
+  }
+
+  const renderMainContent = () => {
+    switch (activeView) {
+      case 'tracks':
+        return <MultiTrackEditor tracks={engineTracks} />
+      case 'patterns':
+        return selectedTrack ? (
+          <PatternSequencer trackId={selectedTrack} />
+        ) : (
+          <div style={{ 
+            height: '400px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: 'rgba(255, 255, 255, 0.5)'
+          }}>
+            Select a track to use the pattern sequencer
+          </div>
+        )
+      case 'synth':
+        return <AdvancedSynth />
+      case 'rack':
+        return <ModularRack />
+      case 'automation':
+        return selectedTrack ? (
+          <AutomationEditor trackId={selectedTrack} duration={60} />
+        ) : (
+          <div style={{ 
+            height: '400px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: 'rgba(255, 255, 255, 0.5)'
+          }}>
+            Select a track to edit automation
+          </div>
+        )
+      default:
+        return <MultiTrackEditor tracks={engineTracks} />
+    }
   }
 
   return (
@@ -170,163 +194,78 @@ export default function StudioPage() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="glass-morphism rounded-xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-white">Transport Controls</h2>
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="p-3 bg-bitcoin-orange rounded-full hover:bg-yellow-600 transition-colors"
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-6 h-6 text-white" />
-                    ) : (
-                      <Play className="w-6 h-6 text-white" />
-                    )}
-                  </button>
-                  
-                  <button
-                    onClick={() => {
-                      setIsPlaying(false)
-                      setCurrentTime('00:00:00')
-                    }}
-                    className="p-3 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
-                  >
-                    <Square className="w-6 h-6 text-white" />
-                  </button>
-                  
-                  <button
-                    onClick={isRecording ? stopRecording : startRecording}
-                    className={`p-3 rounded-full transition-colors ${
-                      isRecording 
-                        ? 'bg-red-500 animate-pulse hover:bg-red-600' 
-                        : 'bg-gray-700 hover:bg-gray-600'
-                    }`}
-                  >
-                    <Mic className="w-6 h-6 text-white" />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="w-full h-32 bg-black/30 rounded-lg flex items-center justify-center">
-                <span className="text-gray-400">Waveform display</span>
-              </div>
-            </div>
+        {/* View Tabs */}
+        <div className="flex items-center space-x-2 mb-6 glass-morphism rounded-lg p-2">
+          {[
+            { id: 'tracks', label: 'Tracks', icon: Layers },
+            { id: 'patterns', label: 'Patterns', icon: Music },
+            { id: 'synth', label: 'Synthesizer', icon: Keyboard },
+            { id: 'rack', label: 'Modular Rack', icon: Cable },
+            { id: 'automation', label: 'Automation', icon: TrendingUp }
+          ].map(view => (
+            <button
+              key={view.id}
+              onClick={() => setActiveView(view.id as any)}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                activeView === view.id
+                  ? 'bg-bitcoin-orange text-white'
+                  : 'text-gray-300 hover:bg-white/10'
+              }`}
+            >
+              <view.icon className="w-4 h-4" />
+              <span className="text-sm font-medium">{view.label}</span>
+            </button>
+          ))}
+        </div>
 
-            <div className="glass-morphism rounded-xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-white">Tracks</h2>
-                <div className="flex items-center space-x-2">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="audio/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center space-x-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
-                  >
-                    <Upload className="w-4 h-4 text-gray-300" />
-                    <span className="text-gray-300 text-sm">Import</span>
-                  </button>
-                  
-                  <button
-                    onClick={() => addTrack(`Track ${tracks.length + 1}`)}
-                    className="flex items-center space-x-2 px-3 py-2 bg-bitcoin-orange rounded-lg hover:bg-yellow-600 transition-colors"
-                  >
-                    <Plus className="w-4 h-4 text-white" />
-                    <span className="text-white text-sm">Add Track</span>
-                  </button>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                {tracks.length === 0 ? (
-                  <div className="text-center py-8 text-gray-400">
-                    No tracks yet. Add a track to get started.
-                  </div>
+        {/* Transport Controls */}
+        <div className="glass-morphism rounded-xl p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-white">Transport Controls</h2>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handlePlay}
+                className="p-3 bg-bitcoin-orange rounded-full hover:bg-yellow-600 transition-colors"
+              >
+                {isPlaying ? (
+                  <Pause className="w-6 h-6 text-white" />
                 ) : (
-                  tracks.map((track) => (
-                    <div
-                      key={track.id}
-                      className={`p-4 rounded-lg border transition-all ${
-                        selectedTrack === track.id
-                          ? 'bg-bitcoin-orange/20 border-bitcoin-orange'
-                          : 'bg-white/5 border-white/10 hover:bg-white/10'
-                      }`}
-                      onClick={() => setSelectedTrack(track.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <Layers className="w-5 h-5 text-gray-300" />
-                          <span className="text-white font-medium">{track.name}</span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              updateTrack(track.id, { muted: !track.muted })
-                            }}
-                            className={`p-2 rounded-lg transition-colors ${
-                              track.muted 
-                                ? 'bg-red-500/20 text-red-400' 
-                                : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                            }`}
-                          >
-                            <Volume2 className="w-4 h-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              updateTrack(track.id, { solo: !track.solo })
-                            }}
-                            className={`p-2 rounded-lg transition-colors ${
-                              track.solo 
-                                ? 'bg-yellow-500/20 text-yellow-400' 
-                                : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                            }`}
-                          >
-                            <Headphones className="w-4 h-4" />
-                          </button>
-                          
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              deleteTrack(track.id)
-                            }}
-                            className="p-2 bg-white/10 rounded-lg text-gray-300 hover:bg-red-500/20 hover:text-red-400 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                      
-                      {track.audio && (
-                        <div className="mt-2 h-12 bg-black/30 rounded-lg flex items-center px-2">
-                          <div className="w-full h-1 bg-bitcoin-orange/30 rounded-full">
-                            <div className="h-full w-1/3 bg-bitcoin-orange rounded-full" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))
+                  <Play className="w-6 h-6 text-white" />
                 )}
-              </div>
+              </button>
+              
+              <button
+                onClick={handleStop}
+                className="p-3 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
+              >
+                <Square className="w-6 h-6 text-white" />
+              </button>
+              
+              <button
+                onClick={handleRecord}
+                className={`p-3 rounded-full transition-colors ${
+                  isRecording 
+                    ? 'bg-red-500 animate-pulse hover:bg-red-600' 
+                    : 'bg-gray-700 hover:bg-gray-600'
+                }`}
+              >
+                <Mic className="w-6 h-6 text-white" />
+              </button>
+
+              <button
+                onClick={() => handleAddTrack('audio')}
+                className="flex items-center space-x-2 px-3 py-2 bg-bitcoin-orange rounded-lg hover:bg-yellow-600 transition-colors ml-4"
+              >
+                <Plus className="w-4 h-4 text-white" />
+                <span className="text-white text-sm">Add Track</span>
+              </button>
             </div>
-
-            {/* <MusicSequencer /> */}
           </div>
+        </div>
 
-          <div className="space-y-6">
-            {/* <TrackMixer tracks={tracks} onUpdateTrack={updateTrack} /> */}
-            {/* <InstrumentPanel /> */}
-          </div>
+        {/* Main Content Area */}
+        <div className="glass-morphism rounded-xl p-6">
+          {renderMainContent()}
         </div>
       </div>
     </div>
