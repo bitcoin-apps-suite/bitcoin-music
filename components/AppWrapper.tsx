@@ -5,6 +5,7 @@ import PocBar from './PocBar';
 import Taskbar from './Taskbar';
 import DevBar from './DevBar';
 import Footer from './Footer';
+import MinimalDock from './MinimalDock';
 import { useBitcoinOS } from '@/lib/utils/useBitcoinOS';
 
 interface AppWrapperProps {
@@ -105,6 +106,9 @@ export default function AppWrapper({ children }: AppWrapperProps) {
       </div>
       
       <Footer />
+      
+      {/* Minimal Dock - Only show when not running in Bitcoin OS */}
+      {!isInOS && <MinimalDock />}
     </div>
   );
 }
