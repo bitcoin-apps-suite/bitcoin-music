@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Filter, Grid, List, TrendingUp, Music, DollarSign, Clock, Star } from 'lucide-react'
+import Link from 'next/link'
+import { Search, Filter, Grid, List, TrendingUp, Music, DollarSign, Clock, Star, Layers } from 'lucide-react'
 
 export default function MarketplaceView() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -27,9 +28,28 @@ export default function MarketplaceView() {
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <h1 style={{ color: '#ffffff', fontSize: '24px', fontWeight: '600' }}>
-            Music NFT Marketplace
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <h1 style={{ color: '#ffffff', fontSize: '24px', fontWeight: '600' }}>
+              Music NFT Marketplace
+            </h1>
+            <Link href="/ordinals" style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              background: 'rgba(139, 92, 246, 0.2)',
+              border: '1px solid rgba(139, 92, 246, 0.3)',
+              borderRadius: '6px',
+              color: '#8b5cf6',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: '500',
+              transition: 'all 0.2s'
+            }}>
+              <Layers size={16} />
+              Browse Ordinals Music
+            </Link>
+          </div>
           <div style={{ display: 'flex', gap: '8px' }}>
             <button
               onClick={() => setViewMode('grid')}

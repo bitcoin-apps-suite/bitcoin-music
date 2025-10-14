@@ -143,6 +143,50 @@
   font-size: 11px;
 }
 
+/* Right side mini apps - now inside status */
+.minimal-dock-right-apps {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Expand toggle - now inside status */
+.minimal-dock-expand-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.minimal-dock-app-mini {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.minimal-dock-app-mini:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.minimal-dock-icon-mini {
+  width: 12px;
+  height: 12px;
+  transition: filter 0.2s ease;
+}
+
+.minimal-dock-app-mini:hover .minimal-dock-icon-mini {
+  filter: brightness(1.2);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .minimal-dock-container {

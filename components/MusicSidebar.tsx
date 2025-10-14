@@ -21,7 +21,8 @@ import {
   LogOut,
   ChevronRight,
   ChevronDown,
-  Search
+  Search,
+  Layers
 } from 'lucide-react'
 
 interface MusicSidebarProps {
@@ -83,6 +84,13 @@ export default function MusicSidebar({ currentView, onViewChange, onAuthRequired
     { id: 'marketplace', icon: <Store size={18} />, label: 'Marketplace' },
     { id: 'library', icon: <Library size={18} />, label: 'Library' },
     { id: 'exchange', icon: <TrendingUp size={18} />, label: 'Exchange' }
+  ]
+
+  const ordinalsCategories = [
+    { icon: <Layers size={16} />, label: 'Browse Ordinals', count: '∞', href: '/ordinals' },
+    { icon: <Music size={16} />, label: 'Audio MP3', count: '1.2k' },
+    { icon: <Radio size={16} />, label: 'Audio WAV', count: '890' },
+    { icon: <Star size={16} />, label: 'Favorites', count: '12' }
   ]
 
   return (
@@ -431,6 +439,94 @@ export default function MusicSidebar({ currentView, onViewChange, onAuthRequired
                     </div>
                     <span style={{ opacity: 0.5, fontSize: '11px' }}>{cat.count}</span>
                   </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* BSV Ordinals Section */}
+        {(currentView === 'marketplace' || currentView === 'library') && (
+          <div style={{ marginBottom: '16px' }}>
+            <button
+              onClick={() => toggleSection('ordinals')}
+              style={{
+                width: '100%',
+                padding: '8px 0',
+                background: 'transparent',
+                border: 'none',
+                color: '#ffffff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '11px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                opacity: 0.7
+              }}
+            >
+              {expandedSections.includes('ordinals') ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              BSV Ordinals Music
+            </button>
+            {expandedSections.includes('ordinals') && (
+              <div style={{ marginTop: '8px' }}>
+                {ordinalsCategories.map((cat, index) => (
+                  cat.href ? (
+                    <a
+                      key={index}
+                      href={cat.href}
+                      style={{
+                        width: '100%',
+                        padding: '6px 8px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#ffffff',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        fontSize: '12px',
+                        borderRadius: '4px',
+                        transition: 'background 0.2s',
+                        textDecoration: 'none'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(139, 92, 246, 0.1)'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {cat.icon}
+                        <span>{cat.label}</span>
+                      </div>
+                      <span style={{ opacity: 0.5, fontSize: '11px', color: '#8b5cf6' }}>{cat.count}</span>
+                    </a>
+                  ) : (
+                    <button
+                      key={index}
+                      style={{
+                        width: '100%',
+                        padding: '6px 8px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#ffffff',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        fontSize: '12px',
+                        borderRadius: '4px',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {cat.icon}
+                        <span>{cat.label}</span>
+                      </div>
+                      <span style={{ opacity: 0.5, fontSize: '11px' }}>{cat.count}</span>
+                    </button>
+                  )
                 ))}
               </div>
             )}
