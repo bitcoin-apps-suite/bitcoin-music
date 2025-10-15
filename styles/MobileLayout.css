@@ -7,6 +7,11 @@
     display: none !important;
   }
   
+  /* Hide the ticker sidebar on mobile */
+  .ticker-sidebar-container {
+    display: none !important;
+  }
+  
   /* Full width for main content on mobile */
   .main-content-area {
     width: 100% !important;
@@ -152,6 +157,12 @@
   
   .mobile-menu-panel {
     display: none !important;
+  }
+  
+  /* Show ticker sidebar on desktop */
+  .ticker-sidebar-container {
+    display: block;
+    flex-shrink: 0;
   }
 }
 

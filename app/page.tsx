@@ -10,6 +10,7 @@ import MusicExchangeView from '@/components/MusicExchangeView'
 import AuthModal from '@/components/AuthModal'
 import AppHeader from '@/components/AppHeader'
 import InstallPrompt from '@/components/InstallPrompt'
+import TickerSidebar from '@/components/TickerSidebar'
 import '../styles/AppHeader.css'
 import '../styles/MobileLayout.css'
 
@@ -22,6 +23,7 @@ export default function HomePage() {
   const [isResizing, setIsResizing] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [tickerCollapsed, setTickerCollapsed] = useState(false)
   const resizeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -134,18 +136,32 @@ export default function HomePage() {
         />
       </div>
 
-        {/* Main Content Area */}
+        {/* Main Content Area with Right Sidebar */}
         <div 
           className="main-content-area"
           style={{ 
             flex: 1,
             display: 'flex',
-            flexDirection: 'column',
             overflow: 'hidden',
             background: '#0a0a0a'
           }}
         >
-          {renderMainContent()}
+          {/* Central Content */}
+          <div 
+            style={{ 
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden'
+            }}
+          >
+            {renderMainContent()}
+          </div>
+          
+          {/* Right Ticker Sidebar - Only on desktop */}
+          <div className="ticker-sidebar-container">
+            <TickerSidebar onCollapsedChange={setTickerCollapsed} />
+          </div>
         </div>
       </div>
 
