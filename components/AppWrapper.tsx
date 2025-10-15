@@ -6,6 +6,7 @@ import Taskbar from './Taskbar';
 import DevBar from './DevBar';
 import Footer from './Footer';
 import MinimalDock from './MinimalDock';
+import Dock from './Dock';
 import { useBitcoinOS } from '@/lib/utils/useBitcoinOS';
 
 interface AppWrapperProps {
@@ -17,6 +18,7 @@ export default function AppWrapper({ children }: AppWrapperProps) {
   const [pocBannerVisible, setPocBannerVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [dockStyle, setDockStyle] = useState<'minimal' | 'large'>('minimal');
   const { isInOS, setTitle } = useBitcoinOS();
 
   useEffect(() => {
@@ -33,9 +35,11 @@ export default function AppWrapper({ children }: AppWrapperProps) {
     if (typeof window !== 'undefined') {
       const savedDevCollapsed = localStorage.getItem('devSidebarCollapsed');
       const savedPocVisible = localStorage.getItem('pocBannerVisible');
+      const savedDockStyle = localStorage.getItem('dockStyle') as 'minimal' | 'large' | null;
       
       setDevSidebarCollapsed(savedDevCollapsed !== null ? savedDevCollapsed === 'true' : true);
       setPocBannerVisible(savedPocVisible !== null ? savedPocVisible === 'true' : true);
+      setDockStyle(savedDockStyle || 'minimal');
     }
     
     // Set app title when running in Bitcoin OS
@@ -43,7 +47,17 @@ export default function AppWrapper({ children }: AppWrapperProps) {
       setTitle('Bitcoin Music');
     }
 
-    return () => window.removeEventListener('resize', checkMobile);
+    // Listen for dock style changes
+    const handleDockStyleChange = (event: CustomEvent<string>) => {
+      setDockStyle(event.detail as 'minimal' | 'large');
+    };
+
+    window.addEventListener('dockStyleChanged', handleDockStyleChange as EventListener);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('dockStyleChanged', handleDockStyleChange as EventListener);
+    };
   }, [isInOS, setTitle]);
 
   const handleDevSidebarCollapsedChange = (collapsed: boolean) => {
@@ -107,8 +121,8 @@ export default function AppWrapper({ children }: AppWrapperProps) {
       
       <Footer />
       
-      {/* Minimal Dock - Only show when not running in Bitcoin OS */}
-      {!isInOS && <MinimalDock />}
+      {/* Dock - Only show when not running in Bitcoin OS */}
+      {!isInOS && (dockStyle === 'minimal' ? <MinimalDock /> : <Dock />)}
     </div>
   );
 }
