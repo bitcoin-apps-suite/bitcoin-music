@@ -17,9 +17,8 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 0 12px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0 4px; /* Minimal padding at edges */
+  width: 100%; /* Use full width */
 }
 
 .minimal-dock-apps {
@@ -28,7 +27,8 @@
   gap: 6px;
   overflow-x: auto;
   flex: 1;
-  padding-right: 12px;
+  padding-left: 2px; /* Small left padding to not touch edge */
+  padding-right: 8px; /* Reduced right padding */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -101,9 +101,10 @@
 .minimal-dock-status {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.8);
+  padding-right: 2px; /* Small right padding to not touch edge */
 }
 
 .minimal-status-item {
