@@ -4,6 +4,8 @@ import './globals.css'
 import Providers from '@/components/Providers'
 import AppWrapper from '@/components/AppWrapper'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
+import '../components/mobile/mobile-bwallet.css'
+import MobileShellInit from '../components/mobile/MobileShellInit'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,6 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} style={{ minHeight: '100vh' }}>
+        <MobileShellInit />
         <ServiceWorkerRegistration />
         <Providers>
           <AppWrapper>
