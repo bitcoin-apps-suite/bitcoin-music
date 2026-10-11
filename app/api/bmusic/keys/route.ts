@@ -78,3 +78,8 @@ export async function POST(request: Request) {
   }
   return NextResponse.json({ ok: true, origin })
 }
+
+/** CORS preflight (headers come from next.config.js). */
+export function OPTIONS() {
+  return new Response(null, { status: 204 })
+}

@@ -59,3 +59,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: e instanceof Error ? e.message : 'quote failed' }, { status: 503 })
   }
 }
+
+/** CORS preflight (headers come from next.config.js). */
+export function OPTIONS() {
+  return new Response(null, { status: 204 })
+}

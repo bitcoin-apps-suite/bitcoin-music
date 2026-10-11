@@ -6,8 +6,18 @@ const nextConfig = {
   },
   async headers() {
     return [
+      // bMusic key server API: public, called from other origins (vexvoid.com, bWalletX). Responses are
+      // either public or encrypted to one wallet, so any origin may call it.
       {
-        source: '/(.*)',
+        source: '/api/bmusic/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type' },
+        ],
+      },
+      {
+        source: '/((?!api/bmusic/).*)',
         headers: [
           {
             key: 'Content-Security-Policy',
