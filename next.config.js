@@ -16,8 +16,17 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type' },
         ],
       },
+      // bMusic stream files: segments are encrypted, so any origin (bWalletX web, desktop, mobile) may fetch them.
       {
-        source: '/((?!api/bmusic/).*)',
+        source: '/bmusic/streams/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, OPTIONS' },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/((?!api/bmusic/|bmusic/streams/).*)',
         headers: [
           {
             key: 'Content-Security-Policy',

@@ -7,8 +7,8 @@
   "company": "The Bitcoin Corporation LTD. - UK Company No. 16735102",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3007",
-    "build": "next build",
+    "dev": "next dev --webpack -p 3007",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
