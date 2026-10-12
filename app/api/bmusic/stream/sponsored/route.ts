@@ -12,7 +12,12 @@ export async function GET(request: Request) {
   const pots = await query<Pot>(`bmusic_sponsor_pots?album_id=eq.${encodeURIComponent(albumId)}&limit=1`)
   const p = pots[0]
   if (!p) return NextResponse.json({ sponsored: false })
-  return NextResponse.json({ sponsored: p.active && p.spent_sats < p.cap_sats, sponsor: p.pot, capSats: p.cap_sats, spentSats: p.spent_sats, fundAddress: p.address })
+  const funds = await query<{ sats: number }>(`bmusic_sponsor_utxos?pot=eq.${p.pot}&status=neq.spent&select=sats`)
+  const potSats = funds.reduce((n, u) => n + Number(u.sats), 0)
+  return NextResponse.json({
+    sponsored: p.active && p.spent_sats < p.cap_sats && potSats > 100,
+    sponsor: p.pot, capSats: p.cap_sats, spentSats: p.spent_sats, potSats, fundAddress: p.address,
+  })
 }
 
 /**
