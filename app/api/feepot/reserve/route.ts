@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { P2PKH } from '@bsv/sdk'
 import { insert, rpc } from '@/lib/bmusic/db'
-import { feePotDecision } from '@/lib/feepot/limits'
-import { feePotOn, monthlyBudgetSats, potKey, RESERVE_TTL_MS, verifyProof } from '@/lib/feepot/service'
+import { feePotDecision, monthlyBudgetSats } from '@/lib/feepot/limits'
+import { usdPerBsv } from '@/lib/bmusic/server'
+import { budgetEnv, feePotOn, potKey, RESERVE_TTL_MS, verifyProof } from '@/lib/feepot/service'
 
 /**
  * POST {kind, identityKey, txBytes, timestamp, sig} → a pot input + the pot's change output for one action
@@ -30,10 +31,14 @@ export async function POST(request: Request) {
 
   // Usage + account age come from the DB (feepot_usage_for: today's count for this key, this month's sats, first seen).
   const [u] = await rpc<{ user_today: number; month_sats: number; first_seen: string }[]>('feepot_usage_for', { p_key: identityKey })
+  // Budget in USD converted at today's price, never above the sats ceiling; no price = no budget (refused as month-budget).
+  const { usd, ceilingSats } = budgetEnv()
+  const price = await usdPerBsv().catch(() => 0)
+  const budget = monthlyBudgetSats(usd, price, ceilingSats)
   const decision = feePotDecision(
     { kind, userCreatedAt: new Date(u?.first_seen ?? Date.now()), now: new Date(), txBytes },
     { userToday: Number(u?.user_today ?? 0), monthSats: Number(u?.month_sats ?? 0) },
-    monthlyBudgetSats(),
+    budget,
   )
   if (!decision.ok) return NextResponse.json({ error: decision.reason }, { status: 429 })
 

@@ -5,11 +5,17 @@
  * funds it). It signs only the pot's own input, SIGHASH_ALL|FORKID, after checking the input pays the fee only.
  */
 import { P2PKH, PrivateKey, ProtoWallet, Transaction, Utils } from '@bsv/sdk'
+import { DEFAULT_MAX_MONTHLY_SATS, DEFAULT_MONTHLY_BUDGET_USD } from './limits'
 
 export const feePotOn = () => process.env.FEE_POT_ENABLED === '1'
-export const monthlyBudgetSats = () => {
-  const n = Number(process.env.FEE_POT_MONTHLY_SATS)
-  return Number.isInteger(n) && n > 0 ? n : 50_000
+/** FEE_POT_MONTHLY_USD (default 10) and FEE_POT_MAX_MONTHLY_SATS (hard ceiling, default 1 BSV). */
+export const budgetEnv = () => {
+  const usd = Number(process.env.FEE_POT_MONTHLY_USD)
+  const max = Number(process.env.FEE_POT_MAX_MONTHLY_SATS)
+  return {
+    usd: Number.isFinite(usd) && usd > 0 ? usd : DEFAULT_MONTHLY_BUDGET_USD,
+    ceilingSats: Number.isInteger(max) && max > 0 ? max : DEFAULT_MAX_MONTHLY_SATS,
+  }
 }
 export const RESERVE_TTL_MS = 60_000
 
