@@ -194,14 +194,14 @@ export const segmentKey = (secret: Uint8Array, trackId: string, n: number) =>
   createHmac('sha256', secret).update(`${trackId}:${n}`).digest()
 
 /**
- * Broadcast to GorillaPool ARC, then TAAL ARC. Resolves with the txid only when a broadcaster accepts it;
+ * Broadcast to GorillaPool ARC, then WhatsOnChain (TAAL ARC needs an API key). Resolves with the txid only when a broadcaster accepts it;
  * orphan / unknown-parent / rejected results are errors (the player must resync its change chain).
  */
 export async function broadcastStrict(rawHex: string): Promise<string> {
   const txid = Transaction.fromHex(rawHex).id('hex')
   const ok = /^(STORED|ANNOUNCED_TO_NETWORK|REQUESTED_BY_NETWORK|SENT_TO_NETWORK|ACCEPTED_BY_NETWORK|SEEN_ON_NETWORK|MINED)$/
   const problems: string[] = []
-  for (const arc of ['https://arc.gorillapool.io', 'https://arc.taal.com']) {
+  for (const arc of ['https://arc.gorillapool.io']) {
     try {
       const r = await fetch(`${arc}/v1/tx`, {
         method: 'POST',
@@ -217,5 +217,45 @@ export async function broadcastStrict(rawHex: string): Promise<string> {
       problems.push(`${new URL(arc).host}: ${e instanceof Error ? e.message : 'unreachable'}`)
     }
   }
+  // second opinion: WhatsOnChain answers the txid on acceptance, an error string otherwise
+  try {
+    const r = await fetch('https://api.whatsonchain.com/v1/bsv/main/tx/raw', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ txhex: rawHex }), signal: AbortSignal.timeout(8000),
+    })
+    const body = (await r.text()).replace(/"/g, '').trim()
+    if (r.ok && body === txid) return txid
+    if (/already|txn-already-known/i.test(body)) return txid
+    problems.push(`whatsonchain: ${r.status} ${body.slice(0, 120)}`)
+  } catch (e) {
+    problems.push(`whatsonchain: ${e instanceof Error ? e.message : 'unreachable'}`)
+  }
   throw new Error(`not accepted: ${problems.join('; ')}`)
+}
+
+export type StreamRow = {
+  track_id: string; album_id: string; artist_address: string; artist_identity: string | null
+  segments: number; sats_per_segment: number; secret_enc: string
+}
+export type PayTo = {
+  segment: number; sats: number; lockingScript: string; address: string
+  derivationPrefix?: string; derivationSuffix?: string; senderIdentityKey?: string
+}
+
+/**
+ * Where segment `n` of a track is paid. With an artist identity key: a BRC-29 output, sender = this server,
+ * prefix "bmusic:<trackId>", suffix "<n>", so every track (and second) lands on its own key that only the
+ * artist can spend, and the artist's wallet internalizes it as a wallet payment. Without one: the plain address.
+ */
+export async function streamPayTo(s: StreamRow, n: number): Promise<PayTo> {
+  if (!s.artist_identity) {
+    return { segment: n, sats: s.sats_per_segment, lockingScript: new P2PKH().lock(s.artist_address).toHex(), address: s.artist_address }
+  }
+  const derivationPrefix = Utils.toBase64(Utils.toArray(`bmusic:${s.track_id}`, 'utf8'))
+  const derivationSuffix = Utils.toBase64(Utils.toArray(String(n), 'utf8'))
+  const { publicKey } = await serverWallet().getPublicKey({ protocolID: BRC29, keyID: `${derivationPrefix} ${derivationSuffix}`, counterparty: s.artist_identity })
+  const address = PublicKey.fromString(publicKey).toAddress()
+  return {
+    segment: n, sats: s.sats_per_segment, lockingScript: new P2PKH().lock(address).toHex(), address,
+    derivationPrefix, derivationSuffix, senderIdentityKey: await serverIdentity(),
+  }
 }

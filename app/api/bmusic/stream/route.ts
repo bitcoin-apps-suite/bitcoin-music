@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server'
-import { P2PKH, PublicKey, Signature, Transaction, Utils } from '@bsv/sdk'
+import { PublicKey, Signature, Transaction, Utils } from '@bsv/sdk'
 import { getOne, insert } from '@/lib/bmusic/db'
-import { broadcastStrict, openAtRest, segmentKey, serverIdentity, serverWallet, STREAM_KEY_PROTOCOL } from '@/lib/bmusic/server'
+import { broadcastStrict, openAtRest, segmentKey, serverIdentity, serverWallet, STREAM_KEY_PROTOCOL, streamPayTo, type StreamRow } from '@/lib/bmusic/server'
 
 export const dynamic = 'force-dynamic'
-
-type Stream = { track_id: string; artist_address: string; segments: number; sats_per_segment: number; secret_enc: string }
 
 /**
  * Pay for one second, get its key (per-second streaming demo).
@@ -29,7 +27,7 @@ export async function POST(request: Request) {
     || typeof listener !== 'string' || !/^0[23][0-9a-f]{64}$/i.test(listener) || typeof sig !== 'string' || !/^[0-9a-f]+$/i.test(sig))
     return NextResponse.json({ error: 'trackId, segment (integer), rawTx (hex), listener (public key) and sig are required' }, { status: 400 })
 
-  const stream = await getOne<Stream>('bmusic_streams', 'track_id', trackId)
+  const stream = await getOne<StreamRow>('bmusic_streams', 'track_id', trackId)
   if (!stream) return NextResponse.json({ error: 'unknown track' }, { status: 404 })
   const n = segment as number
   if (n < 0 || n >= stream.segments) return NextResponse.json({ error: 'no such segment' }, { status: 404 })
@@ -40,16 +38,16 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: 'not a transaction' }, { status: 400 })
   }
-  const artistScript = new P2PKH().lock(stream.artist_address).toHex()
-  if (!tx.outputs.some((o) => o.lockingScript.toHex() === artistScript && (o.satoshis ?? 0) >= stream.sats_per_segment))
-    return NextResponse.json({ error: `pay ${stream.sats_per_segment} sat to ${stream.artist_address}` }, { status: 402 })
+  const payTo = await streamPayTo(stream, n)
+  const outputIndex = tx.outputs.findIndex((o) => o.lockingScript.toHex() === payTo.lockingScript && (o.satoshis ?? 0) >= payTo.sats)
+  if (outputIndex < 0) return NextResponse.json({ error: `pay ${payTo.sats} sat to ${payTo.address} (GET /api/bmusic/stream/payto)`, payTo }, { status: 402 })
 
   const txid = tx.id('hex')
   let signed = false
   try {
     signed = PublicKey.fromString(listener).verify(Utils.toArray(`${trackId}:${n}:${txid}`, 'utf8'), Signature.fromDER(sig, 'hex'))
   } catch {}
-  if (!signed) return NextResponse.json({ error: 'sig must be the listener key signing sha256("<trackId>:<segment>:<txid>")' }, { status: 401 })
+  if (!signed) return NextResponse.json({ error: 'sig must be the listener key signing "<trackId>:<segment>:<txid>"' }, { status: 401 })
   if (await getOne('bmusic_stream_payments', 'txid', txid, 'txid'))
     return NextResponse.json({ error: 'this transaction already paid for a second' }, { status: 409 })
   try {
@@ -58,7 +56,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: e instanceof Error ? e.message : 'broadcast failed' }, { status: 502 })
   }
   try {
-    await insert('bmusic_stream_payments', { txid, track_id: trackId, segment: n, listener })
+    await insert('bmusic_stream_payments', {
+      txid, track_id: trackId, album_id: stream.album_id, segment: n, listener, output_index: outputIndex,
+      sats: tx.outputs[outputIndex].satoshis, derivation_prefix: payTo.derivationPrefix ?? null, derivation_suffix: payTo.derivationSuffix ?? null,
+    })
   } catch {
     return NextResponse.json({ error: 'this transaction already paid for a second' }, { status: 409 })
   }
@@ -79,6 +80,7 @@ export async function POST(request: Request) {
     protocolID: STREAM_KEY_PROTOCOL,
     keyID: `${trackId}.${n}`,
     serverIdentityKey: await serverIdentity(),
+    next: n + 1 < stream.segments ? await streamPayTo(stream, n + 1) : null,
   })
 }
 
