@@ -1,8 +1,8 @@
 {
  "v": 1,
  "albumId": "first-12",
- "title": "FIRST 12",
- "artist": "V3XV0ID",
+ "title": "Echoes in the Abyss",
+ "artist": "VexVoid",
  "payTo": "13WRxSgUYReyawKo2gbRvKHhDEYb29Xd3K",
  "satsPerSegment": 1,
  "segmentSeconds": 1,
@@ -2403,5 +2403,7 @@
    ],
    "seconds": 135
   }
- ]
+ ],
+ "cover": "cover.jpg",
+ "headline": "first-12-01"
 }
