@@ -7,7 +7,7 @@
  *  - checks a play transaction against its quote, broadcasts it, and returns the track key wrapped to the listener.
  * It never holds anyone else's money or keys. Env: BMUSIC_SERVER_WIF, BMUSIC_KEYSTORE_SECRET (64 hex).
  */
-import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto'
+import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes } from 'node:crypto'
 import { P2PKH, PrivateKey, ProtoWallet, PublicKey, Script, Transaction, Utils } from '@bsv/sdk'
 import { checkPoints, OPNS, splitSats, type PlayRule, type PointsEntry } from './points'
 
@@ -185,4 +185,37 @@ export async function broadcast(rawHex: string): Promise<string> {
   if (r.ok) return body
   if (/already|known|txn-already|257/i.test(body)) return Transaction.fromHex(rawHex).id('hex')
   throw new Error(`broadcast failed: ${body.slice(0, 200)}`)
+}
+
+// ── per-second streaming (stream demo) ────────────────────────────────────────
+export const STREAM_KEY_PROTOCOL: [2, string] = [2, 'bmusic stream key']
+/** Key for one 1-second segment: HMAC-SHA256(track secret, "<trackId>:<n>"). */
+export const segmentKey = (secret: Uint8Array, trackId: string, n: number) =>
+  createHmac('sha256', secret).update(`${trackId}:${n}`).digest()
+
+/**
+ * Broadcast to GorillaPool ARC, then TAAL ARC. Resolves with the txid only when a broadcaster accepts it;
+ * orphan / unknown-parent / rejected results are errors (the player must resync its change chain).
+ */
+export async function broadcastStrict(rawHex: string): Promise<string> {
+  const txid = Transaction.fromHex(rawHex).id('hex')
+  const ok = /^(STORED|ANNOUNCED_TO_NETWORK|REQUESTED_BY_NETWORK|SENT_TO_NETWORK|ACCEPTED_BY_NETWORK|SEEN_ON_NETWORK|MINED)$/
+  const problems: string[] = []
+  for (const arc of ['https://arc.gorillapool.io', 'https://arc.taal.com']) {
+    try {
+      const r = await fetch(`${arc}/v1/tx`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'X-WaitFor': 'SEEN_ON_NETWORK' },
+        body: JSON.stringify({ rawTx: rawHex }),
+        signal: AbortSignal.timeout(8000),
+      })
+      const j = (await r.json().catch(() => ({}))) as { txStatus?: string; detail?: string; title?: string; extraInfo?: string }
+      if (r.ok && j.txStatus && ok.test(j.txStatus)) return txid
+      if (/already|known/i.test(`${j.detail} ${j.extraInfo}`)) return txid
+      problems.push(`${new URL(arc).host}: ${j.txStatus ?? r.status} ${j.extraInfo ?? j.detail ?? j.title ?? ''}`.trim())
+    } catch (e) {
+      problems.push(`${new URL(arc).host}: ${e instanceof Error ? e.message : 'unreachable'}`)
+    }
+  }
+  throw new Error(`not accepted: ${problems.join('; ')}`)
 }

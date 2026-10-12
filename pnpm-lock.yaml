@@ -68,9 +68,6 @@ importers:
       '@tonejs/midi':
         specifier: ^2.0.28
         version: 2.0.28
-      '@types/bip39':
-        specifier: ^3.0.0
-        version: 3.0.4
       '@types/node':
         specifier: ^22.7.4
         version: 22.19.15
@@ -2047,10 +2044,6 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
-  '@types/bip39@3.0.4':
-    resolution: {integrity: sha512-kgmgxd14vTUMqcKu/gRi7adMchm7teKnOzdkeP0oQ5QovXpbUJISU0KUtBt84DdxCws/YuNlSCIoZqgXexe6KQ==}
-    deprecated: This is a stub types definition. bip39 provides its own type definitions, so you do not need this installed.
-
   '@types/chrome@0.0.276':
     resolution: {integrity: sha512-2r+RZzfyEvGaIBadCRmOUvWVHtEKHqO8MsHkJTEXqgFnF72pe7lfKZzOoCFh/An5+M+20ULCPofUWnwnlgrXUA==}
 
@@ -2627,9 +2620,6 @@ packages:
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
-
-  bip39@3.1.0:
-    resolution: {integrity: sha512-c9kiwdk45Do5GL0vJMe7tS95VjCii65mYAH7DfWl3uW8AVzXKQVUm64i3hzVybBDMp9r7j9iNxR85+ul8MdN/A==}
 
   bitcoin-address-validation@2.2.3:
     resolution: {integrity: sha512-1uGCGl26Ye8JG5qcExtFLQfuib6qEZWNDo1ZlLlwp/z7ygUFby3IxolgEfgMGaC+LG9csbVASLcH8fRLv7DIOg==}
@@ -5282,7 +5272,7 @@ packages:
     resolution: {integrity: sha512-aWj0Pvzq90fqbI5vN1IvUrlf4utOqy+AERYxwWjegH1G8PzheMnrRIgQ5tkwKVtQMDP0bHZEACW/zLDF+XgfXQ==}
 
   rollup-plugin-polyfill-node@https://codeload.github.com/FredKSchott/rollup-plugin-polyfill-node/tar.gz/31face71b94b8408a907f04753318dff589adc2f:
-    resolution: {tarball: https://codeload.github.com/FredKSchott/rollup-plugin-polyfill-node/tar.gz/31face71b94b8408a907f04753318dff589adc2f}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/FredKSchott/rollup-plugin-polyfill-node/tar.gz/31face71b94b8408a907f04753318dff589adc2f}
     version: 0.13.0
     peerDependencies:
       rollup: ^1.20.0 || ^2.0.0 || ^3.0.0 || ^4.0.0
@@ -8339,10 +8329,6 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.0
 
-  '@types/bip39@3.0.4':
-    dependencies:
-      bip39: 3.1.0
-
   '@types/chrome@0.0.276':
     dependencies:
       '@types/filesystem': 0.0.36
@@ -8978,10 +8964,6 @@ snapshots:
       require-from-string: 2.0.2
 
   binary-extensions@2.3.0: {}
-
-  bip39@3.1.0:
-    dependencies:
-      '@noble/hashes': 1.8.0
 
   bitcoin-address-validation@2.2.3:
     dependencies:

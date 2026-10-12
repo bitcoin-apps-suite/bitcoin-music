@@ -37,7 +37,6 @@
     "@tonaljs/chord": "^6.1.1",
     "@tonaljs/scale": "^4.13.3",
     "@tonejs/midi": "^2.0.28",
-    "@types/bip39": "^3.0.0",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.2.7",
