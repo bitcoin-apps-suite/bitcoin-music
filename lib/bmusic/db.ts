@@ -41,3 +41,8 @@ export async function updateWhere<T>(table: string, filters: Record<string, stri
   const q = Object.entries(filters).map(([k, v]) => `${k}=${eq(v)}`).join('&')
   return call<T[]>(`${table}?${q}`, { method: 'PATCH', body: JSON.stringify(patch), prefer: 'return=representation' })
 }
+
+/** Raw PostgREST GET for filters the helpers above don't cover (e.g. or=(…)). `path` is "table?query". */
+export async function query<T>(path: string): Promise<T[]> {
+  return call<T[]>(path)
+}
