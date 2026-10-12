@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
-import { PublicKey, Signature, Utils } from '@bsv/sdk'
+import { ARTIST_AUTH_PROTOCOL, verifyWalletSig } from '@/lib/bmusic/listeners'
 
 export const dynamic = 'force-dynamic'
 
 /**
  * Artist income feed for internalizeAction ('wallet payment').
- * GET ?identityKey&since=<ISO>&ts=<ms>&sig=<DER hex of identityKey.sign(utf8 "bmusic income:<since>:<ts>")>
+ * GET ?identityKey&since=<ISO>&ts=<ms>&sig. sig = artist wallet createSignature({ protocolID: [2,'bmusic artist auth'],
+ *   keyID: String(ts), counterparty: 'anyone', data: utf8("bmusic income:<since>:<ts>") }) (BRC-3; works from any BRC-100 wallet).
  * ts must be within 5 minutes. Returns paid seconds on tracks whose artist_identity = identityKey, after `since`.
  */
 export async function GET(request: Request) {
@@ -16,11 +17,7 @@ export async function GET(request: Request) {
   const sig = q.get('sig') ?? ''
   if (!/^0[23][0-9a-f]{64}$/i.test(identityKey) || !Number.isFinite(ts) || Math.abs(Date.now() - ts) > 5 * 60_000 || Number.isNaN(Date.parse(since)))
     return NextResponse.json({ error: 'identityKey, since (ISO), ts (ms, within 5 min) and sig are required' }, { status: 400 })
-  let ok = false
-  try {
-    ok = PublicKey.fromString(identityKey).verify(Utils.toArray(`bmusic income:${since}:${ts}`, 'utf8'), Signature.fromDER(sig, 'hex'))
-  } catch {}
-  if (!ok) return NextResponse.json({ error: 'bad signature' }, { status: 401 })
+  if (!(await verifyWalletSig(identityKey, ARTIST_AUTH_PROTOCOL, String(ts), `bmusic income:${since}:${ts}`, sig, ts))) return NextResponse.json({ error: 'bad signature' }, { status: 401 })
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY!

@@ -46,3 +46,8 @@ export async function updateWhere<T>(table: string, filters: Record<string, stri
 export async function query<T>(path: string): Promise<T[]> {
   return call<T[]>(path)
 }
+
+/** Call a SQL function through PostgREST (POST /rpc/<fn>). */
+export async function rpc<T>(fn: string, args: object): Promise<T> {
+  return call<T>(`rpc/${fn}`, { method: 'POST', body: JSON.stringify(args) })
+}
