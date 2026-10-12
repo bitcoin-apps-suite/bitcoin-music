@@ -20,7 +20,30 @@ create table if not exists bmusic_artist_tracks (
   sponsored boolean not null default true
 );
 
--- Fans' (and the artist's own) locks behind an artist. verified=false until the on-chain check.
+-- Money paid to an artist (paid stream time, tips, originals, tickets): the rank input (owner, 12 Oct 2026).
+-- Filled by the stats job from bmusic_stream_payments / sales. usd_cents = value at time of payment when known.
+create table if not exists bmusic_artist_payments (
+  id bigserial primary key,
+  slug text not null references bmusic_artists (slug) on delete cascade,
+  payer_key text not null,
+  payer_name text,
+  kind text not null check (kind in ('stream', 'tip', 'original', 'ticket')),
+  sats bigint not null check (sats > 0),
+  usd_cents bigint,
+  txid text,
+  paid_at timestamptz not null default now()
+);
+create index if not exists bmusic_artist_payments_slug on bmusic_artist_payments (slug, paid_at);
+
+-- The artist's linked wallets (besides bmusic_artists.identity_key): their payments never count toward rank.
+create table if not exists bmusic_artist_linked_keys (
+  slug text not null references bmusic_artists (slug) on delete cascade,
+  key text not null,
+  primary key (slug, key)
+);
+
+-- Fans' (and the artist's own) locks in an artist's pot. Kept for the Locks screen; NOT listed as backers and
+-- NOT in rank (locks are refundable). verified=false until the on-chain check.
 create sequence if not exists bmusic_backer_seq;
 create table if not exists bmusic_artist_backings (
   id bigserial primary key,
