@@ -12,10 +12,13 @@ export async function GET(request: Request) {
   const pots = await query<Pot>(`bmusic_sponsor_pots?album_id=eq.${encodeURIComponent(albumId)}&limit=1`)
   const p = pots[0]
   if (!p) return NextResponse.json({ sponsored: false })
+  const tracks = await query<{ track_id: string; sponsorable: boolean }>(`bmusic_streams?album_id=eq.${encodeURIComponent(albumId)}&select=track_id,sponsorable&order=track_id`)
   const funds = await query<{ sats: number }>(`bmusic_sponsor_utxos?pot=eq.${p.pot}&status=neq.spent&select=sats`)
   const potSats = funds.reduce((n, u) => n + Number(u.sats), 0)
   return NextResponse.json({
     sponsored: p.active && p.spent_sats < p.cap_sats && potSats > 100,
+    sponsoredTracks: tracks.filter((t) => t.sponsorable).map((t) => t.track_id),
+    payToPlayTracks: tracks.filter((t) => !t.sponsorable).map((t) => t.track_id),
     sponsor: p.pot, capSats: p.cap_sats, spentSats: p.spent_sats, potSats, fundAddress: p.address,
   })
 }
@@ -49,6 +52,7 @@ export async function POST(request: Request) {
   const stream = await getOne<StreamRow>('bmusic_streams', 'track_id', trackId)
   if (!stream) return NextResponse.json({ error: 'unknown track' }, { status: 404 })
   if (n < 0 || n >= stream.segments) return NextResponse.json({ error: 'no such segment' }, { status: 404 })
+  if (stream.sponsorable === false) return NextResponse.json({ error: 'this track is pay to play', payToPlay: true }, { status: 410 })
   const pot = (await query<Pot>(`bmusic_sponsor_pots?album_id=eq.${encodeURIComponent(stream.album_id)}&limit=1`))[0]
   if (!pot) return NextResponse.json({ error: 'this album is not sponsored' }, { status: 410 })
 

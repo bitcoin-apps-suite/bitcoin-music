@@ -234,7 +234,7 @@ export async function broadcastStrict(rawHex: string): Promise<string> {
 
 export type StreamRow = {
   track_id: string; album_id: string; artist_address: string; artist_identity: string | null
-  segments: number; sats_per_segment: number; secret_enc: string
+  segments: number; sats_per_segment: number; secret_enc: string; sponsorable?: boolean
 }
 export type PayTo = {
   segment: number; sats: number; lockingScript: string; address: string
