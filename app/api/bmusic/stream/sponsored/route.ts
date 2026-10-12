@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { PublicKey, Signature, Utils } from '@bsv/sdk'
 import { getOne, insert, query } from '@/lib/bmusic/db'
 import { broadcastStrict, openAtRest, segmentKey, serverIdentity, serverWallet, STREAM_KEY_PROTOCOL, streamPayTo, type StreamRow } from '@/lib/bmusic/server'
-import { release, settle, SponsorError, sponsorSecond, type Pot } from '@/lib/bmusic/sponsor'
+import { IP_DAILY_SECONDS, release, settle, SponsorError, sponsorSecond, takeIpSecond, type Pot } from '@/lib/bmusic/sponsor'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,7 +19,8 @@ export async function GET(request: Request) {
  * A second paid by the artist's sponsor pot. Body: { trackId, segment, listener, sig }.
  * sig = listener.sign(utf8 "sponsored:<trackId>:<segment>").toDER('hex').
  * Same response as POST /api/bmusic/stream (key wrapped to `listener`, `next`), plus sponsoredBy.
- * 410 = pot empty/capped/closed → the player falls back to paying itself. A second already sponsored for this
+ * 410 = pot empty/capped/closed, or this connection's daily allowance (IP_DAILY_SECONDS) used → the player
+ * falls back to paying itself. A second already sponsored for this
  * listener is re-issued without paying again.
  */
 export async function POST(request: Request) {
@@ -51,6 +52,9 @@ export async function POST(request: Request) {
   )
   let txid = already[0]?.txid
   if (!txid) {
+    const ip = (request.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || 'unknown'
+    if (!(await takeIpSecond(ip)))
+      return NextResponse.json({ error: `sponsored listening is ${IP_DAILY_SECONDS} seconds a day per connection; pay your own seconds to keep going` }, { status: 410 })
     const payTo = await streamPayTo(stream, n)
     let s
     try {

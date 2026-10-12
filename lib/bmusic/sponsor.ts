@@ -103,3 +103,26 @@ export class SponsorError extends Error {
     super(message)
   }
 }
+
+/** Sponsored seconds per IP per UTC day: about one full album listen. */
+export const IP_DAILY_SECONDS = 2_500
+
+/** Count one sponsored second against this IP; false when today's allowance is used up. */
+export async function takeIpSecond(ip: string): Promise<boolean> {
+  const day = new Date().toISOString().slice(0, 10)
+  for (let i = 0; i < 3; i++) {
+    const row = (await query<{ seconds: number }>(`bmusic_sponsor_ip_days?ip=eq.${encodeURIComponent(ip)}&day=eq.${day}&limit=1`))[0]
+    if (!row) {
+      try {
+        await insert('bmusic_sponsor_ip_days', { ip, day, seconds: 1 })
+        return true
+      } catch {
+        continue // raced with another request; read again
+      }
+    }
+    if (row.seconds >= IP_DAILY_SECONDS) return false
+    const ok = await updateWhere('bmusic_sponsor_ip_days', { ip, day, seconds: String(row.seconds) }, { seconds: row.seconds + 1 })
+    if (ok.length) return true
+  }
+  return false
+}
