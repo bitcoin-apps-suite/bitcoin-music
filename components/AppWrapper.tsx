@@ -8,6 +8,7 @@ import Footer from './Footer';
 import MinimalDock from './MinimalDock';
 import Dock from './Dock';
 import { useBitcoinOS } from '@/lib/utils/useBitcoinOS';
+import { usePathname } from 'next/navigation';
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export default function AppWrapper({ children }: AppWrapperProps) {
   const [mounted, setMounted] = useState(false);
   const [dockStyle, setDockStyle] = useState<'minimal' | 'large'>('minimal');
   const { isInOS, setTitle } = useBitcoinOS();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -44,7 +46,7 @@ export default function AppWrapper({ children }: AppWrapperProps) {
     
     // Set app title when running in Bitcoin OS
     if (isInOS) {
-      setTitle('Bitcoin Music');
+      setTitle('bMusicX');
     }
 
     // Listen for dock style changes
@@ -67,6 +69,9 @@ export default function AppWrapper({ children }: AppWrapperProps) {
   const handlePocBannerVisibilityChange = (visible: boolean) => {
     setPocBannerVisible(visible);
   };
+
+  // The front page (the exchange) is its own full-bleed, phone-first layout.
+  if (pathname === '/') return <>{children}</>;
 
   if (!mounted) {
     return (

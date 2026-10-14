@@ -1,7 +1,7 @@
 {
-  "name": "Bitcoin Music",
-  "short_name": "Music",
-  "description": "Decentralized Music Platform on Bitcoin SV",
+  "name": "bMusicX — Bitcoin Music Exchange",
+  "short_name": "bMusicX",
+  "description": "Stream music by the second; every second pays the artist.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
