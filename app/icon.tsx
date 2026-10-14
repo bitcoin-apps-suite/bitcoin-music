@@ -1,38 +1,15 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
-export const size = {
-  width: 32,
-  height: 32,
-}
-
+export const size = { width: 64, height: 64 }
 export const contentType = 'image/png'
 
 export default function Icon() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          fontSize: 24,
-          background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          borderRadius: '50%',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-          <span style={{ fontSize: 14, marginRight: -2 }}>♪</span>
-          <span style={{ fontSize: 10, fontWeight: 'bold' }}>₿</span>
-        </div>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', borderRadius: 14 }}>
+        <span style={{ fontSize: 48, fontWeight: 800, color: '#3b82f6', marginTop: -6 }}>b</span>
       </div>
     ),
-    {
-      ...size,
-    }
+    size,
   )
 }
