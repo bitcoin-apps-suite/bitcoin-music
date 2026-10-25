@@ -1,6 +1,7 @@
 'use client'
 
 import { useAlbumLive } from './LiveStatus'
+import ConnectBwalletX from './ConnectBwalletX'
 
 export type Track = { n: number; trackId: string; title: string; seconds: number; kind: 'audio' | 'video' }
 export type Album = { albumId: string; title: string; artist: string; cover: string; satsPerSegment: number; tracks: Track[]; listenUrl: string }
@@ -53,7 +54,10 @@ export default function Exchange({ albums }: { albums: Album[] }) {
     <main className="bmx">
       <header className="bmx-top">
         <a href="/" className="bmx-logo"><span className="bmx-b">b</span>Music<span className="bmx-b">X</span></a>
-        <a href="https://bwalletx.com" className="bmx-link">Get bWalletX</a>
+        <span className="bmx-actions">
+          <a href="https://bwalletx.com" className="bmx-link">Get bWalletX</a>
+          <ConnectBwalletX />
+        </span>
       </header>
       <section className="bmx-hero">
         <h1>Bitcoin Music Exchange</h1>
