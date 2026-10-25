@@ -37,3 +37,4 @@
 .bmx-how p{margin:0;color:var(--mut);font-size:14px;line-height:1.5}
 .bmx-foot{max-width:1080px;margin:48px auto 0;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;color:var(--mut);font-size:13px}
 .bmx-foot a:hover{color:#fff}
+.bmx-actions{display:flex;align-items:center;gap:14px}@media(max-width:520px){.bmx-actions .bmx-link{display:none}}
