@@ -71,7 +71,7 @@ export default function AppWrapper({ children }: AppWrapperProps) {
   };
 
   // The front page (the exchange) is its own full-bleed, phone-first layout.
-  if (pathname === '/') return <>{children}</>;
+  if (pathname === '/' || pathname?.startsWith('/album/')) return <>{children}</>;
 
   if (!mounted) {
     return (
