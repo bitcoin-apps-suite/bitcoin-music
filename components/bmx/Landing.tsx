@@ -40,6 +40,20 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
   const [now, setNow] = useState<{ album: ShelfAlbum; i: number } | null>(null)
   const [playing, setPlaying] = useState(false)
   const g = albums[cur]
+  // Hero music video: plays muted (poster only with reduced motion); Sound on is the shared hero control.
+  const hv = useRef<HTMLVideoElement>(null)
+  const [heroSound, setHeroSound] = useState(false)
+  useEffect(() => {
+    const v = hv.current
+    if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {})
+  }, [])
+  const toggleHeroSound = () => {
+    const v = hv.current
+    if (!v) return
+    v.muted = !v.muted
+    if (!v.muted) { audio.current?.pause(); setPlaying(false); v.play().catch(() => {}) }
+    setHeroSound(!v.muted)
+  }
 
   useEffect(() => {
     const measure = () => {
@@ -141,17 +155,21 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
     <main className="sx">
       <XStrip />
       <section className="xs-top" aria-labelledby="xs-h1">
-        <img className="xs-bg" src="/bmx/covers/terrornode-banner.webp" alt="" />
+        <video className="xs-bg" ref={hv} poster="/bmx/hero-loop.jpg" muted loop playsInline preload="metadata" aria-hidden="true">
+          <source src="/bmx/hero-loop.webm" type="video/webm" />
+          <source src="/bmx/hero-loop.mp4" type="video/mp4" />
+        </video>
         <XHeader />
         <div className="xs-wrap xs-in">
           <p className="xs-eye">bMusicX &middot; built on bWalletX</p>
-          <h1 className="xs-h1" id="xs-h1">Music for <i>your bWalletX.</i></h1>
-          <p className="xs-lede">Play samples of every album free. VexVoid streams in full in bWalletX, paid by the second to the artist.</p>
+          <h1 className="xs-h1" id="xs-h1">Your Music on <i>bMusicX</i></h1>
+          <p className="xs-lede">Free samples of every album. VexVoid streams in full, paid by the second.</p>
           <div className="xs-ctas">
             <a className="xs-btn xs-ghost" href="#shelf-h">Browse</a>
             <a className="xs-btn xs-gold" href="https://bwalletx.com/get">Get bWalletX</a>
           </div>
         </div>
+        <button className="xs-snd" type="button" aria-pressed={heroSound} onClick={toggleHeroSound}>&#9834; {heroSound ? 'Sound off' : 'Sound on'}</button>
       </section>
       <audio ref={audio} preload="none" />
 
@@ -225,6 +243,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             ))}
           </div>
         </div>
+        <button className="xs-snd" type="button" aria-pressed={heroSound} onClick={toggleHeroSound}>&#9834; {heroSound ? 'Sound off' : 'Sound on'}</button>
       </section>
 
       <div className="sx-wrap">
