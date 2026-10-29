@@ -6,7 +6,7 @@ const total = (a: ShelfAlbum) => a.tracks.reduce((n, t) => n + t.seconds, 0)
 export function StoreTop() {
   return (
     <>
-      <div className="sx-strip">Music you play in <b>bWalletX</b>. Every second you play pays the artist.</div>
+      <div className="sx-strip"><a href="https://bwalletx.com">Part of <b>bWalletX</b> &rarr;</a></div>
       <header className="sx-wrap sx-nav">
         <a className="sx-brand" href="/" aria-label="bMusicX home">bMusic<span className="sx-gx">X</span></a>
         <a className="sx-btn sx-gold" href="https://bwalletx.com">Get bWalletX</a>
