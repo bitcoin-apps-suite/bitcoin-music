@@ -11,13 +11,13 @@ const description = 'bMusicX, the Bitcoin Music Exchange. Stream music by the se
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://bmusicx.com'),
-  title: { default: 'bMusicX — Bitcoin Music Exchange', template: '%s · bMusicX' },
+  title: { default: 'Your Music on bMusicX', template: '%s · bMusicX' },
   description,
   applicationName: 'bMusicX',
   authors: [{ name: 'The Bitcoin Corporation Ltd' }],
   publisher: 'The Bitcoin Corporation Ltd',
-  openGraph: { title: 'bMusicX — Bitcoin Music Exchange', description, url: 'https://bmusicx.com', siteName: 'bMusicX', type: 'website', locale: 'en_GB', images: [{ url: '/og/bmusicx-og.png', width: 1200, height: 630, alt: 'bMusicX: a fan of album covers led by WELCOME TO TERRORNODE. Free previews of real albums. Part of bWalletX.' }] },
-  twitter: { card: 'summary_large_image', title: 'bMusicX — Bitcoin Music Exchange', description, images: ['/og/bmusicx-og.png'] },
+  openGraph: { title: 'Your Music on bMusicX', description, url: 'https://bmusicx.com', siteName: 'bMusicX', type: 'website', locale: 'en_GB', images: [{ url: '/og/bmusicx-og.png', width: 1200, height: 630, alt: 'bMusicX: a fan of album covers led by WELCOME TO TERRORNODE. Free previews of real albums. Part of bWalletX.' }] },
+  twitter: { card: 'summary_large_image', title: 'Your Music on bMusicX', description, images: ['/og/bmusicx-og.png'] },
   manifest: '/manifest.json',
   icons: {
     icon: [
