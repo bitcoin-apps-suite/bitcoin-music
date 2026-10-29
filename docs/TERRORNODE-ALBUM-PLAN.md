@@ -22,7 +22,7 @@ Clean check = lyric transcript in `npgx/public/music/lyrics-sync/<slug>.json` sc
 
 Total ≈ 38:00.
 
-Left out: Harajuku Chainsaw (owner), Tokyo Gutter Queen (transcript clean but the Suno lyric sheet has an f-word — ear check before adding),
+ADDED 29 Oct (owner: "massive hit waiting to happen"): Tokyo Gutter Queen at track 2 — ear check the f-word in the lyric sheet before release. Left out: Harajuku Chainsaw (owner),
 Roppongi Warzone / Electric Geisha / Concrete Sakura / Dead Idols / Last Train (the npgx files are 29–65 s stubs, or too gentle),
 Gasoline Heart (garage/rockabilly, not heavy), Neon Rust + Veins of the City (CherryX), Echo Chamber / Unicorn Dreamscape (b0ase/NPG site).
 Audio: A-side mp3s in `npgx/public/music/albums/<album>/NN-a.mp3`; Midnight Graffiti from tokenblaster `public/music/kweg/`.
