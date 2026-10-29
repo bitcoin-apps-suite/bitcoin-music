@@ -85,6 +85,31 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
 
   const go = (i: number) => { setCur(((i % N) + N) % N); setDrag(0) }
 
+  // Trackpad / Magic Mouse swipe: horizontal wheel (or Shift+wheel) steps one album per gesture.
+  // Vertical wheel is never touched, so the page still scrolls. A long fast swipe may step twice.
+  const curRef = useRef(cur)
+  curRef.current = cur
+  useEffect(() => {
+    const el = flow.current
+    if (!el || !N) return
+    let acc = 0, steps = 0, idle: ReturnType<typeof setTimeout> | undefined
+    const step = (d: number) => { setCur((((curRef.current + d) % N) + N) % N); setDrag(0) }
+    const onWheel = (e: WheelEvent) => {
+      const k = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1
+      let dx = e.deltaX * k, dy = e.deltaY * k
+      if (e.shiftKey && !dx) { dx = dy; dy = 0 }
+      if (Math.abs(dx) <= Math.abs(dy) || Math.abs(dx) < 2) return
+      e.preventDefault()
+      clearTimeout(idle)
+      idle = setTimeout(() => { acc = 0; steps = 0 }, 200) // momentum tail over: unlock
+      acc += dx
+      if (steps === 0 && Math.abs(acc) >= 50) { step(Math.sign(acc)); steps = 1; acc = 0 }
+      else if (steps === 1 && Math.abs(acc) >= 600) { step(Math.sign(acc)); steps = 2 }
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => { el.removeEventListener('wheel', onWheel); clearTimeout(idle) }
+  }, [N])
+
   // Swipe / drag (vertical page scroll stays native via touch-action: pan-y).
   const st = useRef({ down: false, moved: false, x: 0, y: 0 })
   const onDown = (e: React.PointerEvent) => {
