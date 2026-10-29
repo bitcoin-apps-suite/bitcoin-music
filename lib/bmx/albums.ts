@@ -14,6 +14,8 @@ export type ShelfAlbum = {
   genre: string
   featured?: boolean
   titleStyle?: 'drip' | 'gold'
+  titleImg?: string
+  titleSub?: string
   /** Live = streams today in bWalletX, paid by the second. */
   live: boolean
   satsPerSecond?: number
@@ -36,7 +38,7 @@ export const TERRORNODE: ShelfAlbum = {
   line: 'Hard rock, industrial and hardcore from the streets of Neo-Tokyo 2048. The soundtrack to the TERRORNODE game.',
   genre: 'Industrial punk · hardcore · heavy',
   featured: true,
-  titleStyle: 'drip',
+  titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg',
   live: false,
   credits: [
     `Music: ${NPGX_CREDIT}`,
@@ -77,7 +79,7 @@ export const TERRORNODE_ALTS: ShelfAlbum = {
   cover: '/bmx/covers/terrornode-alternate-takes.webp',
   line: 'Other takes from the WELCOME TO TERRORNODE sessions, including six more runs at Shibuya Breaker.',
   genre: 'Industrial punk · alternate takes',
-  titleStyle: 'drip',
+  titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg', titleSub: 'Alternate Takes',
   live: false,
   credits: [`Music: ${NPGX_CREDIT}`, DARKTECH],
   tracks: [

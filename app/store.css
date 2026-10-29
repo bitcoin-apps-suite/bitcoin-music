@@ -148,3 +148,6 @@
 @media(max-width:700px){.sx-artist{grid-template-columns:1fr}.sx-artist img{max-width:320px}}
 .sx-artist h1{font-size:clamp(34px,6vw,60px);margin:0}
 .sx-artist .sx-line{color:var(--muted);margin:12px 0 0}
+.wmark{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.wmark img{display:block;width:min(560px,86vw);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
+.wsub{font:600 clamp(14px,2.4vw,18px)/1 'Space Grotesk',system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#cfd8ff}

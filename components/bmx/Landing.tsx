@@ -164,7 +164,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         </div>
 
         <div className="lx-info" aria-live="polite">
-          <h1 className={g.titleStyle === 'drip' ? 'drip' : 'goldt'}>{g.title}</h1>
+          {g.titleImg ? (<h1 className="wmark"><img src={g.titleImg} alt={g.title} />{g.titleSub && <span className="wsub">{g.titleSub}</span>}</h1>) : (<h1 className={g.titleStyle === 'drip' ? 'drip' : 'goldt'}>{g.title}</h1>)}
           <p>{g.line}</p>
           <div className="lx-meta">
             <span className="sx-chip">{g.artist}</span>
