@@ -40,9 +40,15 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
             <div className="sx-own">
               <h3>Status</h3>
               <ul className="sx-check">
-                <li className={a.live || a.tracks.some((t) => t.src) ? 'ok' : ''}>Listen here, free</li>
-                <li className={a.live ? 'ok' : ''}>Pay by the second in bWalletX{a.live ? '' : ' (coming)'}</li>
-                <li>Buy and own (coming)</li>
+                {a.live ? (
+                  <li className="ok">Pay by the second in bWalletX</li>
+                ) : (
+                  <>
+                    <li className={a.tracks.some((t) => t.src) ? 'ok' : ''}>Listen to samples, free</li>
+                    <li>Pay by the second in bWalletX (coming)</li>
+                    <li>Own the album: numbered edition (coming)</li>
+                  </>
+                )}
               </ul>
             </div>
             {a.credits && (

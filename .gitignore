@@ -44,7 +44,7 @@ next-env.d.ts
 *.flac
 *.ogg
 !public/samples/**
-!public/bmx/audio/**
+!public/bmx/samples/**
 
 # IDE
 .vscode
