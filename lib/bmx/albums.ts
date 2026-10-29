@@ -108,7 +108,7 @@ export const PAPER_REED_B: ShelfAlbum = {
   title: 'Paper Reed Circuit (Part B)',
   artist: 'VexVoid',
   cover: '/bmx/covers/paper-reed-circuit-part-b.webp',
-  line: 'The second part of Paper Reed Circuit. Part A closes out WELCOME TO TERRORNODE.',
+  line: 'The second part of Paper Reed Circuit.',
   genre: 'Dark electronic · single',
   titleStyle: 'gold',
   live: false,
