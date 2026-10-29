@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ShelfAlbum, ShelfTrack } from '@/lib/bmx/albums'
 import { artistBySlug, artistSlug, mmss } from '@/lib/bmx/albums'
-import { Case, StatusChip, StoreFoot, StoreTop } from './Store'
+import { Case, StatusChip, StoreFoot, XHeader, XStrip } from './Store'
 
 type Artist = { name: string; picks: { album: ShelfAlbum; track?: ShelfTrack }[] }
 
@@ -139,21 +139,24 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
 
   return (
     <main className="sx">
-      <section className="bx-top" aria-labelledby="bx-h">
-        <StoreTop />
-        <div className="sx-wrap bx-in">
-          <p className="bx-eye">bMusicX &middot; built on bWalletX</p>
-          <p className="bx-h" id="bx-h">Music for your bWalletX. <span>Play the samples free.</span></p>
-          <div className="bx-ctas">
-            <a className="sx-btn sx-ghost" href="#shelf-h">Browse</a>
-            <a className="sx-btn sx-gold" href="https://bwalletx.com/get">Get bWalletX</a>
+      <XStrip />
+      <section className="xs-top" aria-labelledby="xs-h1">
+        <img className="xs-bg" src="/bmx/covers/terrornode-banner.webp" alt="" />
+        <XHeader />
+        <div className="xs-wrap xs-in">
+          <p className="xs-eye">bMusicX &middot; built on bWalletX</p>
+          <h1 className="xs-h1" id="xs-h1">Music for <i>your bWalletX.</i></h1>
+          <p className="xs-lede">Play samples of every album free. VexVoid streams in full in bWalletX, paid by the second to the artist.</p>
+          <div className="xs-ctas">
+            <a className="xs-btn xs-ghost" href="#shelf-h">Browse</a>
+            <a className="xs-btn xs-gold" href="https://bwalletx.com/get">Get bWalletX</a>
           </div>
         </div>
       </section>
       <audio ref={audio} preload="none" />
 
       <section className="lx-hero" aria-roledescription="carousel" aria-label="Albums">
-        <p className="lx-kicker">Pick an album</p>
+        <p className="xs-kick">Pick an album</p>
         <div
           className={`lx-flow${st.current.moved ? ' drag' : ''}`}
           ref={flow}
@@ -226,7 +229,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
 
       <div className="sx-wrap">
         <section aria-labelledby="shelf-h" className="lx-sec">
-          <div className="sx-shelf-h bx-cat"><div><p className="bx-eye">The catalogue</p><h2 id="shelf-h">Already on <span>bMusicX.</span></h2><p className="bx-sub">Every album here. Tap play for samples, or open the tracklist.</p></div></div>
+          <div className="sx-shelf-h xs-cat"><div><p className="xs-eye">The catalogue</p><h2 id="shelf-h">Already on <i>bMusicX.</i></h2><p className="xs-sub">Every album here. Tap play for samples, or open the tracklist.</p></div></div>
           <div className="sx-shelf">
             {albums.map((a) => (
               <div key={a.slug} className={`sx-item lx-item${a.featured ? ' sx-item-feat' : ''}`}>
@@ -247,6 +250,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
           </div>
         </section>
 
+        <div id="artists">
         {artists.map((ar) => (
           <section key={ar.name} className="lx-sec lx-artist" aria-labelledby={`ar-${ar.name}`}>
             <div className="sx-shelf-h">
@@ -277,9 +281,10 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             </div>
           </section>
         ))}
+        </div>
 
-        <section className="sx-how">
-          <div><h3>Play</h3><p>Press play for free samples of any album here. VexVoid streams in full in bWalletX, paid by the second, straight to the artist.</p></div>
+        <section className="sx-how" id="creators" aria-label="For creators">
+          <div><h3>For creators</h3><p>Every second a fan listens in bWalletX pays the artist directly. VexVoid streams in full today; anyone can press play here for free samples of any album.</p></div>
           <div><h3>Albums</h3><p>Open an album for the full tracklist and player.</p></div>
           <div><h3>TERRORNODE</h3><p>The album is the soundtrack to the TERRORNODE game on bGamesX.</p></div>
         </section>

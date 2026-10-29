@@ -1,16 +1,56 @@
+import Script from 'next/script'
+import '@/app/xshell.css'
 import type { ShelfAlbum } from '@/lib/bmx/albums'
 import { mmss } from '@/lib/bmx/albums'
 
 const total = (a: ShelfAlbum) => a.tracks.reduce((n, t) => n + t.seconds, 0)
 
+// Shared b*X shell (same markup on bmoviesx.com and bvideox.com; only the accent colour and art differ).
+export function XStrip() {
+  return (
+    <aside className="xs-strip" aria-label="bWalletX">
+      <a href="https://bwalletx.com">
+        <svg viewBox="23 8 74 100" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="xs-sg" gradientUnits="userSpaceOnUse" x1="0" y1="12" x2="0" y2="105"><stop offset="0" stopColor="#FFE58A" /><stop offset=".55" stopColor="#FFD24D" /><stop offset="1" stopColor="#C98F00" /></linearGradient>
+            <mask id="xs-sm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask>
+          </defs>
+          <g fill="url(#xs-sg)" mask="url(#xs-sm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g>
+        </svg>
+        <span>Part of <b>bWalletX</b></span><span className="xs-go" aria-hidden="true">&rarr;</span>
+      </a>
+    </aside>
+  )
+}
+
+export function XHeader() {
+  return (
+    <header className="xs-wrap xs-nav">
+      <a className="xs-brand" href="/" aria-label="bMusicX home">
+        <svg viewBox="23 8 74 100" aria-hidden="true" focusable="false">
+          <mask id="xs-bm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask>
+          <g fill="currentColor" mask="url(#xs-bm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g>
+        </svg>
+        <span>bMusic<i>X</i></span>
+      </a>
+      <nav className="xs-links" aria-label="Main">
+        <a href="/#shelf-h">Browse</a>
+        <a className="xs-hs" href="/#artists">Artists</a>
+        <a className="xs-hs" href="/#creators">For creators</a>
+        {/* One wallet control: Get bWalletX (no wallet here) / Connect / paymail pill (connected). */}
+        <span data-bwx-connect="" suppressHydrationWarning />
+      </nav>
+      <Script src="https://unpkg.com/@bwalletx/connect@0.5.0/dist/bwalletx-connect.global.js" integrity="sha384-1XiN/accJppMI7qXUHzNrUAdUWIotONkjNy7rZBrwcvPxDCFk1yC83JY2c4LZ8gg" crossOrigin="anonymous" strategy="afterInteractive" />
+      <Script src="/bwx-connect.js" strategy="afterInteractive" />
+    </header>
+  )
+}
+
 export function StoreTop() {
   return (
     <>
-      <div className="sx-strip"><a href="https://bwalletx.com">Part of <b>bWalletX</b> &rarr;</a></div>
-      <header className="sx-wrap sx-nav">
-        <a className="sx-brand" href="/" aria-label="bMusicX home">bMusic<span className="sx-gx">X</span></a>
-        <a className="sx-btn sx-gold" href="https://bwalletx.com">Get bWalletX</a>
-      </header>
+      <XStrip />
+      <XHeader />
     </>
   )
 }
