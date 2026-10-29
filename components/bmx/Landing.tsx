@@ -139,7 +139,17 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
 
   return (
     <main className="sx">
-      <StoreTop />
+      <section className="bx-top" aria-labelledby="bx-h">
+        <StoreTop />
+        <div className="sx-wrap bx-in">
+          <p className="bx-eye">bMusicX &middot; built on bWalletX</p>
+          <p className="bx-h" id="bx-h">Music for your bWalletX. <span>Play the samples free.</span></p>
+          <div className="bx-ctas">
+            <a className="sx-btn sx-ghost" href="#shelf-h">Browse</a>
+            <a className="sx-btn sx-gold" href="https://bwalletx.com/get">Get bWalletX</a>
+          </div>
+        </div>
+      </section>
       <audio ref={audio} preload="none" />
 
       <section className="lx-hero" aria-roledescription="carousel" aria-label="Albums">
@@ -216,7 +226,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
 
       <div className="sx-wrap">
         <section aria-labelledby="shelf-h" className="lx-sec">
-          <div className="sx-shelf-h"><h2 id="shelf-h">Albums</h2></div>
+          <div className="sx-shelf-h bx-cat"><div><p className="bx-eye">The catalogue</p><h2 id="shelf-h">Already on <span>bMusicX.</span></h2><p className="bx-sub">Every album here. Tap play for samples, or open the tracklist.</p></div></div>
           <div className="sx-shelf">
             {albums.map((a) => (
               <div key={a.slug} className={`sx-item lx-item${a.featured ? ' sx-item-feat' : ''}`}>
