@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { SHELF, albumBySlug, mmss } from '@/lib/bmx/albums'
+import { SHELF, albumBySlug, artistBySlug, artistSlug, mmss } from '@/lib/bmx/albums'
 import { Case, StatusChip, StoreFoot, StoreTop } from '@/components/bmx/Store'
 import AlbumPlayer from '@/components/bmx/AlbumPlayer'
 import '../../store.css'
@@ -32,16 +32,25 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
             <h1 className={a.titleStyle === 'drip' ? 'drip' : 'goldt'}>{a.title}</h1>
             <p className="sx-line">{a.line}</p>
             <div className="sx-meta">
-              <span className="sx-chip">{a.artist}</span>
+              {artistBySlug(artistSlug(a.artist)) ? <a className="sx-chip" href={`/artist/${artistSlug(a.artist)}`}>{a.artist}</a> : <span className="sx-chip">{a.artist}</span>}
               <span className="sx-chip">{a.tracks.length} tracks · {mmss(total)}</span>
               <StatusChip a={a} />
             </div>
             <AlbumPlayer album={a} />
             <div className="sx-own">
-              <h3>Buy and own</h3>
-              <p>Not available yet.</p>
-              <span className="sx-btn sx-ghost" aria-disabled="true">Coming</span>
+              <h3>Status</h3>
+              <ul className="sx-check">
+                <li className={a.live || a.tracks.some((t) => t.src) ? 'ok' : ''}>Listen here, free</li>
+                <li className={a.live ? 'ok' : ''}>Pay by the second in bWalletX{a.live ? '' : ' (coming)'}</li>
+                <li>Buy and own (coming)</li>
+              </ul>
             </div>
+            {a.credits && (
+              <div className="sx-own">
+                <h3>Credits</h3>
+                {a.credits.map((c) => <p key={c}>{c}</p>)}
+              </div>
+            )}
           </div>
         </section>
       </div>

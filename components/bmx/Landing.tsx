@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { ShelfAlbum, ShelfTrack } from '@/lib/bmx/albums'
-import { mmss } from '@/lib/bmx/albums'
+import { artistBySlug, artistSlug, mmss } from '@/lib/bmx/albums'
 import { Case, StatusChip, StoreFoot, StoreTop } from './Store'
 
 type Artist = { name: string; picks: { album: ShelfAlbum; track?: ShelfTrack }[] }
@@ -215,7 +215,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         {artists.map((ar) => (
           <section key={ar.name} className="lx-sec lx-artist" aria-labelledby={`ar-${ar.name}`}>
             <div className="sx-shelf-h">
-              <h2 id={`ar-${ar.name}`}>{ar.name}</h2>
+              <h2 id={`ar-${ar.name}`}>{artistBySlug(artistSlug(ar.name)) ? <a href={`/artist/${artistSlug(ar.name)}`}>{ar.name}</a> : ar.name}</h2>
               <span className="lx-count">{ar.picks.filter((p) => !p.track).length ? `${ar.picks.filter((p) => !p.track).length} album${ar.picks.filter((p) => !p.track).length > 1 ? 's' : ''}` : `${ar.picks.length} track${ar.picks.length > 1 ? 's' : ''}`}</span>
             </div>
             <div className="lx-row">
