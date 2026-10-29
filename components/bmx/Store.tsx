@@ -66,7 +66,7 @@ export default function Store({ albums }: { albums: ShelfAlbum[] }) {
         <section className="sx-hero" aria-labelledby="hero-h">
           <div>
             <p className="sx-kicker">New on bMusicX</p>
-            <h1 id="hero-h" className={feat.titleStyle === 'drip' ? 'drip' : 'goldt'}>{feat.title}</h1>
+            {feat.titleImg ? (<h1 id="hero-h" className="wmark"><img src={feat.titleImg} alt={feat.title} />{feat.titleSub && <span className="wsub">{feat.titleSub}</span>}</h1>) : (<h1 id="hero-h" className={feat.titleStyle === 'drip' ? 'drip' : 'goldt'}>{feat.title}</h1>)}
             <p className="sx-line">{feat.line}</p>
             <div className="sx-meta">
               <span className="sx-chip">{feat.artist}</span>
