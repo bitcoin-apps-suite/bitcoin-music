@@ -1,10 +1,10 @@
 import first12 from '@/public/bmusic/streams/first-12/manifest.json'
 
-// Store shelf data. Audio files live in public/bmx/audio (served as static files by Vercel,
-// the same way the live VexVoid stream segments in public/bmusic/streams are served).
-// These releases are for listening only: no sales until each track's rights are checked.
+// Store shelf data. The store plays SAMPLES only: 45s clips (20s for tracks under 50s) in
+// public/bmx/samples. Full tracks are not published until numbered-edition sales launch.
+// `seconds` is the full track length (for display); `sampleSeconds` is the clip length.
 
-export type ShelfTrack = { n: number; title: string; seconds: number; src?: string; note?: string; artist?: string; clean?: 'clean' | 'ear-check' }
+export type ShelfTrack = { n: number; title: string; seconds: number; src?: string; sampleSeconds?: number; note?: string; artist?: string; clean?: 'clean' | 'ear-check' }
 export type ShelfAlbum = {
   slug: string
   title: string
@@ -24,7 +24,7 @@ export type ShelfAlbum = {
 
 export type ShelfArtist = { slug: string; name: string; photo: string; bio: string }
 
-const AU = '/bmx/audio'
+const AU = '/bmx/samples'
 const NPGX_CREDIT = 'NPGX. Created with Suno; prompts and lyrics by b0ase.'
 const DARKTECH = 'Cover title: Darktech LDR font by Michał "Neoqueto" Nowak, CC BY-SA 3.0.'
 
@@ -45,31 +45,31 @@ export const TERRORNODE: ShelfAlbum = {
     DARKTECH,
   ],
   tracks: [
-    { n: 1, title: 'Welcome to Terrornode', seconds: 164, src: `${AU}/terrornode/welcome-to-terrornode.m4a`, note: 'Title track', clean: 'ear-check' },
-    { n: 2, title: 'March of the Erobotz', seconds: 108, src: `${AU}/terrornode/march-of-the-erobotz.m4a`, note: 'Erobotz theme', clean: 'ear-check' },
-    { n: 3, title: 'I Am TERRORNODE', seconds: 138, src: `${AU}/terrornode/i-am-terrornode.m4a`, note: 'Rogue AI theme', clean: 'ear-check' },
-    { n: 4, title: 'KAIJU-01', seconds: 193, src: `${AU}/terrornode/kaiju-01.m4a`, note: 'The giant robot rises', clean: 'ear-check' },
-    { n: 5, title: 'Tokyo Gutter Queen', seconds: 192, src: `${AU}/tokyo-gutter-punk/01.mp3`, note: 'J-punk anthem · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 6, title: 'Shibuya Mosh Pit', seconds: 135, src: `${AU}/tokyo-gutter-punk/03.mp3`, note: 'Thrash crossover · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 7, title: 'Akihabara Fury', seconds: 144, src: `${AU}/neon-blood-riot/08.mp3`, note: 'Noise punk · from Neon Blood Riot', clean: 'ear-check' },
-    { n: 8, title: 'Shinobi Girls', seconds: 200, src: `${AU}/neon-blood-riot/07.mp3`, note: 'Speed punk · from Neon Blood Riot', clean: 'ear-check' },
-    { n: 9, title: 'Underground Empress', seconds: 165, src: `${AU}/tokyo-gutter-punk/09.mp3`, note: 'Anarcho-punk · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 10, title: 'Molotov Kiss', seconds: 110, src: `${AU}/neon-blood-riot/06.mp3`, note: 'Hardcore punk · from Neon Blood Riot', clean: 'ear-check' },
-    { n: 11, title: 'Chrome Fist', seconds: 177, src: `${AU}/neon-blood-riot/02.mp3`, note: 'Industrial punk · from Neon Blood Riot', clean: 'ear-check' },
-    { n: 12, title: 'Void Mass (Vivienne Void)', seconds: 56, src: `${AU}/vivienne-void/void-mass.m4a`, artist: 'Vivienne Void', note: 'Interlude', clean: 'ear-check' },
-    { n: 13, title: '渋谷ブレイカー (Shibuya Breaker)', seconds: 198, src: `${AU}/terrornode/shibuya-breaker.m4a`, note: 'Speed punk', clean: 'ear-check' },
-    { n: 14, title: 'Tokaido Reload', seconds: 210, src: `${AU}/tokyo-gutter-punk/11.mp3`, note: 'Driving hard rock · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 15, title: 'Neon Blood Riot', seconds: 137, src: `${AU}/neon-blood-riot/01.mp3`, note: 'Riot grrrl hardcore · from Neon Blood Riot', clean: 'ear-check' },
-    { n: 16, title: 'Kabukicho Wolf', seconds: 143, src: `${AU}/tokyo-gutter-punk/05.mp3`, note: 'Street punk · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 17, title: 'Blade Girl', seconds: 205, src: `${AU}/tokyo-gutter-punk/02.mp3`, note: 'Crust punk · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 18, title: 'Razor Kisses', seconds: 188, src: `${AU}/tokyo-gutter-punk/06.mp3`, note: 'Noise hardcore · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 19, title: 'Black Rose', seconds: 281, src: `${AU}/tokyo-gutter-punk/04.mp3`, note: 'Hardcore anthem · from Tokyo Gutter Punk', clean: 'ear-check' },
-    { n: 20, title: 'Paper Reed Circuit (VexVoid)', seconds: 179, src: `${AU}/vexvoid/paper-reed-circuit.m4a`, artist: 'VexVoid', clean: 'ear-check' },
-    { n: 21, title: 'Electric Geisha (電気芸者)', seconds: 244, src: `${AU}/terrornode/electric-geisha.m4a`, note: 'End credits', clean: 'ear-check' },
+    { n: 1, title: 'Welcome to Terrornode', seconds: 164, src: `${AU}/terrornode/welcome-to-terrornode-sample.m4a`, note: 'Title track', clean: 'ear-check' },
+    { n: 2, title: 'March of the Erobotz', seconds: 108, src: `${AU}/terrornode/march-of-the-erobotz-sample.m4a`, note: 'Erobotz theme', clean: 'ear-check' },
+    { n: 3, title: 'I Am TERRORNODE', seconds: 138, src: `${AU}/terrornode/i-am-terrornode-sample.m4a`, note: 'Rogue AI theme', clean: 'ear-check' },
+    { n: 4, title: 'KAIJU-01', seconds: 193, src: `${AU}/terrornode/kaiju-01-sample.m4a`, note: 'The giant robot rises', clean: 'ear-check' },
+    { n: 5, title: 'Tokyo Gutter Queen', seconds: 192, src: `${AU}/tokyo-gutter-punk/01-sample.m4a`, note: 'J-punk anthem · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 6, title: 'Shibuya Mosh Pit', seconds: 135, src: `${AU}/tokyo-gutter-punk/03-sample.m4a`, note: 'Thrash crossover · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 7, title: 'Akihabara Fury', seconds: 144, src: `${AU}/neon-blood-riot/08-sample.m4a`, note: 'Noise punk · from Neon Blood Riot', clean: 'ear-check' },
+    { n: 8, title: 'Shinobi Girls', seconds: 200, src: `${AU}/neon-blood-riot/07-sample.m4a`, note: 'Speed punk · from Neon Blood Riot', clean: 'ear-check' },
+    { n: 9, title: 'Underground Empress', seconds: 165, src: `${AU}/tokyo-gutter-punk/09-sample.m4a`, note: 'Anarcho-punk · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 10, title: 'Molotov Kiss', seconds: 110, src: `${AU}/neon-blood-riot/06-sample.m4a`, note: 'Hardcore punk · from Neon Blood Riot', clean: 'ear-check' },
+    { n: 11, title: 'Chrome Fist', seconds: 177, src: `${AU}/neon-blood-riot/02-sample.m4a`, note: 'Industrial punk · from Neon Blood Riot', clean: 'ear-check' },
+    { n: 12, title: 'Void Mass (Vivienne Void)', seconds: 56, src: `${AU}/vivienne-void/void-mass-sample.m4a`, artist: 'Vivienne Void', note: 'Interlude', clean: 'ear-check' },
+    { n: 13, title: '渋谷ブレイカー (Shibuya Breaker)', seconds: 198, src: `${AU}/terrornode/shibuya-breaker-sample.m4a`, note: 'Speed punk', clean: 'ear-check' },
+    { n: 14, title: 'Tokaido Reload', seconds: 210, src: `${AU}/tokyo-gutter-punk/11-sample.m4a`, note: 'Driving hard rock · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 15, title: 'Neon Blood Riot', seconds: 137, src: `${AU}/neon-blood-riot/01-sample.m4a`, note: 'Riot grrrl hardcore · from Neon Blood Riot', clean: 'ear-check' },
+    { n: 16, title: 'Kabukicho Wolf', seconds: 143, src: `${AU}/tokyo-gutter-punk/05-sample.m4a`, note: 'Street punk · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 17, title: 'Blade Girl', seconds: 205, src: `${AU}/tokyo-gutter-punk/02-sample.m4a`, note: 'Crust punk · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 18, title: 'Razor Kisses', seconds: 188, src: `${AU}/tokyo-gutter-punk/06-sample.m4a`, note: 'Noise hardcore · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 19, title: 'Black Rose', seconds: 281, src: `${AU}/tokyo-gutter-punk/04-sample.m4a`, note: 'Hardcore anthem · from Tokyo Gutter Punk', clean: 'ear-check' },
+    { n: 20, title: 'Paper Reed Circuit (VexVoid)', seconds: 179, src: `${AU}/vexvoid/paper-reed-circuit-sample.m4a`, artist: 'VexVoid', clean: 'ear-check' },
+    { n: 21, title: 'Electric Geisha (電気芸者)', seconds: 244, src: `${AU}/terrornode/electric-geisha-sample.m4a`, note: 'End credits', clean: 'ear-check' },
   ],
 }
 
-const alt = (n: number, title: string, seconds: number, file: string, note?: string): ShelfTrack => ({ n, title, seconds, src: `${AU}/terrornode-alts/${file}.m4a`, note, clean: 'ear-check' })
+const alt = (n: number, title: string, seconds: number, file: string, note?: string): ShelfTrack => ({ n, title, seconds, src: `${AU}/terrornode-alts/${file}-sample.m4a`, note, clean: 'ear-check' })
 export const TERRORNODE_ALTS: ShelfAlbum = {
   slug: 'terrornode-alternate-takes',
   title: 'TERRORNODE: Alternate Takes',
@@ -105,9 +105,9 @@ export const VOID_MASS: ShelfAlbum = {
   live: false,
   credits: ['Music: Vivienne Void (NPGX). Created with Suno; prompts by b0ase.', 'Cover: Vivienne Void character art, NPGX.'],
   tracks: [
-    { n: 1, title: 'Void Mass', seconds: 56, src: `${AU}/vivienne-void/void-mass.m4a`, clean: 'ear-check' },
-    { n: 2, title: 'Body Machine', seconds: 35, src: `${AU}/vivienne-void/body-machine.m4a`, clean: 'ear-check' },
-    { n: 3, title: 'Cold Leather', seconds: 86, src: `${AU}/vivienne-void/cold-leather.m4a`, clean: 'ear-check' },
+    { n: 1, title: 'Void Mass', seconds: 56, src: `${AU}/vivienne-void/void-mass-sample.m4a`, clean: 'ear-check' },
+    { n: 2, title: 'Body Machine', seconds: 35, src: `${AU}/vivienne-void/body-machine-sample.m4a`, clean: 'ear-check' },
+    { n: 3, title: 'Cold Leather', seconds: 86, src: `${AU}/vivienne-void/cold-leather-sample.m4a`, clean: 'ear-check' },
   ],
 }
 
@@ -121,18 +121,18 @@ export const PAPER_REED_B: ShelfAlbum = {
   titleStyle: 'gold',
   live: false,
   credits: ['Music: VexVoid. Created with Suno; prompts by b0ase.', 'Cover: VexVoid artwork from Echoes in the Abyss.'],
-  tracks: [{ n: 1, title: 'Paper Reed Circuit (Part B)', seconds: 155, src: `${AU}/vexvoid/paper-reed-circuit-part-b.m4a`, clean: 'ear-check' }],
+  tracks: [{ n: 1, title: 'Paper Reed Circuit (Part B)', seconds: 155, src: `${AU}/vexvoid/paper-reed-circuit-part-b-sample.m4a`, clean: 'ear-check' }],
 }
 
 const tgp: ShelfTrack[] = [
   [1, 'Tokyo Gutter Queen', 192], [2, 'Blade Girl', 205], [3, 'Shibuya Mosh Pit', 135], [4, 'Black Rose', 281],
   [5, 'Kabukicho Wolf', 143], [6, 'Razor Kisses', 188], [9, 'Underground Empress', 165], [11, 'Tokaido Reload', 210],
-].map(([n, title, seconds], i) => ({ n: i + 1, title: title as string, seconds: seconds as number, src: `${AU}/tokyo-gutter-punk/${String(n).padStart(2, '0')}.mp3`, clean: 'ear-check' as const }))
+].map(([n, title, seconds], i) => ({ n: i + 1, title: title as string, seconds: seconds as number, src: `${AU}/tokyo-gutter-punk/${String(n).padStart(2, '0')}-sample.m4a`, clean: 'ear-check' as const }))
 
 const nbr: ShelfTrack[] = [
   'Neon Blood Riot', 'Chrome Fist', 'Roppongi Warzone', 'Electric Geisha', 'Concrete Sakura', 'Molotov Kiss',
   'Shinobi Girls', 'Akihabara Fury', 'Dead Idols', 'Gasoline Heart', 'Last Train to Nowhere',
-].map((title, i) => ({ n: i + 1, title, seconds: [137, 177, 31, 29, 55, 110, 200, 144, 65, 154, 59][i], src: `${AU}/neon-blood-riot/${String(i + 1).padStart(2, '0')}.mp3`, clean: 'ear-check' as const }))
+].map((title, i) => ({ n: i + 1, title, seconds: [137, 177, 31, 29, 55, 110, 200, 144, 65, 154, 59][i], src: `${AU}/neon-blood-riot/${String(i + 1).padStart(2, '0')}-sample.m4a`, clean: 'ear-check' as const }))
 
 export const TOKYO: ShelfAlbum = {
   slug: 'tokyo-gutter-punk', title: 'Tokyo Gutter Punk', artist: 'NPGX', cover: '/bmx/covers/tokyo-gutter-punk.webp',
@@ -154,6 +154,10 @@ export const VEXVOID: ShelfAlbum = {
 }
 
 export const SHELF: ShelfAlbum[] = [TERRORNODE, VOID_MASS, PAPER_REED_B, TOKYO, NEON, VEXVOID, TERRORNODE_ALTS]
+
+/** Clip length for a track of `seconds` full length (matches how the samples were cut). */
+export const sampleLength = (seconds: number) => (seconds < 50 ? 20 : 45)
+for (const a of SHELF) for (const t of a.tracks) if (t.src) t.sampleSeconds = sampleLength(t.seconds)
 
 export const ARTISTS: ShelfArtist[] = [
   { slug: 'npgx', name: 'NPGX', photo: '/bmx/covers/terrornode-cover.webp', bio: 'The Ninja Punk Girls band: J-punk, hardcore and industrial from Neo-Tokyo. Made with Suno; prompts and lyrics by b0ase.' },
