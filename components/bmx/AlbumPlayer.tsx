@@ -59,10 +59,10 @@ export default function AlbumPlayer({ album }: { album: ShelfAlbum }) {
           <audio ref={audio} preload="none" />
           <div className="sx-now">
             <button className="sx-pp" type="button" onClick={toggle} disabled={!playable} aria-label={playing ? 'Pause' : 'Play'}>{playing ? '❚❚' : '▶'}</button>
-            <div className="sx-now-t"><strong>{t.n}. {t.title}</strong><span>{album.artist} · {mmss(t.seconds)}</span></div>
+            <div className="sx-now-t"><strong>{t.n}. {t.title}</strong><span>{album.artist} · {t.sampleSeconds ? `Sample · ${t.sampleSeconds}s of ${mmss(t.seconds)}` : mmss(t.seconds)}</span></div>
           </div>
+          <button className="sx-playall" type="button" onClick={() => (playing ? toggle() : pick(cur))} disabled={!playable}>{playing ? 'Pause' : 'Play samples'}</button>
           <div className="sx-bar" onClick={seek} role="presentation"><i style={{ width: `${(pos * 100).toFixed(1)}%` }} /></div>
-          <p className="sx-note">Preview player. Paying by the second for this album is not live yet.</p>
         </div>
       )}
       <ol className="sx-tracks">
@@ -77,7 +77,7 @@ export default function AlbumPlayer({ album }: { album: ShelfAlbum }) {
             ) : (
               <button type="button" className={i === cur && playing ? 'on' : ''} onClick={() => pick(i)}>
                 <span className="sx-tn">{i === cur && playing ? '♪' : tr.n}</span>
-                <span className="sx-tt"><strong>{tr.title}</strong>{tr.note && <small>{tr.note}</small>}</span>
+                <span className="sx-tt"><strong>{tr.title}</strong><small>{tr.sampleSeconds ? `Sample · ${tr.sampleSeconds}s` : null}{tr.sampleSeconds && tr.note ? ' · ' : null}{tr.note}</small></span>
                 <span className="sx-td">{mmss(tr.seconds)}</span>
               </button>
             )}

@@ -176,7 +176,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
               <a className="sx-btn sx-gold" href={g.listenUrl}>&#9654; Listen in bWalletX</a>
             ) : (
               <button className="sx-btn sx-gold" type="button" onClick={() => play(g)}>
-                {isOn(g) ? '❚❚ Pause' : '▶ Play the album'}
+                {isOn(g) ? '❚❚ Pause' : '▶ Play samples'}
               </button>
             )}
             <a className="sx-btn sx-ghost" href={`/album/${g.slug}`}>Tracklist</a>
@@ -200,7 +200,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
                 {a.live ? (
                   <a className="lx-pp" href={a.listenUrl} aria-label={`Listen to ${a.title} in bWalletX`}>&#9654;</a>
                 ) : (
-                  <button className="lx-pp" type="button" onClick={() => play(a)} aria-label={isOn(a) ? 'Pause' : `Play ${a.title}`}>{isOn(a) ? '❚❚' : '▶'}</button>
+                  <button className="lx-pp" type="button" onClick={() => play(a)} aria-label={isOn(a) ? 'Pause' : `Play samples from ${a.title}`}>{isOn(a) ? '❚❚' : '▶'}</button>
                 )}
                 </div>
                 <a href={`/album/${a.slug}`}>
@@ -244,7 +244,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         ))}
 
         <section className="sx-how">
-          <div><h3>Play</h3><p>Press play on any album here. VexVoid streams in bWalletX, paid by the second, straight to the artist.</p></div>
+          <div><h3>Play</h3><p>Press play for free samples of any album here. VexVoid streams in full in bWalletX, paid by the second, straight to the artist.</p></div>
           <div><h3>Albums</h3><p>Open an album for the full tracklist and player.</p></div>
           <div><h3>TERRORNODE</h3><p>The album is the soundtrack to the TERRORNODE game on bGamesX.</p></div>
         </section>
@@ -253,7 +253,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
       {now && (
         <div className="lx-now" role="region" aria-label="Now playing">
           <img src={now.album.cover} alt="" />
-          <div className="lx-now-t"><strong>{now.album.tracks[now.i].title}</strong><span>{now.album.title} · {now.album.artist}</span></div>
+          <div className="lx-now-t"><strong>{now.album.tracks[now.i].title}</strong><span>{now.album.tracks[now.i].sampleSeconds ? `Sample · ${now.album.tracks[now.i].sampleSeconds}s · ` : ''}{now.album.title} · {now.album.artist}</span></div>
           <button className="lx-pp sm" type="button" onClick={() => play(now.album, now.i)} aria-label={playing ? 'Pause' : 'Play'}>{playing ? '❚❚' : '▶'}</button>
         </div>
       )}
