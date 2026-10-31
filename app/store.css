@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&display=swap');
 .sx{--bg:#000;--ink:#f4f1e8;--muted:#a9a69c;--dim:#7c7a73;--gold-hi:#ffd24d;--edge:#1f2127;--card:#0d0e11;--grad:linear-gradient(180deg,#ffe58a,#ffd24d 55%,#c98f00);--blood:linear-gradient(180deg,#ff5a4f 0%,#e0141b 45%,#7a0007 100%);--hf:'Space Grotesk',system-ui,sans-serif;--bf:'IBM Plex Sans',system-ui,sans-serif;--ease:cubic-bezier(.2,.8,.2,1);min-height:100vh;background:var(--bg);color:var(--ink);font:17px/1.55 var(--bf);overflow-x:clip}
 .sx *{box-sizing:border-box}
 .sx a{color:inherit;text-decoration:none}
@@ -182,3 +182,11 @@
 .sx-album-bg video{width:100%;height:100%;object-fit:cover;opacity:.34}
 .sx-album-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,rgba(0,0,0,.25),rgba(0,0,0,.85) 75%),linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.35) 30%,rgba(0,0,0,.8))}
 @media (prefers-reduced-motion:reduce){.sx-album-bg video{display:none}.sx-album-bg{background:#000 url(/bmx/hero-loop.jpg) center/cover}}
+
+/* approved hero wordmark banner (31 Oct 2026): name+X one word, gradient, outline ghost, equaliser texture */
+.xs-top.rx-music .xs-h1{font-family:'Space Grotesk',system-ui,sans-serif;font-weight:800;letter-spacing:-.02em}
+.xs-top.rx-music .xs-h1 .xs-hb{color:#F5B800}
+.xs-top.rx-music .xs-h1 .rx-g{background:linear-gradient(90deg,#1d4ed8,#2F7BFF 45%,#bfdbfe);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #000)}
+.rx-music .rx-ghost{position:absolute;right:-20px;bottom:-50px;font:800 clamp(140px,22vw,300px)/1 'Space Grotesk',sans-serif;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:2px rgba(47,123,255,.3);z-index:1;pointer-events:none;white-space:nowrap}
+.rx-music .rx-eq{position:absolute;left:0;right:0;bottom:0;height:46%;z-index:1;pointer-events:none;background:repeating-linear-gradient(90deg,rgba(47,123,255,.32) 0 10px,transparent 10px 16px);clip-path:polygon(0 60%,4% 30%,8% 55%,12% 20%,16% 45%,20% 10%,24% 50%,28% 35%,32% 60%,36% 15%,40% 40%,44% 25%,48% 55%,52% 5%,56% 45%,60% 30%,64% 50%,68% 20%,72% 40%,76% 10%,80% 55%,84% 25%,88% 45%,92% 15%,96% 50%,100% 30%,100% 100%,0 100%);-webkit-mask-image:linear-gradient(0deg,#000,transparent);mask-image:linear-gradient(0deg,#000,transparent)}
+.xs-top.rx-music .xs-in,.xs-top.rx-music .xs-nav{position:relative;z-index:2}.xs-top.rx-music .xs-snd{z-index:3}
