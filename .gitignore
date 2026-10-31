@@ -57,3 +57,5 @@ Thumbs.db
 *Screenshot*
 Screenshot*
 *.png
+# Share cards must ship: *.png above would silently drop them (bmusicx.com og:image 404, 31 Oct 2026)
+!public/og/*.png
