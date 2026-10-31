@@ -162,7 +162,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         </video>
         <XHeader />
         <div className="xs-wrap xs-in">
-          <h1 className="xs-h1" id="xs-h1"><i>bMusicX</i></h1>
+          <h1 className="xs-h1" id="xs-h1"><i>b</i>Music<span className="xs-x">X</span></h1>
           <p className="xs-lede">Free samples of every album. VexVoid streams in full, paid by the second.</p>
           <div className="xs-ctas">
             <a className="xs-btn xs-ghost" href="#shelf-h">Browse</a>
