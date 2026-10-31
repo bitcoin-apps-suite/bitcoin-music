@@ -25,8 +25,12 @@ export default function ListenPlayer() {
   useEffect(() => {
     const a = audio.current
     if (!a) return
-    a.src = `${A}/${TRACKS[i][1]}`
-    if (playing) void a.play().catch(() => setPlaying(false))
+    const want = `${A}/${TRACKS[i][1]}`
+    // onEnded already loaded and started the next track; only load here when the user picked one.
+    if (!a.src.endsWith(want)) {
+      a.src = want
+      if (playing) void a.play().catch(() => setPlaying(false))
+    }
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: TRACKS[i][0],
@@ -57,8 +61,18 @@ export default function ListenPlayer() {
         preload="metadata"
         playsInline
         onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onEnded={() => setI((n) => (n + 1) % TRACKS.length)}
+        onPause={(e) => {
+          // A track ending also fires "pause"; that is not the listener pausing.
+          if (!e.currentTarget.ended) setPlaying(false)
+        }}
+        onEnded={(e) => {
+          // Start the next track inside the ended event so iOS keeps playing in the background.
+          const a = e.currentTarget
+          const next = (i + 1) % TRACKS.length
+          a.src = `${A}/${TRACKS[next][1]}`
+          void a.play().catch(() => setPlaying(false))
+          setI(next)
+        }}
         style={{ width: '100%' }}
       />
       <ol style={{ listStyle: 'none', padding: 0, margin: '16px 0 0' }}>
