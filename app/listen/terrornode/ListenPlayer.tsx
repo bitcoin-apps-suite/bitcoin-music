@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { TERRORNODE } from '@/lib/bmx/albums'
 
 const A = '/bmx/listen/terrornode'
 const TRACKS = [
@@ -51,7 +52,18 @@ export default function ListenPlayer() {
   }
 
   return (
-    <main style={{ minHeight: '100svh', background: '#000', color: '#f1ead9', fontFamily: 'system-ui, sans-serif', padding: '24px 16px 120px', maxWidth: 560, margin: '0 auto' }}>
+    <>
+    {TERRORNODE.video && (
+      // Album video behind everything, muted and dimmed; the music comes from the <audio> player.
+      <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', background: '#000' }}>
+        <video poster={TERRORNODE.video.poster} autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.45 }}>
+          <source src={TERRORNODE.video.webm} type="video/webm" />
+          <source src={TERRORNODE.video.mp4} type="video/mp4" />
+        </video>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.7))' }} />
+      </div>
+    )}
+    <main style={{ position: 'relative', zIndex: 1, minHeight: '100svh', color: '#f1ead9', fontFamily: 'system-ui, sans-serif', padding: '24px 16px 120px', maxWidth: 560, margin: '0 auto' }}>
       <img src="/bmx/covers/terrornode-cover.webp" alt="WELCOME TO TERRORNODE" style={{ width: '100%', borderRadius: 14, display: 'block' }} />
       <h1 style={{ fontSize: 24, margin: '18px 0 2px' }}>WELCOME TO TERRORNODE</h1>
       <p style={{ margin: '0 0 16px', color: '#8a8a86' }}>NPGX · 12 tracks</p>
@@ -80,7 +92,7 @@ export default function ListenPlayer() {
           <li key={n}>
             <button
               onClick={() => pick(n)}
-              style={{ width: '100%', textAlign: 'left', padding: '14px 12px', border: 0, borderBottom: '1px solid #ffffff14', background: n === i ? '#2F7BFF22' : 'transparent', color: n === i ? '#7fb0ff' : '#f1ead9', fontSize: 16 }}
+              style={{ width: '100%', textAlign: 'left', padding: '14px 12px', border: 0, borderBottom: '1px solid #ffffff14', background: n === i ? '#2F7BFF33' : 'rgba(0,0,0,.35)', color: n === i ? '#7fb0ff' : '#f1ead9', fontSize: 16 }}
             >
               {String(n + 1).padStart(2, '0')}  {t}
             </button>
@@ -88,5 +100,6 @@ export default function ListenPlayer() {
         ))}
       </ol>
     </main>
+    </>
   )
 }
