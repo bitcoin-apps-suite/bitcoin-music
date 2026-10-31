@@ -14,6 +14,8 @@ export type ShelfAlbum = {
   genre: string
   featured?: boolean
   titleStyle?: 'drip' | 'gold'
+  /** Music video shown on the album page (webm + mp4 + poster). */
+  video?: { webm: string; mp4: string; poster: string }
   titleImg?: string
   titleSub?: string
   /** Live = streams today in bWalletX, paid by the second. */
@@ -39,6 +41,7 @@ export const TERRORNODE: ShelfAlbum = {
   genre: 'Industrial punk · hardcore · heavy',
   featured: true,
   titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg',
+  video: { webm: '/bmx/hero-loop.webm', mp4: '/bmx/hero-loop.mp4', poster: '/bmx/hero-loop.jpg' },
   live: false,
   credits: [
     `Music: ${NPGX_CREDIT}`,
