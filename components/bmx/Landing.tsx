@@ -30,6 +30,9 @@ function artistsFrom(albums: ShelfAlbum[]): Artist[] {
   return [...map.values()]
 }
 
+// Text-free hero clips (titles trimmed out): NPGX performances + the black/red/white NPG RED comic scenes.
+const HERO_CLIPS = ['tokyo-gutter-queen', 'red-battle-scene-1', 'razor-kisses', 'red-battle-scene-2', 'underground-empress', 'red-battle-scene-3', 'red-climax-battle-1', 'red-battle-scene-4']
+
 export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
   const N = albums.length
   const [cur, setCur] = useState(0)
@@ -41,9 +44,12 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
   const [now, setNow] = useState<{ album: ShelfAlbum; i: number } | null>(null)
   const [playing, setPlaying] = useState(false)
   const g = albums[cur]
-  // Hero music video: plays muted (poster only with reduced motion); Sound on is the shared hero control.
+  // Hero music video: a text-free playlist from across the albums (no burned-in titles under the bMusicX headline);
+  // plays muted, one clip after another (poster only with reduced motion); Sound on is the shared hero control.
   const hv = useRef<HTMLVideoElement>(null)
   const [heroSound, setHeroSound] = useState(false)
+  const [clip, setClip] = useState(0)
+  const nextClip = () => setClip(c => (c + 1) % HERO_CLIPS.length)
   useEffect(() => {
     const v = hv.current
     if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {})
@@ -156,10 +162,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
     <main className="sx">
       <XStrip />
       <section className="xs-top" aria-labelledby="xs-h1">
-        <video className="xs-bg" ref={hv} poster="/bmx/hero-loop.jpg" muted loop playsInline preload="metadata" aria-hidden="true">
-          <source src="/bmx/hero-loop.webm" type="video/webm" />
-          <source src="/bmx/hero-loop.mp4" type="video/mp4" />
-        </video>
+        <video className="xs-bg" ref={hv} src={`/bmx/hero/${HERO_CLIPS[clip]}.mp4`} poster="/bmx/hero/tokyo-gutter-queen.jpg" muted autoPlay={clip > 0} playsInline preload="metadata" aria-hidden="true" onEnded={nextClip} onError={nextClip} />
         <XHeader />
         <div className="xs-wrap xs-in">
           <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><mask id="xs-hbm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask><g fill="currentColor" mask="url(#xs-hbm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g></svg><span className="xs-sr">b</span><span className="xs-nm">Music</span><span className="xs-x">X</span></h1>
