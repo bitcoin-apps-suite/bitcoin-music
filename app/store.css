@@ -176,5 +176,9 @@
 .sx-wrap .ofr-card a.ofr-go{color:#000}
 
 /* Album page music video: wide, above the album details */
-.sx-album-video{margin:6px 0 28px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#000;box-shadow:0 30px 60px rgba(0,0,0,.6)}
-.sx-album-video video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;max-height:62svh}
+/* Album music video as a full-page background: fixed behind everything, dimmed + vignetted for readability */
+.sx.sx-has-bg{background:transparent;position:relative;isolation:isolate}
+.sx-album-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#000}
+.sx-album-bg video{width:100%;height:100%;object-fit:cover;opacity:.45}
+.sx-album-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,rgba(0,0,0,.25),rgba(0,0,0,.85) 75%),linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.35) 30%,rgba(0,0,0,.8))}
+@media (prefers-reduced-motion:reduce){.sx-album-bg video{display:none}.sx-album-bg{background:#000 url(/bmx/hero-loop.jpg) center/cover}}
