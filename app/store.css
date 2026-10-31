@@ -174,3 +174,7 @@
 .ofr-go:hover{filter:brightness(1.06)}
 @media (prefers-reduced-motion:reduce){.ofr-rail{scroll-behavior:auto}}
 .sx-wrap .ofr-card a.ofr-go{color:#000}
+
+/* Album page music video: wide, above the album details */
+.sx-album-video{margin:6px 0 28px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#000;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.sx-album-video video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;max-height:62svh}

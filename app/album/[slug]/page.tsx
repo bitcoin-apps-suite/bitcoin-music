@@ -25,6 +25,14 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
       <StoreTop />
       <div className="sx-wrap">
         <a className="sx-back" href="/">&larr; All albums</a>
+        {a.video && (
+          <div className="sx-album-video">
+            <video poster={a.video.poster} autoPlay muted loop playsInline controls preload="metadata" aria-label={`${a.title}: music video`}>
+              <source src={a.video.webm} type="video/webm" />
+              <source src={a.video.mp4} type="video/mp4" />
+            </video>
+          </div>
+        )}
         <section className="sx-album">
           <div className="sx-album-art"><Case a={a} /></div>
           <div>
