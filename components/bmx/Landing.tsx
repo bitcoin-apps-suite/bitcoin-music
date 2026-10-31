@@ -41,20 +41,6 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
   const [now, setNow] = useState<{ album: ShelfAlbum; i: number } | null>(null)
   const [playing, setPlaying] = useState(false)
   const g = albums[cur]
-  // Hero music video: plays muted (poster only with reduced motion); Sound on is the shared hero control.
-  const hv = useRef<HTMLVideoElement>(null)
-  const [heroSound, setHeroSound] = useState(false)
-  useEffect(() => {
-    const v = hv.current
-    if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {})
-  }, [])
-  const toggleHeroSound = () => {
-    const v = hv.current
-    if (!v) return
-    v.muted = !v.muted
-    if (!v.muted) { audio.current?.pause(); setPlaying(false); v.play().catch(() => {}) }
-    setHeroSound(!v.muted)
-  }
 
   useEffect(() => {
     const measure = () => {
@@ -156,10 +142,8 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
     <main className="sx">
       <XStrip />
       <section className="xs-top" aria-labelledby="xs-h1">
-        <video className="xs-bg" ref={hv} poster="/bmx/hero-loop.jpg" muted loop playsInline preload="metadata" aria-hidden="true">
-          <source src="/bmx/hero-loop.webm" type="video/webm" />
-          <source src="/bmx/hero-loop.mp4" type="video/mp4" />
-        </video>
+        {/* Neutral brand backdrop: no single release on the home hero (owner 31 Oct); TERRORNODE lives on its album page. */}
+        <div className="xs-bg bmx-hero-bg" aria-hidden="true">{Array.from({ length: 48 }, (_, i) => <i key={i} style={{ height: `${18 + ((i * 37) % 70)}%`, animationDelay: `${(i % 12) * -0.35}s` }} />)}</div>
         <XHeader />
         <div className="xs-wrap xs-in">
           <h1 className="xs-h1" id="xs-h1"><i>b</i>Music<span className="xs-x">X</span></h1>
@@ -169,7 +153,6 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             <a className="xs-btn xs-gold" href="https://bwalletx.com/get">Get bWalletX</a>
           </div>
         </div>
-        <button className="xs-snd" type="button" aria-pressed={heroSound} onClick={toggleHeroSound}>&#9834; {heroSound ? 'Sound off' : 'Sound on'}</button>
       </section>
       <audio ref={audio} preload="none" />
 
@@ -243,7 +226,6 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             ))}
           </div>
         </div>
-        <button className="xs-snd" type="button" aria-pressed={heroSound} onClick={toggleHeroSound}>&#9834; {heroSound ? 'Sound off' : 'Sound on'}</button>
       </section>
 
       <div className="sx-wrap">
