@@ -151,6 +151,9 @@
 .wmark{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
 .wmark img{display:block;width:min(560px,86vw);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
 .wsub{font:600 clamp(14px,2.4vw,18px)/1 'Space Grotesk',system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#cfd8ff}
+/* Album page: the release's own title artwork, left-aligned in the info column */
+.sx-album-wmark{align-items:flex-start;margin:6px 0 16px}
+.sx-album-wmark img{width:min(520px,100%)}
 /* shared b*X shell (app/xshell.css): album case height = the space left under the capped hero, so the first case is fully visible on load */
 .sx{--ch:min(calc(var(--xs-cfh) + 15px),78vw)}
 .lx-hero{padding-top:16px}
