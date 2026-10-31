@@ -81,6 +81,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
     const a = audio.current
     if (!a) return
     const ended = () => {
+      if (radio) { playRandom(); return }
       if (!now) return
       const nx = now.album.tracks.findIndex((t, j) => j > now.i && t.src)
       if (nx >= 0) play(now.album, nx)
@@ -89,6 +90,22 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
     a.addEventListener('ended', ended)
     return () => a.removeEventListener('ended', ended)
   })
+
+  // bRadioX: every released sample across all albums, shuffled, one after another (hero button).
+  const [radio, setRadio] = useState(false)
+  function playRandom() {
+    const pool = albums.flatMap((al) => al.tracks.map((t, i) => ({ al, i, ok: !!t.src })).filter((x) => x.ok))
+    if (!pool.length) return
+    let pick = pool[Math.floor(Math.random() * pool.length)]
+    if (pool.length > 1 && now && pick.al.slug === now.album.slug && pick.i === now.i) pick = pool[(pool.indexOf(pick) + 1) % pool.length]
+    play(pick.al, pick.i)
+  }
+  const toggleRadio = () => {
+    const a = audio.current
+    if (radio && playing) { a?.pause(); setPlaying(false); setRadio(false); return }
+    setRadio(true); playRandom()
+  }
+  const toggleFeatured = () => { setRadio(false); play(g) }
 
   function play(album: ShelfAlbum, i = album.tracks.findIndex((t) => t.src)) {
     const a = audio.current
@@ -169,6 +186,8 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
           <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><mask id="xs-hbm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask><g fill="currentColor" mask="url(#xs-hbm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g></svg><span className="xs-sr">b</span><span className="xs-nm">Music</span><span className="xs-x">X</span></h1>
           <p className="xs-lede">Free samples of every album. VexVoid streams in full, paid by the second.</p>
           <div className="xs-ctas">
+            <button className="xs-btn xs-play" type="button" onClick={toggleFeatured} aria-pressed={!radio && isOn(g)}>{!radio && isOn(g) ? '❚❚ Pause' : '▶ Play'}</button>
+            <button className="xs-btn xs-ghost" type="button" onClick={toggleRadio} aria-pressed={radio && playing}>{radio && playing ? '❚❚ bRadioX' : '▶ bRadioX'}</button>
             <a className="xs-btn xs-ghost" href="#shelf-h">Browse</a>
             <a className="xs-btn xs-gold" href="https://bwalletx.com/get">Get bWalletX</a>
           </div>

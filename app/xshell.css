@@ -54,3 +54,8 @@
 .xs-brand i,.xs-h1 .xs-x{color:var(--xs-acc)}
 .xs-h1 .xs-hb{display:inline-block;height:.95em;width:auto;vertical-align:-.03em;margin-right:.04em;color:#F5B800}
 .xs-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Hero Play: the site's blue, so it reads as the first action (owner 31 Oct) */
+.xs-btn.xs-play{background:var(--xs-acc);color:#fff;border-color:transparent}
+.xs-btn.xs-play:hover{filter:brightness(1.1)}
+@media(max-width:640px){.xs-ctas .xs-btn{flex:1 1 calc(50% - 5px)}}
