@@ -14,6 +14,8 @@ export type ShelfAlbum = {
   genre: string
   featured?: boolean
   titleStyle?: 'drip' | 'gold'
+  /** Limited-edition mint (owner 31 Oct): the 1/1 Original + user-generated variation tiers by format. */
+  edition?: { tiers: { label: string; what: string; usd: number; run: number }[] }
   /** Music video shown on the album page (webm + mp4 + poster). */
   video?: { webm: string; mp4: string; poster: string }
   titleImg?: string
@@ -42,6 +44,14 @@ export const TERRORNODE: ShelfAlbum = {
   featured: true,
   titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg',
   video: { webm: '/bmx/hero-loop.webm', mp4: '/bmx/hero-loop.mp4', poster: '/bmx/hero-loop.jpg' },
+  edition: {
+    tiers: [
+      { label: 'Your single', what: 'Your own version of a song: 100 versions of each song, made to collect and swap.', usd: 0.99, run: 100 },
+      { label: 'Your album', what: 'Your own version of every song on the album, minted to you together (from each song\'s 100).', usd: 9.99, run: 100 },
+      { label: 'Your music video', what: 'Your own cut of one music video: your scenes, colours and edit.', usd: 9.99, run: 100 },
+      { label: 'Your video album', what: 'Your own versions of all the album\'s music videos, minted to you together.', usd: 99, run: 100 },
+    ],
+  },
   live: false,
   credits: [
     `Music: ${NPGX_CREDIT}`,
