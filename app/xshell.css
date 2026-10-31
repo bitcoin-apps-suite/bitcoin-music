@@ -47,3 +47,10 @@
 .xs-cat h2{font:700 clamp(34px,4.8vw,60px)/.98 var(--xs-hf);letter-spacing:-.04em;margin:0;color:#fff;text-transform:none}
 .xs-cat p.xs-sub{color:var(--xs-mute);font:400 17px/1.5 var(--xs-bf);margin:12px 0 0;max-width:620px}
 .xs-brand svg{color:var(--xs-acc)}
+
+/* Wordmark option 2 (owner 31 Oct 2026): gold b logo, name in the product colour, white X; title and top bar */
+.xs-brand svg{color:#F5B800}
+.xs-brand .xs-nm,.xs-h1 .xs-nm{font-style:normal;color:var(--xs-acc)}
+.xs-brand i,.xs-h1 .xs-x{color:#fff}
+.xs-h1 .xs-hb{display:inline-block;height:.95em;width:auto;vertical-align:-.03em;margin-right:.04em;color:#F5B800}
+.xs-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

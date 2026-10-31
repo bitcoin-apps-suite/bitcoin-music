@@ -31,7 +31,7 @@ export function XHeader() {
           <mask id="xs-bm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask>
           <g fill="currentColor" mask="url(#xs-bm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g>
         </svg>
-        <span>bMusic<i>X</i></span>
+        <span><span className="xs-sr">b</span><span className="xs-nm">Music</span><i>X</i></span>
       </a>
       <nav className="xs-links" aria-label="Main">
         <a href="/#shelf-h">Browse</a>
