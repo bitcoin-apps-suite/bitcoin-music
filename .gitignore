@@ -45,6 +45,7 @@ next-env.d.ts
 *.ogg
 !public/samples/**
 !public/bmx/samples/**
+!public/bmx/listen/**
 
 # IDE
 .vscode
