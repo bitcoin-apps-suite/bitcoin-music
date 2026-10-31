@@ -31,7 +31,8 @@ function artistsFrom(albums: ShelfAlbum[]): Artist[] {
 }
 
 // Text-free hero clips (titles trimmed out): NPGX performances + the black/red/white NPG RED comic scenes.
-const HERO_CLIPS = ['tokyo-gutter-queen', 'red-battle-scene-1', 'razor-kisses', 'red-battle-scene-2', 'underground-empress', 'red-battle-scene-3', 'red-climax-battle-1', 'red-battle-scene-4']
+// Launch: lead with the black/red/white TERRORNODE comic scenes, then the performances (owner 31 Oct).
+const HERO_CLIPS = ['red-battle-scene-1', 'red-battle-scene-2', 'red-battle-scene-3', 'red-battle-scene-4', 'red-climax-battle-1', 'tokyo-gutter-queen', 'underground-empress', 'razor-kisses']
 
 export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
   const N = albums.length
@@ -162,7 +163,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
     <main className="sx">
       <XStrip />
       <section className="xs-top" aria-labelledby="xs-h1">
-        <video className="xs-bg" ref={hv} src={`/bmx/hero/${HERO_CLIPS[clip]}.mp4`} poster="/bmx/hero/tokyo-gutter-queen.jpg" muted autoPlay={clip > 0} playsInline preload="metadata" aria-hidden="true" onEnded={nextClip} onError={nextClip} />
+        <video className="xs-bg" ref={hv} src={`/bmx/hero/${HERO_CLIPS[clip]}.mp4`} poster="/bmx/hero/red-battle-scene-1.jpg" muted autoPlay={clip > 0} playsInline preload="metadata" aria-hidden="true" onEnded={nextClip} onError={nextClip} />
         <XHeader />
         <div className="xs-wrap xs-in">
           <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><mask id="xs-hbm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask><g fill="currentColor" mask="url(#xs-hbm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g></svg><span className="xs-sr">b</span><span className="xs-nm">Music</span><span className="xs-x">X</span></h1>
