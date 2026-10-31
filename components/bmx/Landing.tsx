@@ -179,11 +179,11 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
   return (
     <main className="sx">
       <XStrip />
-      <section className="xs-top" aria-labelledby="xs-h1">
+      <section className="xs-top rx-music" aria-labelledby="xs-h1">
         <video className="xs-bg" ref={hv} src={`/bmx/hero/${HERO_CLIPS[clip]}.mp4`} poster="/bmx/hero/red-battle-scene-1.jpg" muted autoPlay={clip > 0} playsInline preload="metadata" aria-hidden="true" onEnded={nextClip} onError={nextClip} />
         <XHeader />
         <div className="xs-wrap xs-in">
-          <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><mask id="xs-hbm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask><g fill="currentColor" mask="url(#xs-hbm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g></svg><span className="xs-sr">b</span><span className="xs-nm">Music</span><span className="xs-x">X</span></h1>
+          <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><mask id="xs-hbm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask><g fill="currentColor" mask="url(#xs-hbm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g></svg><span className="xs-sr">b</span><span className="xs-nm rx-g">MusicX</span></h1>
           <p className="xs-lede">Free samples of every album. VexVoid streams in full, paid by the second.</p>
           <div className="xs-ctas">
             <button className="xs-btn xs-play" type="button" onClick={toggleFeatured} aria-pressed={!radio && isOn(g)}>{!radio && isOn(g) ? '❚❚ Pause' : '▶ Play'}</button>
@@ -192,6 +192,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             <a className="xs-btn xs-gold" href="https://bwalletx.com/get">Get bWalletX</a>
           </div>
         </div>
+        <div className="rx-ghost" aria-hidden="true">MUSICX</div><div className="rx-eq" aria-hidden="true" />
         <button className="xs-snd" type="button" aria-pressed={heroSound} onClick={toggleHeroSound}>&#9834; {heroSound ? 'Sound off' : 'Sound on'}</button>
       </section>
       <audio ref={audio} preload="none" />
