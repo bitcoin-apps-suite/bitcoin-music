@@ -28,7 +28,7 @@
 :focus-visible{outline:2px solid var(--xs-acc);outline-offset:3px}
 [class*="price"],[class*="count"],[class*="amt"],[class*="num"]{font-variant-numeric:tabular-nums}
 .xs-eye{font:600 12px/1 var(--xs-hf);letter-spacing:.18em;text-transform:uppercase;color:var(--xs-acc);margin:0 0 12px}
-.xs-h1{font:700 clamp(34px,4.4vw,62px)/1 var(--xs-hf);letter-spacing:-.04em;margin:0 0 12px;color:#fff;text-transform:none;text-wrap:balance}
+.xs-h1{font:800 clamp(56px,8vw,112px)/.95 var(--xs-hf);letter-spacing:-.04em;margin:0 0 12px;color:#fff;text-transform:none;text-wrap:balance}
 .xs-lede{font:400 clamp(15px,1.35vw,18px)/1.5 var(--xs-bf);color:#d8d3c5;max-width:600px;margin:0 0 20px}
 .xs-ctas{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .xs-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;min-width:140px;padding:0 22px;border-radius:999px;font:600 15px/1 var(--xs-hf);letter-spacing:0;text-transform:none;text-decoration:none;border:0;cursor:pointer;box-sizing:border-box;white-space:nowrap}
