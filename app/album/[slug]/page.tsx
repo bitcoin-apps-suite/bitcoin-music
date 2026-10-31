@@ -21,18 +21,19 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
   if (!a) notFound()
   const total = a.tracks.reduce((n, t) => n + t.seconds, 0)
   return (
-    <main className="sx">
+    <main className={a.video ? 'sx sx-has-bg' : 'sx'}>
+      {/* The release's music video plays behind the whole page (owner 31 Oct), dimmed so the page stays readable. */}
+      {a.video && (
+        <div className="sx-album-bg" aria-hidden="true">
+          <video poster={a.video.poster} autoPlay muted loop playsInline preload="metadata">
+            <source src={a.video.webm} type="video/webm" />
+            <source src={a.video.mp4} type="video/mp4" />
+          </video>
+        </div>
+      )}
       <StoreTop />
       <div className="sx-wrap">
         <a className="sx-back" href="/">&larr; All albums</a>
-        {a.video && (
-          <div className="sx-album-video">
-            <video poster={a.video.poster} autoPlay muted loop playsInline controls preload="metadata" aria-label={`${a.title}: music video`}>
-              <source src={a.video.webm} type="video/webm" />
-              <source src={a.video.mp4} type="video/mp4" />
-            </video>
-          </div>
-        )}
         <section className="sx-album">
           <div className="sx-album-art"><Case a={a} /></div>
           <div>
