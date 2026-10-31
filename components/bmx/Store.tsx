@@ -72,7 +72,7 @@ export function StoreFoot() {
 export function StatusChip({ a }: { a: ShelfAlbum }) {
   return a.live
     ? <span className="sx-chip sx-chip-live"><i />Live · {a.satsPerSecond} sat a second</span>
-    : <span className="sx-chip sx-chip-soon">Streaming: coming</span>
+    : <span className="sx-chip sx-chip-soon">Streaming: not open yet</span>
 }
 
 export function Case({ a, big, href }: { a: ShelfAlbum; big?: boolean; href?: string }) {
@@ -80,6 +80,7 @@ export function Case({ a, big, href }: { a: ShelfAlbum; big?: boolean; href?: st
     <>
       <div className="sx-case-win">
         <img src={a.cover} alt={`${a.title} cover`} loading={big ? 'eager' : 'lazy'} />
+        {a.artist === 'NPGX' && <img className="sx-npgx-logo" src="/bmx/npgx-logo.png" alt="NPGX" />}
         <div className="sx-case-badge">
           {a.featured && <span className="sx-chip sx-chip-gold">New album</span>}
           {!big && <StatusChip a={a} />}
