@@ -19,6 +19,9 @@
 .xs-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--xs-ink);font:700 22px/1 var(--xs-hf);letter-spacing:-.02em;white-space:nowrap}
 .xs-brand svg{width:20px;height:27px;flex:none;display:block}
 .xs-brand i,.xs-h1 i,.xs-cat h2 i{font-style:normal;color:var(--xs-acc)}
+.xs-brand i{color:#F5B800}
+/* Family wordmark rule (bwalletx.com/b-family): b in the product colour, name white, X gold */
+.xs-h1 .xs-x{color:#F5B800}
 .xs-links{display:flex;gap:20px;align-items:center;font:500 14px/1 var(--xs-hf);min-width:0}
 .xs-links>a{color:#cfcabd;text-decoration:none;white-space:nowrap}
 .xs-links>a:hover{color:#fff}
