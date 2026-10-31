@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   applicationName: 'bMusicX',
   authors: [{ name: 'The Bitcoin Corporation Ltd' }],
   publisher: 'The Bitcoin Corporation Ltd',
-  openGraph: { title: 'Your Music on bMusicX', description, url: 'https://bmusicx.com', siteName: 'bMusicX', type: 'website', locale: 'en_GB', images: [{ url: '/og/bmusicx-og.png', width: 1200, height: 630, alt: 'bMusicX, the Bitcoin Music Exchange: a gold b record. Stream by the second; every second pays the artist. Part of bWalletX.' }] },
+  openGraph: { title: 'Your Music on bMusicX', description, url: 'https://bmusicx.com', siteName: 'bMusicX', type: 'website', locale: 'en_GB', images: [{ url: '/og/bmusicx-og.png', width: 1200, height: 630, alt: 'bMusicX, the Bitcoin Music Exchange: a blue b record. Stream by the second; every second pays the artist. Part of bWalletX.' }] },
   twitter: { card: 'summary_large_image', title: 'Your Music on bMusicX', description, images: ['/og/bmusicx-og.png'] },
   manifest: '/manifest.json',
   icons: {
