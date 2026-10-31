@@ -29,7 +29,9 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
           <div className="sx-album-art"><Case a={a} /></div>
           <div>
             <p className="sx-kicker">{a.genre}</p>
-            <h1 className={a.titleStyle === 'drip' ? 'drip' : 'goldt'}>{a.title}</h1>
+            {a.titleImg
+              ? <h1 className="wmark sx-album-wmark"><img src={a.titleImg} alt={a.title} />{a.titleSub && <span className="wsub">{a.titleSub}</span>}</h1>
+              : <h1 className={a.titleStyle === 'drip' ? 'drip' : 'goldt'}>{a.title}</h1>}
             <p className="sx-line">{a.line}</p>
             <div className="sx-meta">
               {artistBySlug(artistSlug(a.artist)) ? <a className="sx-chip" href={`/artist/${artistSlug(a.artist)}`}>{a.artist}</a> : <span className="sx-chip">{a.artist}</span>}
