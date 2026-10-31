@@ -75,7 +75,7 @@ export function StatusChip({ a }: { a: ShelfAlbum }) {
     : <span className="sx-chip sx-chip-soon">Streaming: not open yet</span>
 }
 
-export function Case({ a, big, href }: { a: ShelfAlbum; big?: boolean; href?: string }) {
+export function Case({ a, big, href, noStatus }: { a: ShelfAlbum; big?: boolean; href?: string; noStatus?: boolean }) {
   const inner = (
     <>
       <div className="sx-case-win">
@@ -83,7 +83,7 @@ export function Case({ a, big, href }: { a: ShelfAlbum; big?: boolean; href?: st
         {a.artist === 'NPGX' && <img className="sx-npgx-logo" src="/bmx/npgx-logo.png" alt="NPGX" />}
         <div className="sx-case-badge">
           {a.featured && <span className="sx-chip sx-chip-gold">New album</span>}
-          {!big && <StatusChip a={a} />}
+          {!big && !noStatus && <StatusChip a={a} />}
         </div>
         {big && (
           <div className="sx-case-cap">
