@@ -13,9 +13,9 @@ export function XStrip() {
         <svg viewBox="23 8 74 100" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="xs-sg" gradientUnits="userSpaceOnUse" x1="0" y1="12" x2="0" y2="105"><stop offset="0" stopColor="#FFE58A" /><stop offset=".55" stopColor="#FFD24D" /><stop offset="1" stopColor="#C98F00" /></linearGradient>
-            <mask id="xs-sm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask>
+            
           </defs>
-          <g fill="url(#xs-sg)" mask="url(#xs-sm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g>
+          <path fill="url(#xs-sg)" d="M45 12V72H27V30Z M27 72a33 33 0 1 1 66 0a33 33 0 1 1-66 0Z M45 72a15 15 0 1 0 30 0a15 15 0 1 0-30 0Z"/>
         </svg>
         <span>Part of <b>bWalletX</b></span><span className="xs-go" aria-hidden="true">&rarr;</span>
       </a>
@@ -28,8 +28,8 @@ export function XHeader() {
     <header className="xs-wrap xs-nav">
       <a className="xs-brand" href="/" aria-label="bMusicX home">
         <svg viewBox="23 8 74 100" aria-hidden="true" focusable="false">
-          <mask id="xs-bm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask>
-          <g fill="currentColor" mask="url(#xs-bm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g>
+          
+          <path fill="currentColor" d="M45 12V72H27V30Z M27 72a33 33 0 1 1 66 0a33 33 0 1 1-66 0Z M45 72a15 15 0 1 0 30 0a15 15 0 1 0-30 0Z"/>
         </svg>
         <span><span className="xs-sr">b</span><span className="xs-nm">Music</span><i>X</i></span>
       </a>

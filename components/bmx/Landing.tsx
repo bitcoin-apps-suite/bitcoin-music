@@ -183,7 +183,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         <video className="xs-bg" ref={hv} src={`/bmx/hero/${HERO_CLIPS[clip]}.mp4`} poster="/bmx/hero/red-battle-scene-1.jpg" muted autoPlay={clip > 0} playsInline preload="metadata" aria-hidden="true" onEnded={nextClip} onError={nextClip} />
         <XHeader />
         <div className="xs-wrap xs-in">
-          <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><mask id="xs-hbm"><rect width="140" height="140" fill="#fff" /><circle cx="60" cy="72" r="15" fill="#000" /></mask><g fill="currentColor" mask="url(#xs-hbm)"><polygon points="45,12 45,72 27,72 27,30" /><circle cx="60" cy="72" r="33" /></g></svg><span className="xs-sr">b</span><span className="xs-nm rx-g">MusicX</span></h1>
+          <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><path fill="currentColor" d="M45 12V72H27V30Z M27 72a33 33 0 1 1 66 0a33 33 0 1 1-66 0Z M45 72a15 15 0 1 0 30 0a15 15 0 1 0-30 0Z"/></svg><span className="xs-sr">b</span><span className="xs-nm rx-g">MusicX</span></h1>
           <p className="xs-lede">Free samples of every album. VexVoid streams in full, paid by the second.</p>
           <div className="xs-ctas">
             <button className="xs-btn xs-play" type="button" onClick={toggleFeatured} aria-pressed={!radio && isOn(g)}>{!radio && isOn(g) ? '❚❚ Pause' : '▶ Play'}</button>
@@ -267,7 +267,6 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             ))}
           </div>
         </div>
-        <button className="xs-snd" type="button" aria-pressed={heroSound} onClick={toggleHeroSound}>&#9834; {heroSound ? 'Sound off' : 'Sound on'}</button>
       </section>
 
       <div className="sx-wrap">
