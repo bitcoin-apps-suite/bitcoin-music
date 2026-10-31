@@ -35,7 +35,23 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
       <div className="sx-wrap">
         <a className="sx-back" href="/">&larr; All albums</a>
         <section className="sx-album">
-          <div className="sx-album-art"><Case a={a} /></div>
+          <div className="sx-album-art"><Case a={a} />
+            {a.edition && (
+            <div className="sx-mint">
+              <div className="sx-mint-head"><span className="sx-mint-badge">Limited edition</span><h3>Mint your own {a.title}</h3></div>
+              <ul className="sx-mint-tiers">
+                {a.edition.tiers.map((t) => (
+                  <li key={t.label}>
+                    <div><b>{t.label}</b><span>{t.what}</span></div>
+                    <div className="sx-mint-right"><div className="sx-mint-price">${t.usd.toLocaleString('en-US')}</div><span>0 of {t.run.toLocaleString('en-US')} minted</span></div>
+                  </li>
+                ))}
+              </ul>
+              <div className="sx-mint-foot"><span className="sx-mint-closed">Minting coming soon</span><a className="sx-mint-btn" href="https://bwalletx.com/get">Get bWalletX to be ready</a></div>
+              <p className="sx-mint-note">Every play is paid by the second in bWalletX, here and on bRadioX. Your version comes with a licence: it is yours, in your own wallet, and you earn 50% whenever it is played or licensed. Ninja Punk Girls Ltd keeps the songs and characters.</p>
+            </div>
+          )}
+          </div>
           <div>
             <p className="sx-kicker">{a.genre}</p>
             {a.titleImg
@@ -56,8 +72,8 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
                 ) : (
                   <>
                     <li className={a.tracks.some((t) => t.src) ? 'ok' : ''}>Listen to samples, free</li>
-                    <li>Pay by the second in bWalletX (coming)</li>
-                    <li>Own the album: numbered edition (coming)</li>
+                    <li>Pay by the second in bWalletX (not open yet)</li>
+                    <li>Mint your own edition (not open yet)</li>
                   </>
                 )}
               </ul>
