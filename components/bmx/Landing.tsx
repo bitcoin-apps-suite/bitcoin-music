@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ShelfAlbum, ShelfTrack } from '@/lib/bmx/albums'
 import { artistBySlug, artistSlug, mmss } from '@/lib/bmx/albums'
 import { Case, StatusChip, StoreFoot, XHeader, XStrip } from './Store'
-import OffersShelf from './OffersShelf'
+// OffersShelf (./OffersShelf) is not imported. Hidden: CEO ruling 2 Nov 2026 pending review of % offers (s21)
 
 type Artist = { name: string; picks: { album: ShelfAlbum; track?: ShelfTrack }[] }
 
@@ -271,7 +271,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
       </section>
 
       <div className="sx-wrap">
-        <OffersShelf />
+        {/* Hidden: CEO ruling 2 Nov 2026 pending review of % offers (s21) */}
         <section aria-labelledby="shelf-h" className="lx-sec">
           <div className="sx-shelf-h xs-cat"><div><p className="xs-eye">The catalogue</p><h2 id="shelf-h">Already on <i>bMusicX.</i></h2><p className="xs-sub">Every album here. Tap play for samples, or open the tracklist.</p></div></div>
           <div className="sx-shelf">

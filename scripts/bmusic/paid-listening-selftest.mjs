@@ -1,6 +1,7 @@
 // Selftest for the paid-listening kill switch (no DB, no env, no network beyond the URL given).
 // Usage: node scripts/bmusic/paid-listening-selftest.mjs http://127.0.0.1:3917
-// Checks that both PAID routes answer 503 {error:'paused'} and the sponsored route is not paused.
+// Checks that every PAID route (per-second: stream, stream/payto; per-play: quote, play) answers
+// 503 {error:'paused'} and the sponsored route is not paused.
 const base = process.argv[2] || 'http://127.0.0.1:3917'
 const want = { error: 'paused', message: 'Paid listening is paused while we move to the new pay-as-you-listen model.' }
 let fail = 0
@@ -15,6 +16,15 @@ await check('GET /api/bmusic/stream/payto', await fetch(`${base}/api/bmusic/stre
 await check('POST /api/bmusic/stream', await fetch(`${base}/api/bmusic/stream`, {
   method: 'POST', headers: { 'content-type': 'application/json' },
   body: JSON.stringify({ trackId: 'first-12-07', segment: 0, rawTx: '00', listener: '02' + '11'.repeat(32), sig: '00' }),
+}), true)
+// Per-play paid path (CEO ruling, 2 Nov 2026): no quote is issued and no play payment is verified or broadcast.
+await check('POST /api/bmusic/quote', await fetch(`${base}/api/bmusic/quote`, {
+  method: 'POST', headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ origin: '00'.repeat(32) + '_0', identityKey: '02' + '11'.repeat(32) }),
+}), true)
+await check('POST /api/bmusic/play', await fetch(`${base}/api/bmusic/play`, {
+  method: 'POST', headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ reference: '00'.repeat(16), rawTx: '00' }),
 }), true)
 // Sponsored path must not be paused (a bad signature gets 401 before any DB or pot access).
 await check('POST /api/bmusic/stream/sponsored (bad sig)', await fetch(`${base}/api/bmusic/stream/sponsored`, {
