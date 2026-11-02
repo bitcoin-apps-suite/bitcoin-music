@@ -70,7 +70,6 @@ const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
     { path: '/tasks', icon: Terminal, label: 'Tasks', badge: issueCount > 0 ? String(issueCount) : '0' },
     { path: '/contributors', icon: Users, label: 'Contributors', badge: '2' },
     { path: '/docs', icon: BookOpen, label: 'Documentation' },
-    { path: '/token', icon: DollarSign, label: '$BMUSIC', badge: 'NEW' },
     { divider: true },
     { path: 'https://github.com/bitcoin-apps-suite/bitcoin-music', icon: GitBranch, label: 'GitHub', external: true },
     { path: 'https://github.com/bitcoin-apps-suite/bitcoin-music/issues', icon: Bug, label: 'Issues', external: true, badge: issueCount > 0 ? String(issueCount) : undefined },
@@ -180,14 +179,6 @@ const DevBar: React.FC<DevBarProps> = ({ onCollapsedChange }) => {
         {!isCollapsed && (
           <div className="dev-bar-stats">
             <h4>Music Stats</h4>
-            <div className="dev-stat">
-              <span className="dev-stat-label">Total Supply</span>
-              <span className="dev-stat-value">{stats.totalTokens}</span>
-            </div>
-            <div className="dev-stat">
-              <span className="dev-stat-label">Distributed</span>
-              <span className="dev-stat-value">{stats.distributed}</span>
-            </div>
             <div className="dev-stat">
               <span className="dev-stat-label">Artists</span>
               <span className="dev-stat-value">{stats.artists}</span>

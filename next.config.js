@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Legal ruling 2 Nov 2026: the old proof-of-concept pages below promise holder dividends/APY, sell
+  // "shares" in tracks, offer token trading or invite fans to invest. They are retired to the store
+  // front page until rewritten. Temporary (307) so they can be restored by deleting a line.
+  async redirects() {
+    return [
+      '/token', '/marketplace', '/exchange', '/community', '/wallet', '/docs',
+      '/contracts', '/contributors', '/bitcoin-music', '/bitcoin-music/dark',
+    ].map((source) => ({ source, destination: '/', permanent: false }));
+  },
   images: {
     domains: ['localhost'],
   },

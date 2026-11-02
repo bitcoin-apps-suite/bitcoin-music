@@ -100,26 +100,6 @@ export default function Footer() {
               onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}>
                 Music Studio
               </Link>
-              <Link href="/marketplace" style={{
-                color: 'rgba(255, 255, 255, 0.6)',
-                fontSize: '13px',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#9333ea'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}>
-                NFT Marketplace
-              </Link>
-              <Link href="/exchange" style={{
-                color: 'rgba(255, 255, 255, 0.6)',
-                fontSize: '13px',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#9333ea'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}>
-                Token Exchange
-              </Link>
               <Link href="/library" style={{
                 color: 'rgba(255, 255, 255, 0.6)',
                 fontSize: '13px',
@@ -228,16 +208,6 @@ export default function Footer() {
               onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}>
                 Tone.js Docs
               </a>
-              <Link href="/token" style={{
-                color: 'rgba(255, 255, 255, 0.6)',
-                fontSize: '13px',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#9333ea'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'}>
-                $BMUSIC Token
-              </Link>
             </div>
           </div>
         </div>

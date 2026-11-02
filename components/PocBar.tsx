@@ -114,20 +114,6 @@ export default function PocBar({ isVisible: controlledVisible, onVisibilityChang
           >
             Community
           </Link>
-          <Link 
-            href="/token" 
-            style={{ 
-              color: 'white', 
-              textDecoration: 'underline',
-              opacity: 0.9,
-              fontWeight: '400',
-              transition: 'opacity 0.2s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
-          >
-            Token
-          </Link>
           <a 
             href="https://github.com/bitcoin-apps-suite/bitcoin-music"
             target="_blank"
