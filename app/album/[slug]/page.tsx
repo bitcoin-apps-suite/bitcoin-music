@@ -55,7 +55,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
               <h3>Status</h3>
               <ul className="sx-check">
                 {a.live ? (
-                  <li className="ok">Streams in full in bWalletX</li>
+                  <li className="ok">Listen in bWalletX</li>
                 ) : (
                   <>
                     <li className={a.tracks.some((t) => t.src) ? 'ok' : ''}>Listen to samples, free</li>

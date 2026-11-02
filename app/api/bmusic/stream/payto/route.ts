@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server'
 import { getOne } from '@/lib/bmusic/db'
+import { paidListeningPaused } from '@/lib/bmusic/paid-listening'
 import { streamPayTo, type StreamRow } from '@/lib/bmusic/server'
 
 export const dynamic = 'force-dynamic'
 
 /** GET ?trackId&segment → the output that pays for that second (BRC-29 to the artist, or their plain address). */
 export async function GET(request: Request) {
+  // Paid listening is paused: hand out no pay-to address, so the player never builds a payment.
+  const paused = paidListeningPaused()
+  if (paused) return paused
   const q = new URL(request.url).searchParams
   const trackId = q.get('trackId') ?? ''
   const n = Number(q.get('segment'))

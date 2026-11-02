@@ -24,6 +24,8 @@ export type ShelfAlbum = {
   /** Live = streams in full today in bWalletX. */
   live: boolean
   listenUrl?: string
+  /** One line under the bWalletX player on a live album (what plays free, what is paused). */
+  liveNote?: string
   credits?: string[]
   tracks: ShelfTrack[]
 }
@@ -146,8 +148,10 @@ type Manifest = { albumId: string; title: string; artist: string; cover?: string
 const m = first12 as Manifest
 export const VEXVOID: ShelfAlbum = {
   slug: 'echoes-in-the-abyss', title: m.title, artist: m.artist, cover: `/bmusic/streams/${m.albumId}/${m.cover ?? 'cover.jpg'}`,
-  line: 'Twelve dark electronic tracks. Streams live in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', live: true,
+  line: 'Twelve dark electronic tracks. Streams in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', live: true,
   listenUrl: 'https://desktop.bwalletx.com/bmusic/artist/vexvoid/album/echoes-in-the-abyss',
+  // Paid per-second listening paused (owner, 2 Nov 2026; lib/bmusic/paid-listening.ts). Exact CTO wording.
+  liveNote: 'Tracks 1–6 play free. Paid listening for 7–12 is paused while we add new protections.',
   tracks: m.tracks.map((t) => ({ n: t.n, title: t.title, seconds: Math.round(t.durations ? t.durations.reduce((a, b) => a + b, 0) : t.segments) })),
 }
 
@@ -160,7 +164,7 @@ for (const a of SHELF) for (const t of a.tracks) if (t.src) t.sampleSeconds = sa
 export const ARTISTS: ShelfArtist[] = [
   { slug: 'npgx', name: 'NPGX', photo: '/bmx/covers/terrornode-cover.webp', bio: 'The Ninja Punk Girls band: J-punk, hardcore and industrial from Neo-Tokyo. Made with Suno; prompts and lyrics by b0ase.' },
   { slug: 'vivienne-void', name: 'Vivienne Void', photo: '/bmx/covers/void-mass-ep.webp', bio: 'The face behind MISS VOID magazine. She DJs gothic clubs, photographs every NPGX girl and is the partner of VexVoid: where Vex is invisible, Vivienne is the visible half.' },
-  { slug: 'vexvoid', name: 'VexVoid', photo: '/bmx/covers/paper-reed-circuit-part-b.webp', bio: 'Dark electronic producer. Echoes in the Abyss streams in full in bWalletX.' },
+  { slug: 'vexvoid', name: 'VexVoid', photo: '/bmx/covers/paper-reed-circuit-part-b.webp', bio: 'Dark electronic producer. Echoes in the Abyss streams in bWalletX.' },
 ]
 export const artistSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 export const artistBySlug = (s: string) => ARTISTS.find((a) => a.slug === s)
