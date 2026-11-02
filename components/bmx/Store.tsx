@@ -72,7 +72,7 @@ export function StoreFoot() {
 
 export function StatusChip({ a }: { a: ShelfAlbum }) {
   return a.live
-    ? <span className="sx-chip sx-chip-live"><i />Live · {a.satsPerSecond} sat a second</span>
+    ? <span className="sx-chip sx-chip-live"><i />Live in bWalletX</span>
     : <span className="sx-chip sx-chip-soon">Streaming: not open yet</span>
 }
 

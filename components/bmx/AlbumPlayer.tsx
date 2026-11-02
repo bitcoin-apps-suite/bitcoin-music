@@ -50,9 +50,9 @@ export default function AlbumPlayer({ album }: { album: ShelfAlbum }) {
         <div className="sx-player">
           <div className="sx-now">
             <a className="sx-pp" href={album.listenUrl} aria-label="Listen in bWalletX">&#9654;</a>
-            <div className="sx-now-t"><strong>Listen in bWalletX</strong><span>{album.satsPerSecond} sat a second to the artist</span></div>
+            <div className="sx-now-t"><strong>Listen in bWalletX</strong><span>The full album streams in bWalletX</span></div>
           </div>
-          <p className="sx-note">Music you pay for by the second. Every second you play goes straight to the artist, with no subscription and no middleman. Open the album in bWalletX and press play.</p>
+          <p className="sx-note">Open the album in bWalletX and press play.</p>
         </div>
       ) : (
         <div className="sx-player">

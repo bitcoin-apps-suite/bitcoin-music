@@ -36,21 +36,8 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
         <a className="sx-back" href="/">&larr; All albums</a>
         <section className="sx-album">
           <div className="sx-album-art"><Case a={a} />
-            {a.edition && (
-            <div className="sx-mint">
-              <div className="sx-mint-head"><span className="sx-mint-badge">Limited edition</span><h3>Mint your own {a.title}</h3></div>
-              <ul className="sx-mint-tiers">
-                {a.edition.tiers.map((t) => (
-                  <li key={t.label}>
-                    <div><b>{t.label}</b><span>{t.what}</span></div>
-                    <div className="sx-mint-right"><div className="sx-mint-price">${t.usd.toLocaleString('en-US')}</div><span>0 of {t.run.toLocaleString('en-US')} minted</span></div>
-                  </li>
-                ))}
-              </ul>
-              <div className="sx-mint-foot"><span className="sx-mint-closed">Minting coming soon</span><a className="sx-mint-btn" href="https://bwalletx.com/get">Get bWalletX to be ready</a></div>
-              <p className="sx-mint-note">Every play is paid by the second in bWalletX, here and on bRadioX. Your version comes with a licence: it is yours, in your own wallet, and you earn 50% whenever it is played or licensed. Ninja Punk Girls Ltd keeps the songs and characters.</p>
-            </div>
-          )}
+            {/* Legal ruling 2 Nov 2026: one plain line, no prices, run sizes, counters or holder-income copy. */}
+            {a.copies === 'not-on-sale' && <p className="sx-copies">Copies: not on sale yet</p>}
           </div>
           <div>
             <p className="sx-kicker">{a.genre}</p>
@@ -68,12 +55,12 @@ export default async function AlbumPage({ params }: { params: Promise<{ slug: st
               <h3>Status</h3>
               <ul className="sx-check">
                 {a.live ? (
-                  <li className="ok">Pay by the second in bWalletX</li>
+                  <li className="ok">Streams in full in bWalletX</li>
                 ) : (
                   <>
                     <li className={a.tracks.some((t) => t.src) ? 'ok' : ''}>Listen to samples, free</li>
-                    <li>Pay by the second in bWalletX (not open yet)</li>
-                    <li>Mint your own edition (not open yet)</li>
+                    <li>Full album streaming (not open yet)</li>
+                    <li>Buy a copy (not on sale yet)</li>
                   </>
                 )}
               </ul>

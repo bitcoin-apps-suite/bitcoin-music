@@ -14,15 +14,15 @@ export type ShelfAlbum = {
   genre: string
   featured?: boolean
   titleStyle?: 'drip' | 'gold'
-  /** Limited-edition mint (owner 31 Oct): the 1/1 Original + user-generated variation tiers by format. */
-  edition?: { tiers: { label: string; what: string; usd: number; run: number }[] }
+  /** Copies of the release. Legal ruling 2 Nov 2026: no prices, run sizes, counters, swap or holder-income copy;
+   *  the page shows one plain line, "Copies: not on sale yet". */
+  copies?: 'not-on-sale'
   /** Music video shown on the album page (webm + mp4 + poster). */
   video?: { webm: string; mp4: string; poster: string }
   titleImg?: string
   titleSub?: string
-  /** Live = streams today in bWalletX, paid by the second. */
+  /** Live = streams in full today in bWalletX. */
   live: boolean
-  satsPerSecond?: number
   listenUrl?: string
   credits?: string[]
   tracks: ShelfTrack[]
@@ -44,14 +44,7 @@ export const TERRORNODE: ShelfAlbum = {
   featured: true,
   titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg',
   video: { webm: '/bmx/hero-loop.webm', mp4: '/bmx/hero-loop.mp4', poster: '/bmx/hero-loop.jpg' },
-  edition: {
-    tiers: [
-      { label: 'Your single', what: 'Your own version of a song: 100 versions of each song, made to collect and swap.', usd: 0.99, run: 100 },
-      { label: 'Your album', what: 'Your own version of every song on the album, minted to you together (from each song\'s 100).', usd: 9.99, run: 100 },
-      { label: 'Your music video', what: 'Your own cut of one music video: your scenes, colours and edit.', usd: 9.99, run: 100 },
-      { label: 'Your video album', what: 'Your own versions of all the album\'s music videos, minted to you together.', usd: 99, run: 100 },
-    ],
-  },
+  copies: 'not-on-sale',
   live: false,
   credits: [
     `Music: ${NPGX_CREDIT}`,
@@ -154,7 +147,7 @@ const m = first12 as Manifest
 export const VEXVOID: ShelfAlbum = {
   slug: 'echoes-in-the-abyss', title: m.title, artist: m.artist, cover: `/bmusic/streams/${m.albumId}/${m.cover ?? 'cover.jpg'}`,
   line: 'Twelve dark electronic tracks. Streams live in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', live: true,
-  satsPerSecond: m.satsPerSegment, listenUrl: 'https://desktop.bwalletx.com/bmusic/artist/vexvoid/album/echoes-in-the-abyss',
+  listenUrl: 'https://desktop.bwalletx.com/bmusic/artist/vexvoid/album/echoes-in-the-abyss',
   tracks: m.tracks.map((t) => ({ n: t.n, title: t.title, seconds: Math.round(t.durations ? t.durations.reduce((a, b) => a + b, 0) : t.segments) })),
 }
 
@@ -167,7 +160,7 @@ for (const a of SHELF) for (const t of a.tracks) if (t.src) t.sampleSeconds = sa
 export const ARTISTS: ShelfArtist[] = [
   { slug: 'npgx', name: 'NPGX', photo: '/bmx/covers/terrornode-cover.webp', bio: 'The Ninja Punk Girls band: J-punk, hardcore and industrial from Neo-Tokyo. Made with Suno; prompts and lyrics by b0ase.' },
   { slug: 'vivienne-void', name: 'Vivienne Void', photo: '/bmx/covers/void-mass-ep.webp', bio: 'The face behind MISS VOID magazine. She DJs gothic clubs, photographs every NPGX girl and is the partner of VexVoid: where Vex is invisible, Vivienne is the visible half.' },
-  { slug: 'vexvoid', name: 'VexVoid', photo: '/bmx/covers/paper-reed-circuit-part-b.webp', bio: 'Dark electronic producer. Echoes in the Abyss streams live in bWalletX, paid by the second.' },
+  { slug: 'vexvoid', name: 'VexVoid', photo: '/bmx/covers/paper-reed-circuit-part-b.webp', bio: 'Dark electronic producer. Echoes in the Abyss streams in full in bWalletX.' },
 ]
 export const artistSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 export const artistBySlug = (s: string) => ARTISTS.find((a) => a.slug === s)
