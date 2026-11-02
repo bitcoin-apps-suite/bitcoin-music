@@ -26,6 +26,8 @@ export type ShelfAlbum = {
   listenUrl?: string
   /** One line under the bWalletX player on a live album (what plays free, what is paused). */
   liveNote?: string
+  /** Share-card accent (eyebrow + tint), picked by eye from the cover; must read on a near-black background. */
+  accent?: string
   /** Path segment for /listen/<listenSlug>. Defaults to `slug`; TERRORNODE keeps its original short path. */
   listenSlug?: string
   credits?: string[]
@@ -46,7 +48,7 @@ export const TERRORNODE: ShelfAlbum = {
   line: 'Hard rock, industrial and hardcore from the streets of Neo-Tokyo 2048. The soundtrack to the TERRORNODE game.',
   genre: 'Industrial punk · hardcore · heavy',
   featured: true,
-  titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg',
+  titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg', accent: '#ff6270',
   video: { webm: '/bmx/hero-loop.webm', mp4: '/bmx/hero-loop.mp4', poster: '/bmx/hero-loop.jpg' },
   listenSlug: 'terrornode',
   copies: 'not-on-sale',
@@ -80,7 +82,7 @@ export const TERRORNODE_ALTS: ShelfAlbum = {
   cover: '/bmx/covers/terrornode-alternate-takes.webp',
   line: 'Other takes from the WELCOME TO TERRORNODE sessions, including Shibuya Breaker, Roppongi Revenge and the first Erobotz songs.',
   genre: 'Industrial punk · alternate takes',
-  titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg', titleSub: 'Alternate Takes',
+  titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg', titleSub: 'Alternate Takes', accent: '#7fb3ff',
   live: false,
   credits: [`Music: ${NPGX_CREDIT}`, DARKTECH],
   tracks: [
@@ -104,7 +106,7 @@ export const VOID_MASS: ShelfAlbum = {
   cover: '/bmx/covers/void-mass-ep.webp',
   line: 'Three short, dark pieces from Vivienne Void, the face of MISS VOID and the other half of VexVoid.',
   genre: 'Dark electronic · goth',
-  titleStyle: 'gold',
+  titleStyle: 'gold', accent: '#8fc3ff',
   live: false,
   credits: ['Music: Vivienne Void (NPGX). Created with Suno; prompts by b0ase.', 'Cover: Vivienne Void character art, NPGX.'],
   tracks: [
@@ -121,7 +123,7 @@ export const PAPER_REED_B: ShelfAlbum = {
   cover: '/bmx/covers/paper-reed-circuit-part-b.webp',
   line: 'The second part of Paper Reed Circuit.',
   genre: 'Dark electronic · single',
-  titleStyle: 'gold',
+  titleStyle: 'gold', accent: '#c9d4e3',
   live: false,
   credits: ['Music: VexVoid. Created with Suno; prompts by b0ase.', 'Cover: VexVoid artwork from Echoes in the Abyss.'],
   tracks: [{ n: 1, title: 'Paper Reed Circuit (Part B)', seconds: 155, src: `${AU}/vexvoid/paper-reed-circuit-part-b-sample.m4a`, clean: 'ear-check' }],
@@ -139,19 +141,19 @@ const nbr: ShelfTrack[] = [
 
 export const TOKYO: ShelfAlbum = {
   slug: 'tokyo-gutter-punk', title: 'Tokyo Gutter Punk', artist: 'NPGX', cover: '/bmx/covers/tokyo-gutter-punk.webp',
-  line: 'Japanese hardcore punk. Blast beats, gang chants and screaming guitars.', genre: 'J-punk · hardcore', titleStyle: 'gold', live: false, credits: [`Music: ${NPGX_CREDIT}`], tracks: tgp,
+  line: 'Japanese hardcore punk. Blast beats, gang chants and screaming guitars.', genre: 'J-punk · hardcore', titleStyle: 'gold', accent: '#ff74b8', live: false, credits: [`Music: ${NPGX_CREDIT}`], tracks: tgp,
 }
 
 export const NEON: ShelfAlbum = {
   slug: 'neon-blood-riot', title: 'Neon Blood Riot', artist: 'NPGX', cover: '/bmx/covers/neon-blood-riot.webp',
-  line: 'Riot grrrl, post-punk and street punk from neon Tokyo.', genre: 'Punk · post-punk · riot grrrl', titleStyle: 'gold', live: false, credits: [`Music: ${NPGX_CREDIT}`], tracks: nbr,
+  line: 'Riot grrrl, post-punk and street punk from neon Tokyo.', genre: 'Punk · post-punk · riot grrrl', titleStyle: 'gold', accent: '#ff8055', live: false, credits: [`Music: ${NPGX_CREDIT}`], tracks: nbr,
 }
 
 type Manifest = { albumId: string; title: string; artist: string; cover?: string; satsPerSegment: number; tracks: { n: number; title: string; segments: number; durations?: number[] }[] }
 const m = first12 as Manifest
 export const VEXVOID: ShelfAlbum = {
   slug: 'echoes-in-the-abyss', title: m.title, artist: m.artist, cover: `/bmusic/streams/${m.albumId}/${m.cover ?? 'cover.jpg'}`,
-  line: 'Twelve dark electronic tracks. Streams in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', live: true,
+  line: 'Twelve dark electronic tracks. Streams in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', accent: '#c9d4e3', live: true,
   listenUrl: 'https://desktop.bwalletx.com/bmusic/artist/vexvoid/album/echoes-in-the-abyss',
   // Paid per-second listening paused (owner, 2 Nov 2026; lib/bmusic/paid-listening.ts). Exact CTO wording.
   liveNote: 'Tracks 1–6 play free. Paid listening for 7–12 is paused while we add new protections.',
