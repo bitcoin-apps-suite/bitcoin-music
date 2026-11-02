@@ -26,6 +26,8 @@ export type ShelfAlbum = {
   listenUrl?: string
   /** One line under the bWalletX player on a live album (what plays free, what is paused). */
   liveNote?: string
+  /** Path segment for /listen/<listenSlug>. Defaults to `slug`; TERRORNODE keeps its original short path. */
+  listenSlug?: string
   credits?: string[]
   tracks: ShelfTrack[]
 }
@@ -46,6 +48,7 @@ export const TERRORNODE: ShelfAlbum = {
   featured: true,
   titleStyle: 'drip', titleImg: '/bmx/titles/terrornode.svg',
   video: { webm: '/bmx/hero-loop.webm', mp4: '/bmx/hero-loop.mp4', poster: '/bmx/hero-loop.jpg' },
+  listenSlug: 'terrornode',
   copies: 'not-on-sale',
   live: false,
   credits: [
@@ -175,4 +178,13 @@ export function artistWork(name: string) {
   return { albums, guest }
 }
 export const albumBySlug = (s: string) => SHELF.find((a) => a.slug === s)
+
+/**
+ * URL rule (one album, two pages): /album/<slug> and /listen/<listenSlug ?? slug>. Only TERRORNODE has a
+ * different listen slug (/listen/terrornode predates the rule); /listen/welcome-to-terrornode redirects there.
+ */
+export const listenSlugOf = (a: ShelfAlbum) => a.listenSlug ?? a.slug
+export const listenPath = (a: ShelfAlbum) => `/listen/${listenSlugOf(a)}`
+export const albumByListenSlug = (s: string) => SHELF.find((a) => listenSlugOf(a) === s)
+
 export const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`

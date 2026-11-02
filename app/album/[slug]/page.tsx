@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const a = albumBySlug((await params).slug)
   if (!a) return {}
   const title = `${a.title} · ${a.artist}`
-  return { title, description: a.line, alternates: { canonical: `https://bmusicx.com/album/${a.slug}` }, openGraph: { title, description: a.line }, twitter: { title, description: a.line } }
+  const url = `https://bmusicx.com/album/${a.slug}`
+  return { title, description: a.line, alternates: { canonical: url }, openGraph: { title, description: a.line, url }, twitter: { card: 'summary_large_image', title, description: a.line } }
 }
 
 export default async function AlbumPage({ params }: { params: Promise<{ slug: string }> }) {

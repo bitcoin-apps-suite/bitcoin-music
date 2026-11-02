@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { SHELF, TERRORNODE, mmss } from '@/lib/bmx/albums'
+import { SHELF, TERRORNODE, listenPath, mmss } from '@/lib/bmx/albums'
+import { hasFull } from '@/lib/bmx/listen'
 import { Case, StoreFoot, StoreTop } from '@/components/bmx/Store'
 import '../store.css'
 
-// Everything on bMusicX to listen to (owner 31 Oct 2026), in the store's own look. Albums with a full-album
-// player link to /listen/<short>; the rest open their album page. Unlisted and noindex for now.
-const FULL: Record<string, string> = { 'welcome-to-terrornode': '/listen/terrornode' }
+// Everything on bMusicX to listen to (owner 31 Oct 2026), in the store's own look. Every album links to its
+// /listen page (full album where the data has full files, samples otherwise). Unlisted and noindex for now.
 const total = (s: { seconds: number }[]) => s.reduce((n, t) => n + t.seconds, 0)
 
 export const metadata: Metadata = { title: 'Listen · bMusicX', robots: { index: false, follow: false } }
@@ -47,12 +47,12 @@ export default function ListenIndex() {
           <div className="sx-shelf-h"><h2 id="shelf-h">Everything on bMusicX</h2></div>
           <div className="sx-shelf">
             {SHELF.map((a) => {
-              const full = FULL[a.slug]
+              const full = hasFull(a)
               return (
-                <a key={a.slug} href={full ?? `/album/${a.slug}`} className={`sx-item${full ? ' sx-item-feat' : ''}`}>
+                <a key={a.slug} href={listenPath(a)} className={`sx-item${full ? ' sx-item-feat' : ''}`}>
                   <Case a={a} noStatus />
                   <div className="sx-item-t">{a.title}</div>
-                  <div className="sx-item-s">{a.artist} · {a.tracks.length} {a.tracks.length === 1 ? 'track' : 'tracks'}{full ? ' · full album' : ' · samples'}</div>
+                  <div className="sx-item-s">{a.artist} · {a.tracks.length} {a.tracks.length === 1 ? 'track' : 'tracks'}{full ? ' · full album' : a.live ? ' · in bWalletX' : ' · samples'}</div>
                 </a>
               )
             })}
