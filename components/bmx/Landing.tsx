@@ -189,6 +189,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
             <button className="xs-btn xs-play" type="button" onClick={toggleFeatured} aria-pressed={!radio && isOn(g)}>{!radio && isOn(g) ? '❚❚ Pause' : '▶ Play'}</button>
             <button className="xs-btn xs-ghost" type="button" onClick={toggleRadio} aria-pressed={radio && playing}>{radio && playing ? '❚❚ bRadioX' : '▶ bRadioX'}</button>
             <a className="xs-btn xs-ghost" href="#shelf-h">Browse</a>
+            <a className="xs-btn xs-ghost" href="https://www.bchatx.com/s/bmusic">bMusic Lounge</a>
             <a className="xs-btn xs-gold" href="https://bwalletx.com/get">Get bWalletX</a>
           </div>
         </div>
