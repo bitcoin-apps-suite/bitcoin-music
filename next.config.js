@@ -13,6 +13,12 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
+  // The share-card renderer (lib/bmx/og.tsx) reads its fonts and cover jpgs from disk at request time.
+  // Files read with fs are not traced into the serverless bundle on their own, so list them here.
+  outputFileTracingIncludes: {
+    '/album/**': ['./assets/fonts/**', './public/bmx/og/**', './public/bmx/titles/**', './public/bmx/npgx-logo.png'],
+    '/listen/**': ['./assets/fonts/**', './public/bmx/og/**', './public/bmx/titles/**', './public/bmx/npgx-logo.png'],
+  },
   async headers() {
     return [
       // bMusic key server API: public, called from other origins (vexvoid.com, bWalletX). Responses are

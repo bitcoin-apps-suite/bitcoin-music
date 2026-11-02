@@ -143,6 +143,7 @@ export async function albumOG(a: ShelfAlbum | undefined, page: CardPage) {
         )}
       </div>
     ),
-    { ...OG_SIZE, fonts: fontData },
+    // An empty `fonts` array disables the built-in font and makes ImageResponse throw, so pass it only when loaded.
+    { ...OG_SIZE, ...(fontData.length ? { fonts: fontData } : {}) },
   )
 }
