@@ -37,7 +37,7 @@ export default function ListenIndex() {
             </div>
             <div className="sx-plays">
               <a className="sx-btn sx-gold" href="/listen/terrornode">&#9654; Play album</a>
-              <a className="sx-btn sx-ghost" href={`/album/${feat.slug}`}>Tracklist &amp; mint</a>
+              <a className="sx-btn sx-ghost" href={`/album/${feat.slug}`}>Tracklist</a>
             </div>
           </div>
           <Case a={feat} big href="/listen/terrornode" />
