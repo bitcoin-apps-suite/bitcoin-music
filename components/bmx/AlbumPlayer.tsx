@@ -50,7 +50,7 @@ export default function AlbumPlayer({ album }: { album: ShelfAlbum }) {
         <div className="sx-player">
           <div className="sx-now">
             <a className="sx-pp" href={album.listenUrl} aria-label="Listen in bWalletX">&#9654;</a>
-            <div className="sx-now-t"><strong>Listen in bWalletX</strong><span>The full album streams in bWalletX</span></div>
+            <div className="sx-now-t"><strong>Listen in bWalletX</strong><span>{album.liveNote ?? 'The album streams in bWalletX'}</span></div>
           </div>
           <p className="sx-note">Open the album in bWalletX and press play.</p>
         </div>

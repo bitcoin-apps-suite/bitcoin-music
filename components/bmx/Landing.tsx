@@ -184,7 +184,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         <XHeader />
         <div className="xs-wrap xs-in">
           <h1 className="xs-h1" id="xs-h1"><svg className="xs-hb" viewBox="23 8 74 100" aria-hidden="true" focusable="false"><path fill="currentColor" d="M45 12V72H27V30Z M27 72a33 33 0 1 1 66 0a33 33 0 1 1-66 0Z M45 72a15 15 0 1 0 30 0a15 15 0 1 0-30 0Z"/></svg><span className="xs-sr">b</span><span className="xs-nm rx-g">MusicX</span></h1>
-          <p className="xs-lede">Free samples of every album. VexVoid streams in full in bWalletX.</p>
+          <p className="xs-lede">Free samples of every album. VexVoid streams in bWalletX.</p>
           <div className="xs-ctas">
             <button className="xs-btn xs-play" type="button" onClick={toggleFeatured} aria-pressed={!radio && isOn(g)}>{!radio && isOn(g) ? '❚❚ Pause' : '▶ Play'}</button>
             <button className="xs-btn xs-ghost" type="button" onClick={toggleRadio} aria-pressed={radio && playing}>{radio && playing ? '❚❚ bRadioX' : '▶ bRadioX'}</button>
@@ -328,7 +328,7 @@ export default function Landing({ albums }: { albums: ShelfAlbum[] }) {
         </div>
 
         <section className="sx-how" id="creators" aria-label="For creators">
-          <div><h3>For creators</h3><p>Every second a fan listens in bWalletX pays the artist directly. VexVoid streams in full today; anyone can press play here for free samples of any album.</p></div>
+          <div><h3>For creators</h3><p>Every second a fan listens in bWalletX pays the artist directly. VexVoid streams in bWalletX today; anyone can press play here for free samples of any album.</p></div>
           <div><h3>Albums</h3><p>Open an album for the full tracklist and player.</p></div>
           <div><h3>TERRORNODE</h3><p>The album is the soundtrack to the TERRORNODE game on bGamesX.</p></div>
         </section>
