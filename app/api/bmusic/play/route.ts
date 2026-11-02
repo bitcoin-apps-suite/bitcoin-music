@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { Transaction, Utils } from '@bsv/sdk'
 import { getOne, updateWhere } from '@/lib/bmusic/db'
+import { paidListeningPaused } from '@/lib/bmusic/paid-listening'
 import { broadcast, openAtRest, paysQuote, PLAY_KEY_PROTOCOL, serverIdentity, serverWallet, type QuoteOutput } from '@/lib/bmusic/server'
 
 export const dynamic = 'force-dynamic'
@@ -13,6 +14,9 @@ export const dynamic = 'force-dynamic'
  * protocol PLAY_KEY_PROTOCOL, keyID = reference, counterparty = serverIdentityKey on the listener's side.
  */
 export async function POST(request: Request) {
+  // Paid listening is paused: refuse before reading the body, so no payment is verified, broadcast or recorded.
+  const paused = paidListeningPaused()
+  if (paused) return paused
   let body: { reference?: unknown; rawTx?: unknown }
   try {
     body = await request.json()

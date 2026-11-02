@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto'
 import { NextResponse } from 'next/server'
 import { PublicKey } from '@bsv/sdk'
 import { getOne, insert } from '@/lib/bmusic/db'
+import { paidListeningPaused } from '@/lib/bmusic/paid-listening'
 import { centsToSats, QUOTE_TTL_MS, quoteOutputs, serverIdentity, usdPerBsv } from '@/lib/bmusic/server'
 import type { PlayRule } from '@/lib/bmusic/points'
 
@@ -14,6 +15,9 @@ export const dynamic = 'force-dynamic'
  * bMusic's own output is BRC-29: the listener's wallet pays it with { derivationPrefix, derivationSuffix, senderIdentityKey }.
  */
 export async function POST(request: Request) {
+  // Paid listening is paused: refuse before reading the body, so no quote (payment request) is issued or recorded.
+  const paused = paidListeningPaused()
+  if (paused) return paused
   let body: { origin?: unknown; identityKey?: unknown }
   try {
     body = await request.json()

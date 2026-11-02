@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 
 /**
- * Kill switch for PAID per-second listening (owner approval, 2 Nov 2026). While true, the paid path
- * (POST /api/bmusic/stream and GET /api/bmusic/stream/payto) answers 503 before it reads, verifies,
- * broadcasts or records any payment. The sponsored path (/api/bmusic/stream/sponsored, paid from the
+ * Kill switch for PAID listening (owner approval, 2 Nov 2026; per-play routes added under the CEO ruling
+ * of the same day). While true, the paid paths answer 503 before they read, verify, broadcast or record
+ * any payment: per-second (POST /api/bmusic/stream, GET /api/bmusic/stream/payto) and per-play
+ * (POST /api/bmusic/quote, POST /api/bmusic/play). The sponsored path (/api/bmusic/stream/sponsored, paid from the
  * artist's sponsor pot) is not affected. A code constant, not an env var, so the change is reviewable.
  */
 export const PAID_LISTENING_PAUSED = true
