@@ -61,6 +61,7 @@ export function StoreFoot() {
       <span>bMusicX · The Bitcoin Corporation Ltd</span>
       <nav>
         <a href="https://bwalletx.com">bWalletX</a>
+        <a href="https://www.bchatx.com/s/bmusic">The bMusic Lounge</a>
         <a href="https://bgamesx.com">bGamesX</a>
         <a href="https://terrornode.com">TERRORNODE</a>
         <a href="https://github.com/bitcoin-apps-suite/bitcoin-music">Open source</a>
