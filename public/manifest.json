@@ -1,5 +1,5 @@
 {
-  "name": "bMusicX \u2014 Bitcoin Music Exchange",
+  "name": "bMusicX \u2014 Bitcoin Music Store",
   "short_name": "bMusicX",
   "description": "Stream music by the second; every second pays the artist.",
   "start_url": "/",
@@ -10,7 +10,7 @@
   "scope": "/",
   "categories": [
     "productivity",
-    "finance",
+    "music",
     "blockchain"
   ],
   "lang": "en",

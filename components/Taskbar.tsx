@@ -172,9 +172,7 @@ export default function Taskbar() {
         { label: 'Configure Splits', action: () => console.log('Configure revenue splits') },
         { label: 'License Settings', action: () => console.log('License settings') },
         { divider: true },
-        { label: 'My Music NFTs', action: () => window.location.href = '/my-nfts' },
-        { label: 'Music Marketplace', action: handleOpenMarketplace },
-        { label: 'Trading History', action: () => window.location.href = '/trading-history' }
+        { label: 'My Music NFTs', action: () => window.location.href = '/my-nfts' }
       ]
     },
     {
@@ -185,10 +183,6 @@ export default function Taskbar() {
         { divider: true },
         { label: 'Encrypt Master', action: () => console.log('Encrypt master') },
         { label: 'Set Paywall', action: () => console.log('Set paywall') },
-        { label: 'Revenue Share', action: () => console.log('Setup revenue sharing') },
-        { divider: true },
-        { label: 'Exchange', action: handleOpenExchange },
-        { label: 'Trading Hub', action: () => window.location.href = '/trading' },
         { divider: true },
         { label: 'Verify on Chain', action: () => console.log('Verify') },
         { label: 'View on Explorer', href: 'https://whatsonchain.com', target: '_blank' }
@@ -219,8 +213,6 @@ export default function Taskbar() {
         { label: 'Zoom', action: () => console.log('Zoom') },
         { divider: true },
         { label: 'Studio', action: () => window.location.href = '/studio' },
-        { label: 'Marketplace', action: handleOpenMarketplace },
-        { label: 'Exchange', action: handleOpenExchange },
         { label: 'Library', action: () => window.location.href = '/library' },
         { divider: true },
         { label: 'Bring All to Front', action: () => console.log('Bring to front') }
@@ -229,7 +221,7 @@ export default function Taskbar() {
     {
       label: 'Help',
       items: [
-        { label: 'Bitcoin Music Help', shortcut: '⌘?', action: () => alert('Bitcoin Music Studio v1.0\n\nProfessional music production and NFT marketplace on BSV') },
+        { label: 'Bitcoin Music Help', shortcut: '⌘?', action: () => alert('Bitcoin Music Studio v1.0\n\nProfessional music production on BSV') },
         { label: 'Keyboard Shortcuts', action: () => console.log('Show shortcuts') },
         { label: 'Audio Setup Guide', action: () => console.log('Audio guide') },
         { divider: true },
@@ -252,12 +244,10 @@ export default function Taskbar() {
     { name: 'Bitcoin Draw', color: '#10b981', url: '#' },
     { name: 'Bitcoin Drive', color: '#22c55e', url: 'https://bitcoin-drive.vercel.app' },
     { name: 'Bitcoin Email', color: '#06b6d4', url: '#' },
-    { name: 'Bitcoin Exchange', color: '#3b82f6', url: '#', action: handleOpenExchange },
     { name: 'Bitcoin Music', color: '#8b5cf6', url: '#', current: true },
     { name: 'Bitcoin Paint', color: '#a855f7', url: '#' },
     { name: 'Bitcoin Pics', color: '#ec4899', url: '#' },
     { name: 'Bitcoin Registry', color: '#f43f5e', url: '#' },
-    { name: 'Bitcoin Shares', color: '#f43f5e', url: '#' },
     { name: 'Bitcoin Spreadsheets', color: '#3b82f6', url: 'https://bitcoin-spreadsheet.vercel.app' },
     { name: 'Bitcoin Video', color: '#65a30d', url: '#' },
     { name: 'Bitcoin Wallet', color: '#f59e0b', url: '#' },
@@ -662,20 +652,6 @@ export default function Taskbar() {
           Developers
         </a>
         
-        {/* Token Link */}
-        <a
-          href="/token"
-          style={{
-            color: 'rgba(255, 255, 255, 0.8)',
-            textDecoration: 'none',
-            transition: 'color 0.15s ease',
-            fontWeight: '400'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = '#8b5cf6'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)'}
-        >
-          $BMusic
-        </a>
         
         {/* Divider */}
         <span style={{ color: 'rgba(255, 255, 255, 0.2)' }}>|</span>
