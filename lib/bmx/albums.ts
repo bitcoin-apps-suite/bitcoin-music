@@ -159,8 +159,8 @@ export const VEXVOID: ShelfAlbum = {
   line: 'Twelve dark electronic tracks. Streams in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', accent: '#c9d4e3', live: true,
   price: '$10',
   listenUrl: 'https://desktop.bwalletx.com/bmusic/artist/vexvoid/album/echoes-in-the-abyss',
-  // Paid per-second listening paused (owner, 2 Nov 2026; lib/bmusic/paid-listening.ts). Exact CTO wording.
-  liveNote: 'Tracks 1–6 play free. Paid listening for 7–12 is paused while we add new protections.',
+  // Free (sponsored) and per-second listening are both paused (owner, 2 + 10 Nov 2026; lib/bmusic/paid-listening.ts).
+  liveNote: 'Full tracks are no longer free to stream.',
   tracks: m.tracks.map((t) => ({ n: t.n, title: t.title, seconds: Math.round(t.durations ? t.durations.reduce((a, b) => a + b, 0) : t.segments) })),
 }
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { PublicKey, Signature, Utils } from '@bsv/sdk'
 import { getOne, insert, query } from '@/lib/bmusic/db'
+import { SPONSORED_LISTENING_PAUSED, sponsoredListeningPaused } from '@/lib/bmusic/paid-listening'
 import { broadcastStrict, openAtRest, segmentKey, serverIdentity, serverWallet, STREAM_KEY_PROTOCOL, streamPayTo, type StreamRow } from '@/lib/bmusic/server'
 import { IP_DAILY_SECONDS, release, settle, SponsorError, sponsorSecond, takeIpSecond, type Pot } from '@/lib/bmusic/sponsor'
 
@@ -8,6 +9,8 @@ export const dynamic = 'force-dynamic'
 
 /** GET ?albumId → is listening sponsored right now, and how much is left. */
 export async function GET(request: Request) {
+  // Paused (10 Nov 2026): say so without reading the pots, so no client tries to stream for free.
+  if (SPONSORED_LISTENING_PAUSED) return NextResponse.json({ sponsored: false, paused: true })
   const albumId = new URL(request.url).searchParams.get('albumId') ?? ''
   const pots = await query<Pot>(`bmusic_sponsor_pots?album_id=eq.${encodeURIComponent(albumId)}&limit=1`)
   const p = pots[0]
@@ -32,6 +35,9 @@ export async function GET(request: Request) {
  * listener is re-issued without paying again.
  */
 export async function POST(request: Request) {
+  // Paused: refuse before reading the body, so no pot is spent and no segment key is returned.
+  const paused = sponsoredListeningPaused()
+  if (paused) return paused
   let body: { trackId?: unknown; segment?: unknown; listener?: unknown; sig?: unknown }
   try {
     body = await request.json()

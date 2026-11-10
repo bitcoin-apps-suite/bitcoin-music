@@ -1,7 +1,7 @@
 // Selftest for the paid-listening kill switch (no DB, no env, no network beyond the URL given).
 // Usage: node scripts/bmusic/paid-listening-selftest.mjs http://127.0.0.1:3917
 // Checks that every PAID route (per-second: stream, stream/payto; per-play: quote, play) answers
-// 503 {error:'paused'} and the sponsored route is not paused.
+// 503 {error:'paused'}, and that the sponsored (free full-track) route is paused as well.
 const base = process.argv[2] || 'http://127.0.0.1:3917'
 const want = { error: 'paused', message: 'Paid listening is paused while we move to the new pay-as-you-listen model.' }
 let fail = 0
@@ -26,9 +26,15 @@ await check('POST /api/bmusic/play', await fetch(`${base}/api/bmusic/play`, {
   method: 'POST', headers: { 'content-type': 'application/json' },
   body: JSON.stringify({ reference: '00'.repeat(16), rawTx: '00' }),
 }), true)
-// Sponsored path must not be paused (a bad signature gets 401 before any DB or pot access).
-await check('POST /api/bmusic/stream/sponsored (bad sig)', await fetch(`${base}/api/bmusic/stream/sponsored`, {
-  method: 'POST', headers: { 'content-type': 'application/json' },
-  body: JSON.stringify({ trackId: 'first-12-01', segment: 0, listener: '02' + '11'.repeat(32), sig: '00' }),
-}), false)
+// Sponsored (free full-track) path is paused too (owner, 10 Nov 2026): 503 before any signature, DB or pot access.
+{
+  const res = await fetch(`${base}/api/bmusic/stream/sponsored`, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ trackId: 'first-12-01', segment: 0, listener: '02' + '11'.repeat(32), sig: '00' }),
+  })
+  const body = await res.json().catch(() => null)
+  const ok = res.status === 503 && body?.error === 'paused'
+  console.log(`${ok ? 'PASS' : 'FAIL'} POST /api/bmusic/stream/sponsored: ${res.status} ${JSON.stringify(body)}`)
+  if (!ok) fail++
+}
 process.exit(fail ? 1 : 0)

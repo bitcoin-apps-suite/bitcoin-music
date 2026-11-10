@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import { SHELF, TERRORNODE, listenPath, mmss } from '@/lib/bmx/albums'
-import { hasFull } from '@/lib/bmx/listen'
 import { Case, StoreFoot, StoreTop } from '@/components/bmx/Store'
 import '../store.css'
 
 // Everything on bMusicX to listen to (owner 31 Oct 2026), in the store's own look. Every album links to its
-// /listen page (full album where the data has full files, samples otherwise). Unlisted and noindex for now.
+// /listen page: free previews for everyone, full tracks once bought (owner, 10 Nov 2026). Unlisted and noindex for now.
 const total = (s: { seconds: number }[]) => s.reduce((n, t) => n + t.seconds, 0)
 
 export const metadata: Metadata = { title: 'Listen · bMusicX', robots: { index: false, follow: false } }
@@ -26,7 +25,7 @@ export default function ListenIndex() {
       <div className="sx-wrap">
         <section className="sx-hero" aria-labelledby="listen-h">
           <div>
-            <p className="sx-kicker">Listen · full album</p>
+            <p className="sx-kicker">Listen · free previews</p>
             {feat.titleImg
               ? <h1 id="listen-h" className="wmark"><img src={feat.titleImg} alt={feat.title} />{feat.titleSub && <span className="wsub">{feat.titleSub}</span>}</h1>
               : <h1 id="listen-h" className="goldt">{feat.title}</h1>}
@@ -36,7 +35,7 @@ export default function ListenIndex() {
               <span className="sx-chip">{feat.tracks.length} tracks · {mmss(total(feat.tracks))}</span>
             </div>
             <div className="sx-plays">
-              <a className="sx-btn sx-gold" href="/listen/terrornode">&#9654; Play album</a>
+              <a className="sx-btn sx-gold" href="/listen/terrornode">&#9654; Play previews</a>
               <a className="sx-btn sx-ghost" href={`/album/${feat.slug}`}>Tracklist</a>
             </div>
           </div>
@@ -47,12 +46,11 @@ export default function ListenIndex() {
           <div className="sx-shelf-h"><h2 id="shelf-h">Everything on bMusicX</h2></div>
           <div className="sx-shelf">
             {SHELF.map((a) => {
-              const full = hasFull(a)
               return (
-                <a key={a.slug} href={listenPath(a)} className={`sx-item${full ? ' sx-item-feat' : ''}`}>
+                <a key={a.slug} href={listenPath(a)} className="sx-item">
                   <Case a={a} noStatus />
                   <div className="sx-item-t">{a.title}</div>
-                  <div className="sx-item-s">{a.artist} · {a.tracks.length} {a.tracks.length === 1 ? 'track' : 'tracks'}{full ? ' · full album' : a.live ? ' · in bWalletX' : ' · samples'}</div>
+                  <div className="sx-item-s">{a.artist} · {a.tracks.length} {a.tracks.length === 1 ? 'track' : 'tracks'}{a.live ? ' · in bWalletX' : ' · previews'}</div>
                 </a>
               )
             })}
