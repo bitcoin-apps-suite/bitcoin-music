@@ -171,3 +171,11 @@ div.lp-row{cursor:default}
   .lp-mini,.lp-mini.show,.sx.lp{transition:none}
   .lp-spin{animation-duration:2s}
 }
+
+/* iPhone Safari tints its top and bottom bars from the page background, not theme-color (owner, 10 Nov 2026:
+   white bars). The listen pages are black under the art, so the document is too. */
+html:has(.sx.lp),
+html:has(.sx.lp) body {
+  background: #000;
+  color-scheme: dark;
+}
