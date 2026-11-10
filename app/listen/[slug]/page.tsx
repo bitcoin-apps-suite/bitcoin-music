@@ -30,12 +30,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 function LiveGate({ a }: { a: ShelfAlbum }) {
   if (!a.live || !a.listenUrl) return null
   return (
-    <div style={{ marginBottom: 8 }}>
-      <a href={a.listenUrl} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 20px', borderRadius: 999, background: 'linear-gradient(135deg,#ffe58a,#ffd24d 55%,#c98f00)', color: '#000', fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
-        &#9654; Listen in bWalletX
-      </a>
-      {a.liveNote && <p style={{ margin: '10px 0 0', color: '#d8d2c2', fontSize: 15 }}>{a.liveNote}</p>}
-    </div>
+    <>
+      <a className="sx-btn sx-gold lp-play" href={a.listenUrl}>&#9654;&ensp;Listen in bWalletX</a>
+      {a.liveNote && <p className="lp-gate-note">{a.liveNote}</p>}
+    </>
   )
 }
 

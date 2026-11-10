@@ -30,6 +30,9 @@ export type ShelfAlbum = {
   accent?: string
   /** Path segment for /listen/<listenSlug>. Defaults to `slug`; TERRORNODE keeps its original short path. */
   listenSlug?: string
+  /** Album price once it can be bought, e.g. '$10'. Set only on the owner's word (Echoes: $10, 10 Nov 2026).
+   *  There is no checkout yet, so pages show it with "coming soon"; unset = "Buy the album: coming soon". */
+  price?: string
   credits?: string[]
   tracks: ShelfTrack[]
 }
@@ -154,6 +157,7 @@ const m = first12 as Manifest
 export const VEXVOID: ShelfAlbum = {
   slug: 'echoes-in-the-abyss', title: m.title, artist: m.artist, cover: `/bmusic/streams/${m.albumId}/${m.cover ?? 'cover.jpg'}`,
   line: 'Twelve dark electronic tracks. Streams in bWalletX.', genre: 'Dark electronic', titleStyle: 'gold', accent: '#c9d4e3', live: true,
+  price: '$10',
   listenUrl: 'https://desktop.bwalletx.com/bmusic/artist/vexvoid/album/echoes-in-the-abyss',
   // Paid per-second listening paused (owner, 2 Nov 2026; lib/bmusic/paid-listening.ts). Exact CTO wording.
   liveNote: 'Tracks 1–6 play free. Paid listening for 7–12 is paused while we add new protections.',
