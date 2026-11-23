@@ -164,7 +164,20 @@ export const VEXVOID: ShelfAlbum = {
   tracks: m.tracks.map((t) => ({ n: t.n, title: t.title, seconds: Math.round(t.durations ? t.durations.reduce((a, b) => a + b, 0) : t.segments) })),
 }
 
-export const SHELF: ShelfAlbum[] = [TERRORNODE, VOID_MASS, PAPER_REED_B, TOKYO, NEON, VEXVOID, TERRORNODE_ALTS]
+const sc: ShelfTrack[] = [
+  ['Battle Arena (Intro)', 28], ['Rug Pull', 143], ['3AM Lay-Up', 170], ['Door Policy', 136], ['305 Night (Posse Cut)', 110],
+  ['Sandwich Technique', 100], ['Seed Phrase', 107], ['Two Players', 86], ['Proof of Work', 156], ['Last Call (Outro)', 148],
+  ['Scammers Cartel (The Anthem)', 196], ['Cartoon Cartel (Hidden Track)', 119], ['Neon Knee (Bonus)', 120],
+].map(([title, seconds], i) => ({ n: i + 1, title: title as string, seconds: seconds as number, src: `${AU}/scammers-cartel/${String(i + 1).padStart(2, '0')}-sample.m4a`, clean: 'ear-check' as const }))
+
+export const SCAMMERS_CARTEL: ShelfAlbum = {
+  slug: 'scammers-cartel-battle-arena', title: 'Scammers Cartel: Battle Arena', artist: 'Scammers Cartel', cover: '/bmx/covers/scammers-cartel-battle-arena.webp',
+  line: 'Late-90s East Coast boom bap under Miami neon. The soundtrack to the Scammers Cartel fighting game.', genre: 'Boom bap · hip hop', titleStyle: 'gold', accent: '#d98cff', live: false,
+  credits: ['Music: Scammers Cartel. Created with Suno; prompts and lyrics by b0ase.', 'The game: scammerscartel.com. Official visualizers: youtube.com/@ScammersCartel.'],
+  tracks: sc,
+}
+
+export const SHELF: ShelfAlbum[] = [TERRORNODE, SCAMMERS_CARTEL, VOID_MASS, PAPER_REED_B, TOKYO, NEON, VEXVOID, TERRORNODE_ALTS]
 
 /** Clip length for a track of `seconds` full length (matches how the samples were cut). */
 export const sampleLength = (seconds: number) => (seconds < 50 ? 20 : 45)
@@ -173,6 +186,7 @@ for (const a of SHELF) for (const t of a.tracks) if (t.src) t.sampleSeconds = sa
 export const ARTISTS: ShelfArtist[] = [
   { slug: 'npgx', name: 'NPGX', photo: '/bmx/covers/terrornode-cover.webp', bio: 'The Ninja Punk Girls band: J-punk, hardcore and industrial from Neo-Tokyo. Made with Suno; prompts and lyrics by b0ase.' },
   { slug: 'vivienne-void', name: 'Vivienne Void', photo: '/bmx/covers/void-mass-ep.webp', bio: 'The face behind MISS VOID magazine. She DJs gothic clubs, photographs every NPGX girl and is the partner of VexVoid: where Vex is invisible, Vivienne is the visible half.' },
+  { slug: 'scammers-cartel', name: 'Scammers Cartel', photo: '/bmx/covers/scammers-cartel-battle-arena.webp', bio: 'The crew from the Scammers Cartel fighting game: boom bap from Miami, made with Suno; prompts and lyrics by b0ase.' },
   { slug: 'vexvoid', name: 'VexVoid', photo: '/bmx/covers/paper-reed-circuit-part-b.webp', bio: 'Dark electronic producer. Echoes in the Abyss streams in bWalletX.' },
 ]
 export const artistSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
